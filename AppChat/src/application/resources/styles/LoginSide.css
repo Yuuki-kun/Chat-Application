@@ -1,0 +1,40 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.login_left_side{
+	-fx-background-color: linear-gradient(to top right, #85d0ff, #9147ff);
+}
+
+.login_container{
+	-fx-background-color: #eeeeee;
+}
+.login-form-container{
+	-fx-spacing: 17;
+	-fx-alignment: center_left;
+	-fx-font-family: "Tahoma";
+}
+.login-form-container .label{
+	-fx-font-size: 15;
+}
+
+.login-form-container Text{
+	-fx-font-size: 13;
+}
+.login-form-container JFXButton{
+	-fx-font-size: 17;
+	-fx-background-color: #2871de;
+	-fx-cursor: hand;
+	-fx-text-fill: #ffffff;
+	-fx-font-weight: bold;
+	-fx-font-family: "Comic Sans MS";
+	-fx-effect: dropshadow(three-pass-box, #132a13, 5, 0, 0, 3); 
+}
+.login-form-container JFXButton:hover{
+
+	-fx-background-color: #0031ff;
+	
+}
+.help-text{
+	-fx-cursor: hand;
+	-fx-fill: #0031ff;
+}
+

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.LoginController">
+   <children>
+      <AnchorPane layoutX="7.0" layoutY="4.0" prefHeight="500.0" prefWidth="450.0" styleClass="login_left_side" stylesheets="@../styles/LoginSide.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="343.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="261.0" fitWidth="464.0" layoutX="-17.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="110.0">
+               <image>
+                  <Image url="@../images/logo.png" />
+               </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+               <effect>
+                  <Blend />
+               </effect>
+            </ImageView>
+         </children></AnchorPane>
+      <AnchorPane layoutX="10.0" layoutY="124.0" prefHeight="500.0" prefWidth="350.0" styleClass="login_container" stylesheets="@../styles/LoginSide.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <BorderPane layoutX="120.0" layoutY="74.0" prefHeight="500.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <top>
+                  <AnchorPane prefHeight="115.0" prefWidth="350.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox alignment="CENTER" layoutY="22.0" prefHeight="161.0" prefWidth="350.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="22.0">
+                           <children>
+                              <ImageView fitHeight="151.0" fitWidth="207.0" layoutX="10.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/logo.png" />
+                                 </image></ImageView>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to" wrappingWidth="76.59625244140625">
+                                 <font>
+                                    <Font name="Tahoma" size="13.0" />
+                                 </font></Text>
+                              <Text fill="#0031ff" strokeType="OUTSIDE" strokeWidth="0.0" text="Chat" wrappingWidth="66.3251953125">
+                                 <font>
+                                    <Font name="Comic Sans MS Bold" size="25.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </top>
+               <center>
+                  <VBox fillWidth="false" prefHeight="365.0" prefWidth="310.0" styleClass="login-form-container" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox fillWidth="false" prefHeight="41.0" prefWidth="311.0">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label text="Username:" />
+                              <TextField fx:id="username_tf" prefHeight="26.0" prefWidth="260.0" />
+                           </children>
+                        </VBox>
+                        <VBox fillWidth="false" layoutX="10.0" layoutY="10.0" prefHeight="41.0" prefWidth="311.0">
+                           <children>
+                              <Label text="Password:" />
+                              <HBox prefHeight="26.0" prefWidth="309.0" spacing="10.0">
+                                 <children>
+                                    <PasswordField fx:id="password_tf" prefHeight="25.0" prefWidth="260.0" />
+                                    <FontAwesomeIconView glyphName="EYE" size="20" visible="false" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <Text fx:id="forgot_pwd" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="help-text" text="Forgot password?" />
+                        <JFXButton fx:id="login_btn" alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="180.0" text="Login">
+                           <VBox.margin>
+                              <Insets left="47.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                        <HBox alignment="CENTER" prefHeight="23.0" prefWidth="284.0" spacing="10.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Don't have an account?" />
+                              <Text fx:id="signup" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="help-text" text="Sign up" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <BorderPane.margin>
+                        <Insets left="40.0" />
+                     </BorderPane.margin></VBox>
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
