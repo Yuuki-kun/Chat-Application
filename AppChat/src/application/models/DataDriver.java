@@ -34,6 +34,7 @@ public class DataDriver {
 		// connect sql
 //		conn = connect to sql;
 		conn = connectToSQL();
+		
 	}
 
 	public ResultSet getExistUserResultSet(String username, String password) {
