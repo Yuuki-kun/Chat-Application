@@ -1,0 +1,15 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.open-window-container{
+	-fx-background-color: #E3DFE7;
+}
+.modern-progress-bar .bar {
+    -fx-background-color: linear-gradient(to right, #E3DFE7, blue);
+} 
+
+.modern-progress-bar .track {
+    -fx-background-color: transparent;    
+}
+
+.modern-progress-bar .indicator {
+    -fx-background-color: #ffffff;
+}

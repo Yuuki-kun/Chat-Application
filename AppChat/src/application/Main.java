@@ -22,7 +22,7 @@ public class Main extends Application {
 //		} catch(Exception e) {
 //			e.printStackTrace();
 //		}
-		Model.getInstance().getViewFactory().showLoginWindow();
+		Model.getInstance().getViewFactory().showOpenWindow();
 	}
 	
 	public static void main(String[] args) {
