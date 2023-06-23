@@ -16,7 +16,7 @@ public class Model {
 	
 	private Model() {
 		this.viewFactory = new ViewFactory(logginAccountType);
-		this.datadriver = new DataDriver();
+		this.datadriver = new DataDriver("","","");
 	}
 	
 	public static synchronized Model getInstance() {

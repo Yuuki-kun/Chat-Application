@@ -12,29 +12,17 @@ public class DataDriver {
 	private PreparedStatement statement;
 	private ResultSet resultSet;
 
-	private Connection connectToSQL() {
-		Connection connection = null;
-		try {
-			
-			String url = "jdbc:sqlserver://localhost:1433;databaseName = "; //Database name
-			String username = ""; //UseName
-			String password = ""; //Password
-
-			connection = DriverManager.getConnection(url, username, password);
-
-			System.out.println("Connected to SQL Server");
-		} catch (SQLException e) {
-			System.out.println("Failed to connect to SQL Server");
-			e.printStackTrace();
-		}
-		return connection;
-	}
-
-	public DataDriver() {
+	public DataDriver(String databaseName, String username, String password) {
 		// connect sql
 //		conn = connect to sql;
-		conn = connectToSQL();
-		
+		 try {
+	            String url = "jdbc:sqlserver://localhost:1433;databaseName=" + databaseName;
+	            conn = DriverManager.getConnection(url, username, password);
+	            System.out.println("Connected to SQL Server");
+	        } catch (SQLException e) {
+	            System.out.println("Failed to connect to SQL Server");
+	            e.printStackTrace();
+	        }
 	}
 
 	public ResultSet getExistUserResultSet(String username, String password) {
