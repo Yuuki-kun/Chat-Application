@@ -4,6 +4,7 @@ module AppChat {
 	requires de.jensd.fx.glyphs.fontawesome;
 	requires com.jfoenix;
 	requires java.management;
+	requires java.sql;
 	opens application to javafx.graphics, javafx.fxml;
 	opens application.controller to javafx.graphics,javafx.fxml;
 }
