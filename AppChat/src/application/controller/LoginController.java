@@ -11,6 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -41,9 +43,21 @@ public class LoginController implements Initializable{
 	
 	public void onLogin() {
 		Stage stage = (Stage) login_btn.getScene().getWindow();
-		if(Model.getInstance().getViewFactory().getLoginAccountType()==AccountType.CLIENT) {
-			Model.getInstance().getViewFactory().closeStage(stage);
-			Model.getInstance().getViewFactory().showClientWindow();
+		Model.getInstance().evaluateLoginType(username_tf.getText(), password_tf.getText());
+		
+		if (Model.getInstance().getLoginSuccessfully()) {
+			if (Model.getInstance().getLoginAccoutType() == AccountType.CLIENT) {
+				Model.getInstance().getViewFactory().closeStage(stage);
+				Model.getInstance().getViewFactory().showClientWindow();
+				System.out.println("SHOW CLIENT WINDOW");
+			} else {
+				System.out.println("ADMIN LOGIN.");
+			}
+		}else {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+	        alert.setTitle("Login failed");
+	        alert.setContentText("Username or password does not exit.\nPlease try again.");
+	        alert.showAndWait();
 		}
 	}
 	
