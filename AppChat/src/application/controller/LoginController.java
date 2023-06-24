@@ -42,6 +42,7 @@ public class LoginController implements Initializable{
 	}
 	
 	public void onLogin() {
+		Model.getInstance().connectSQL("TTTTT", "sa", "reallyStrongPwd123");
 		Stage stage = (Stage) login_btn.getScene().getWindow();
 		Model.getInstance().evaluateLoginType(username_tf.getText(), password_tf.getText());
 		

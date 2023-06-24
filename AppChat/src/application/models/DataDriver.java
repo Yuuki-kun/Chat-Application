@@ -16,7 +16,7 @@ public class DataDriver {
 		// connect sql
 //		conn = connect to sql;
 		 try {
-	            String url = "jdbc:sqlserver://localhost:1433;databaseName=" + databaseName;
+	            String url = "jdbc:sqlserver://localhost:1433;databaseName=" + databaseName+";encrypt=true; trustServerCertificate=true";
 	            conn = DriverManager.getConnection(url, username, password);
 	            System.out.println("Connected to SQL Server");
 	        } catch (SQLException e) {
@@ -30,7 +30,7 @@ public class DataDriver {
 		// use PrepareStatement execute query
 
 		try {
-			String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+			String query = "SELECT * FROM newaccount WHERE username = ? AND password = ?";
 			statement = conn.prepareStatement(query);
 			statement.setString(1, username);
 			statement.setString(2, password);

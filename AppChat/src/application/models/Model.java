@@ -16,7 +16,11 @@ public class Model {
 	
 	private Model() {
 		this.viewFactory = new ViewFactory(logginAccountType);
-		this.datadriver = new DataDriver("","","");
+		
+	}
+	
+	public void connectSQL(String dbname, String usrname, String pwd) {
+		datadriver = new DataDriver(dbname,usrname,pwd);
 	}
 	
 	public static synchronized Model getInstance() {
