@@ -38,3 +38,10 @@
 	-fx-fill: #0031ff;
 }
 
+
+.alert .button-bar .button {
+    -fx-background-color: #0031ff;
+    -fx-text-fill: #ffffff;
+	-fx-cursor: hand;
+}
+

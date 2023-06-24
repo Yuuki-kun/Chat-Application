@@ -58,6 +58,7 @@ public class LoginController implements Initializable{
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 	        alert.setTitle("Login failed");
 	        alert.setContentText("Username or password does not exit.\nPlease try again.");
+	        alert.getDialogPane().getStylesheets().add(getClass().getResource("/application/resources/styles/LoginSide.css").toExternalForm());
 	        alert.showAndWait();
 		}
 	}
