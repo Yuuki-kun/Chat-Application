@@ -2,7 +2,7 @@ package request;
 
 import java.io.IOException;
 
-import application.models.Model;
+import application.models.ClientModel;
 
 public class LoginRequest extends Request{
 
@@ -17,12 +17,18 @@ public class LoginRequest extends Request{
 	@Override
 	public void writeRequest() {
 		try {
-			Model.getInstance().getClient().getOut().writeObject(this);
+			ClientModel.getInstance().getClient().getOut().writeObject(this);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("send login request failed.");
 			e.printStackTrace();
 		}
 	}
-
+	
+	public String getUsername() {
+		return username;
+	}
+	public String getPassword() {
+		return password;
+	}
 }

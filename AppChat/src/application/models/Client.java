@@ -43,6 +43,9 @@ public class Client {
 			System.out.println("Initial client in put stream failed.");
 			e.printStackTrace();
 		}
+		
+		Thread listening = new Thread(new ListeningServer(out, in));
+		listening.start();
 	}
 	
 	
@@ -58,4 +61,34 @@ public class Client {
 		return in;
 	}
 	
+	public Socket getSocket() {
+		return socket;
+	}
+	
+	public void closeEverything() {
+		if(in!=null) {
+			try {
+				in.close();
+			} catch (IOException e) {
+				System.out.println("Error closing in.");
+				e.printStackTrace();
+			}
+		}
+		if(out!=null) {
+			try {
+				out.close();
+			} catch (IOException e) {
+				System.out.println("Error closing out.");
+				e.printStackTrace();
+			}
+		}
+		if(socket!=null) {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				System.out.println("Error closing socket.");
+				e.printStackTrace();
+			}
+		}
+	}
 }

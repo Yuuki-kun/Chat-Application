@@ -1,6 +1,6 @@
 package application;
 	
-import application.models.Model;
+import application.models.ClientModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
-		Model.getInstance().getViewFactory().showOpenWindow();
+		ClientModel.getInstance().getViewFactory().showOpenWindow();
 	}
 	
 	public static void main(String[] args) {

@@ -1,6 +1,8 @@
 package application.views;
 
+import accounttype.AccountType;
 import application.controller.ClientController;
+import application.controller.LoginController;
 import application.controller.OpenWindowController;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -16,6 +18,8 @@ public class ViewFactory {
 	
 	private AccountType loginAccountType;
 	
+	private LoginController loginController;
+	
 	public ViewFactory(AccountType loginAccountType) {
 		this.loginAccountType = loginAccountType;
 	}
@@ -30,6 +34,8 @@ public class ViewFactory {
 	
 	public void showLoginWindow() {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/login.fxml"));
+		loginController = new LoginController();
+		loader.setController(loginController);
 		Scene scene = null;
 		try {
 			scene = new Scene(loader.load());
@@ -50,25 +56,27 @@ public class ViewFactory {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/Client.fxml"));
 		ClientController clientController = new ClientController();
 		loader.setController(clientController);
-		createStage(loader);
+		Stage stage = new Stage();
+		createStage(loader, stage);
 	}
 	
 	public void showOpenWindow() {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/OpenWindow.fxml"));
 //		OpenWindowController clientController = new OpenWindowController();
 //		loader.setController(clientController);
-		createStage(loader);
+		Stage stage = new Stage();
+		createStage(loader, stage);
 	}
 	
 	
-	public void createStage(FXMLLoader loader) {
+	public void createStage(FXMLLoader loader, Stage stage) {
 		Scene scene = null;
 		try {
 			scene = new Scene(loader.load());
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		Stage stage = new Stage();
+		stage = new Stage();
 		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.setScene(scene);
 		stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/application/resources/images/logo_small.png"))));
@@ -97,6 +105,10 @@ public class ViewFactory {
 	
 	public void closeStage(Stage stage) {
 		stage.close();
+	}
+	
+	public void closeLoginWindow() {
+		this.loginController.closeLoginWindow();
 	}
 	
 }

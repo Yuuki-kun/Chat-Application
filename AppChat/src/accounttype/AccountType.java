@@ -1,4 +1,4 @@
-package application.views;
+package accounttype;
 
 public enum AccountType {
 	ADMIN,

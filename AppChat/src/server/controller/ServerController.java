@@ -17,7 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import server.handler.ClientHandler;
-import server.model.Model;
+import server.model.ServerModel;
 
 public class ServerController implements Initializable{
 	  @FXML
@@ -86,7 +86,8 @@ public class ServerController implements Initializable{
 	}
 	
 	public void connectDB() throws SQLException {
-		Model.getInstance().connectSQL(dbname_tf.getText(), username_tf.getText(), password_tf.getText());
+//		ServerModel.getInstance().connectSQL(dbname_tf.getText(), username_tf.getText(), password_tf.getText());
+		ServerModel.getInstance().connectSQL("TTTTT", "sa", "reallyStrongPwd123");
 		//co the dung duoc cau lenh nay
 //		
 //		Statement st = Model.getInstance().getConn().createStatement();

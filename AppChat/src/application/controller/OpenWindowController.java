@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import application.models.Model;
+import application.models.ClientModel;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -38,9 +38,8 @@ public class OpenWindowController implements Initializable{
 			if (newValue.doubleValue() >= 1.0) {
 				timer.cancel();
 				Stage stage = (Stage)loadingOpen.getScene().getWindow();
-				Model.getInstance().getViewFactory().transparentStageFadeout(stage);
-				Model.getInstance().getViewFactory().showLoginWindow();
-
+				ClientModel.getInstance().getViewFactory().transparentStageFadeout(stage);
+				ClientModel.getInstance().getViewFactory().showLoginWindow();
 			}
 			
 		});
