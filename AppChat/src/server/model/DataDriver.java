@@ -1,4 +1,4 @@
-package application.models;
+package server.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -41,5 +41,8 @@ public class DataDriver {
 		}
 
 		return resultSet;
+	}
+	public Connection getConn() {
+		return conn;
 	}
 }

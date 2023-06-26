@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="server.controller.ServerController">
+   <children>
+      <JFXButton fx:id="startServer_btn" layoutX="177.0" layoutY="143.0" text="Start the server" />
+      <Label layoutX="43.0" layoutY="148.0" text="PORT:" />
+      <TextField fx:id="PORT_tf" layoutX="88.0" layoutY="143.0" prefHeight="26.0" prefWidth="78.0" />
+      <JFXButton fx:id="connectDB_btn" layoutX="96.0" layoutY="444.0" text="Connecting to the db" />
+      <Label layoutX="27.0" layoutY="307.0" text="DB name:" />
+      <TextField fx:id="dbname_tf" layoutX="87.0" layoutY="302.0" prefHeight="26.0" prefWidth="130.0" />
+      <Label layoutX="36.0" layoutY="350.0" text="Username:" />
+      <TextField fx:id="username_tf" layoutX="109.0" layoutY="345.0" prefHeight="26.0" prefWidth="143.0" />
+      <Label layoutX="29.0" layoutY="388.0" text="password:" />
+      <TextField fx:id="password_tf" layoutX="102.0" layoutY="383.0" prefHeight="26.0" prefWidth="143.0" />
+   </children>
+</AnchorPane>
