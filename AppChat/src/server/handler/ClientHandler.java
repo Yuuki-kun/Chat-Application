@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import accounttype.AccountType;
-import javafx.stage.Stage;
 import request.LoginRequest;
 import request.LoginSuccessfully;
 import request.Request;
@@ -45,6 +44,8 @@ public class ClientHandler implements Runnable {
 
 					System.out.println("SERVER DA NHAN YEU CAU LOGIN");
 					checkLogin(((LoginRequest) rq).getUsername(), ((LoginRequest) rq).getPassword());
+				default:
+					break;
 				}
 
 			} catch (ClassNotFoundException e) {
@@ -61,7 +62,7 @@ public class ClientHandler implements Runnable {
 		}
 	}
 
-	public void checkLogin(String username, String password) {
+	public void checkLogin(String username, String password) { 
 
 		ServerModel.getInstance().evaluateLoginType(username, password);
 		if (ServerModel.getInstance().getLoginSuccessfully()) {

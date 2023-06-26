@@ -5,23 +5,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import accounttype.AccountType;
-import application.views.ViewFactory;
-import request.LoginRequest;
-import request.Request;
-import request.RequestType;
-import server.model.DataDriver;
 
 public class ServerModel {
 	
 	private static ServerModel model;
-	private final ViewFactory viewFactory;
 	private AccountType logginAccountType = AccountType.CLIENT;
 	private DataDriver datadriver;
 	private boolean loginSuccessfully = false;
 	
-	private ServerModel() {
-		this.viewFactory = new ViewFactory(logginAccountType);
-		
+	private ServerModel() {		
 	}
 	
 	public void connectSQL(String dbname, String usrname, String pwd) {
@@ -34,9 +26,7 @@ public class ServerModel {
 		}
 		return model;
 	}
-	public ViewFactory getViewFactory() {
-		return viewFactory;
-	}
+
 	
 	public void evaluateLoginType(String username, String password) {
 		ResultSet resultSet = datadriver.getExistUserResultSet(username, password);
@@ -60,11 +50,6 @@ public class ServerModel {
 		}
 	}
 
-	
-	public void sendLoginRequest(String username, String password) {
-		Request rq = new LoginRequest(RequestType.LOGIN, username, password);
-		rq.sendRequest();
-	}
 	
 	
 	public AccountType getLoginAccoutType() {
