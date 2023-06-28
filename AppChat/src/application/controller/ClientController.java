@@ -5,6 +5,7 @@ import java.net.URL;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -50,7 +51,11 @@ public class ClientController implements Initializable {
 
 		HBox h = null;
 		try {
-			h = FXMLLoader.load(getClass().getResource("/test/guiobjectjson/testHBox.fxml"));
+			ClientBoxController clientBoxController = new ClientBoxController();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/test/guiobjectjson/testHBox.fxml"));
+			loader.setController(clientBoxController);
+			h = loader.load();
+			System.out.println(clientBoxController.getHave());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -68,18 +73,24 @@ public class ClientController implements Initializable {
 		Label i = (Label) v.getChildren().get(2);
 
 		i.setText(time);
+		
 		messVBox.getChildren().add(h);
 
 	}
 
+	public ArrayList<String> searchIboxByName(String searchName, ArrayList<String> inboxF){
+		ArrayList<String> resultList = new ArrayList<>();
+		return resultList;
+	}
+	
 	public void hide() {
 		clientBorderPane.getCenter().setVisible(false);
-		;
+		
 	}
 
 	public void show() {
 		clientBorderPane.getCenter().setVisible(true);
-		;
+		
 
 	}
 

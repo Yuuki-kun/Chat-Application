@@ -65,6 +65,7 @@ public class ClientHandler implements Runnable {
 	public void checkLogin(String username, String password) { 
 
 		String usernameFromDB  = ServerModel.getInstance().evaluateLoginType(username, password);
+		
 		if (ServerModel.getInstance().getLoginSuccessfully()) {
 			if (ServerModel.getInstance().getLoginAccoutType() == AccountType.CLIENT) {
 				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.CLIENT, usernameFromDB);
