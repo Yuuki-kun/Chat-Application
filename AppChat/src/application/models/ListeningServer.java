@@ -5,19 +5,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import accounttype.AccountType;
-import application.controller.LoginController;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import request.LoginRequest;
 import request.LoginSuccessfully;
+import request.Message;
 import request.Request;
 
 public class ListeningServer implements Runnable {
 
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-
+	Request rq = null;
 	public ListeningServer(ObjectOutputStream out, ObjectInputStream in) {
 		this.out = out;
 		this.in = in;
@@ -26,8 +23,11 @@ public class ListeningServer implements Runnable {
 	// listening message from server and handle it
 	@Override
 	public void run() {
-		Request rq = null;
+		
 		while (ClientModel.getInstance().getClient().getSocket().isConnected()) {
+			
+			
+
 			
 			try {
 				rq = (Request) in.readObject();
@@ -40,12 +40,20 @@ public class ListeningServer implements Runnable {
 			
 			switch (rq.getRqType()) {
 			case LOGIN_SUCCESSFULLY:
-				System.out.println("Da nhan doi tuong login client");
-
+				System.out.println("Da nhan doi tuong login client "+((LoginSuccessfully)rq).getUsernameFromDB());
+				String clientNameFromDB = ((LoginSuccessfully)rq).getUsernameFromDB();
+				
 				if (((LoginSuccessfully) rq).getAccountType() == AccountType.CLIENT) {
 
-					Platform.runLater(() ->ClientModel.getInstance().getViewFactory().showClientWindow());
+					Platform.runLater(() ->ClientModel.getInstance().getViewFactory().showClientWindow(clientNameFromDB));
 					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().closeLoginWindow());
+				}
+				
+				break;
+			case MESSAGE:
+				System.out.print("DA NHAN MESSAGE + "+((Message)rq).getMessage().toString());
+				if(!((Message)rq).getMessage().equals(null)) {
+					Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().addNewMessage("SERVER",((Message)rq).getMessage().toString(), ((Message)rq).getTimeSend()));
 				}
 				break;
 			default:

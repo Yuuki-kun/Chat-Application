@@ -9,6 +9,8 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -19,6 +21,8 @@ public class ViewFactory {
 	private AccountType loginAccountType;
 	
 	private LoginController loginController;
+	
+	private ClientController clientControllers;
 	
 	public ViewFactory(AccountType loginAccountType) {
 		this.loginAccountType = loginAccountType;
@@ -52,12 +56,19 @@ public class ViewFactory {
 		transparentStageFadeIn(stage);
 	}
 	
-	public void showClientWindow() {
+	public void showClientWindow(String username) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/Client.fxml"));
 		ClientController clientController = new ClientController();
 		loader.setController(clientController);
 		Stage stage = new Stage();
 		createStage(loader, stage);
+		
+		clientControllers = clientController;
+		System.out.println("CLIENT CONTROLLER");
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setContentText("Hello "+username);
+		alert.showAndWait();
+		
 	}
 	
 	public void showOpenWindow() {
@@ -66,6 +77,7 @@ public class ViewFactory {
 //		loader.setController(clientController);
 		Stage stage = new Stage();
 		createStage(loader, stage);
+		
 	}
 	
 	
@@ -111,4 +123,15 @@ public class ViewFactory {
 		this.loginController.closeLoginWindow();
 	}
 	
+	public ClientController getClientController() {
+		return clientControllers;
+	}
+	
+	public void sh() {
+		clientControllers.show();
+	}
+	public void hi() {
+		clientControllers.hide();
+	}
 }
+

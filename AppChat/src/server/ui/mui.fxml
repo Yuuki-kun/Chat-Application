@@ -5,7 +5,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="server.controller.ServerController">
    <children>
       <JFXButton fx:id="startServer_btn" layoutX="177.0" layoutY="143.0" text="Start the server" />
@@ -18,5 +17,7 @@
       <TextField fx:id="username_tf" layoutX="109.0" layoutY="345.0" prefHeight="26.0" prefWidth="143.0" />
       <Label layoutX="29.0" layoutY="388.0" text="password:" />
       <TextField fx:id="password_tf" layoutX="102.0" layoutY="383.0" prefHeight="26.0" prefWidth="143.0" />
+      <JFXButton fx:id="sendToClient" layoutX="524.0" layoutY="227.0" text="Send" />
+      <TextField fx:id="sayToClient" layoutX="363.0" layoutY="228.0" />
    </children>
 </AnchorPane>

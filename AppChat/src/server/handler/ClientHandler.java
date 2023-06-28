@@ -64,10 +64,10 @@ public class ClientHandler implements Runnable {
 
 	public void checkLogin(String username, String password) { 
 
-		ServerModel.getInstance().evaluateLoginType(username, password);
+		String usernameFromDB  = ServerModel.getInstance().evaluateLoginType(username, password);
 		if (ServerModel.getInstance().getLoginSuccessfully()) {
 			if (ServerModel.getInstance().getLoginAccoutType() == AccountType.CLIENT) {
-				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.CLIENT);
+				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.CLIENT, usernameFromDB);
 
 				try {
 					this.out.writeObject(loginSuccessfully);
@@ -81,7 +81,7 @@ public class ClientHandler implements Runnable {
 				}
 			} else {
 				System.out.println("ADMIN LOGIN.");
-				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.ADMIN);
+				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.ADMIN, usernameFromDB);
 				try {
 					this.out.writeObject(loginSuccessfully);
 					System.out.println("Da gui doi tuong login admin.");
@@ -122,5 +122,9 @@ public class ClientHandler implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public ObjectOutputStream getOut() {
+		return out;
 	}
 }

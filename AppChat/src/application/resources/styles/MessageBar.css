@@ -1,0 +1,63 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.scroll-pane{	
+	-fx-border-color: #ffffff;
+}
+
+.message_bar_container .vbox{
+		-fx-border-color: #ffffff;
+	
+	-fx-background-color: #ffffff;
+	-fx-spacing: 5;
+	-fx-padding: 0 10 0 10;
+}
+
+.message_bar_container HBox{
+	-fx-min-width: 290;
+	-fx-min-height: 75;
+	-fx-padding: 0 10 0 10;
+}
+.message_bar_container HBox:hover{
+	-fx-background-color: linear-gradient(to right, #cccccc, #dddddd,  #eeeeee);
+	-fx-cursor: hand;
+	-fx-background-radius: 10 0 0 10;
+}
+
+.message_bar_container .scroll-pane:focued{
+	-fx-background-color: transparent;
+}
+
+
+.scroll-pane .scroll-bar .thumb {
+    -fx-background-color: #6e7696; 
+}
+.scroll-pane .scroll-bar .track {
+    -fx-background-color: #ffffff; 
+}
+
+.label {
+    -fx-font-family: "Arial";
+    -fx-text-fill: #240000; 
+    -fx-font-size: 18;
+}
+
+.text{
+	-fx-font-family: "Arial";
+    -fx-text-fill: #404040; 
+    -fx-font-size: 15;
+}
+
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-pref-width: 10px;
+}
+
+.scroll-pane .scroll-bar:vertical .increment-button,
+.scroll-pane .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent; 
+    -fx-padding: 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0; 
+    -fx-pref-height: 0;
+}
+

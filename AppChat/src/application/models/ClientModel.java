@@ -1,7 +1,12 @@
 package application.models;
 
+import java.io.IOException;
+
 import accounttype.AccountType;
+import application.controller.FriendInboxController;
 import application.views.ViewFactory;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.HBox;
 import request.LoginRequest;
 import request.Request;
 import request.RequestType;
@@ -51,4 +56,6 @@ public class ClientModel {
 	public boolean getLoginSuccessfully() {
 		return this.loginSuccessfully;
 	}
+	
+
 }

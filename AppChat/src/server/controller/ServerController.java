@@ -1,6 +1,8 @@
 package server.controller;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
@@ -16,6 +18,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
+import request.Message;
+import request.Request;
+import request.RequestType;
 import server.handler.ClientHandler;
 import server.model.ServerModel;
 
@@ -38,6 +43,15 @@ public class ServerController implements Initializable{
 	    @FXML
 	    private TextField username_tf;
 
+	    
+
+	    @FXML
+	    private TextField sayToClient;
+
+	    @FXML
+	    private JFXButton sendToClient;
+	
+		private ObjectOutputStream out;
 	
 	private ServerSocket serverSocket;
 	private int PORT = -1;
@@ -53,6 +67,8 @@ public class ServerController implements Initializable{
 				e.printStackTrace();
 			}
 		});
+		
+		sendToClient.setOnAction(event -> sayToClient());
 
 	}
 	
@@ -72,10 +88,16 @@ public class ServerController implements Initializable{
 					while(!serverSocket.isClosed()) {
 						System.out.println("server is listening...");
 						Socket socket = serverSocket.accept();
+						
 						System.out.println(socket.getInetAddress()+" new client connected!");
-						Thread clientHandler = new Thread(new ClientHandler(socket));
+						
+						ClientHandler cli = new ClientHandler(socket);
+						
+						Thread clientHandler = new Thread(cli);
+						
 						clientHandler.start();
-
+						
+						out = cli.getOut();
 					}
 				}catch (Exception e) {
 					e.printStackTrace();
@@ -102,5 +124,21 @@ public class ServerController implements Initializable{
 		
 	}
 
+	public void sayToClient() {
+		this.sayToClient.getText();
+		
+		
+		Request rq = new Message(RequestType.MESSAGE,this.sayToClient.getText());
+		try {
+			
+			out.writeObject(rq);
+			System.out.println("DA GUI LOI NHAN");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	
+	}
 
 }

@@ -28,8 +28,9 @@ public class ServerModel {
 	}
 
 	
-	public void evaluateLoginType(String username, String password) {
+	public String evaluateLoginType(String username, String password) {
 		ResultSet resultSet = datadriver.getExistUserResultSet(username, password);
+		String usernameFromDB = null;
 		try {
 			if(resultSet.next()) {
 				if(resultSet.getInt("type")==1) {
@@ -42,12 +43,16 @@ public class ServerModel {
 					this.loginSuccessfully = false;
 				}
 				this.loginSuccessfully = true;
-
+				
+				usernameFromDB = resultSet.getString("name");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return usernameFromDB;
+		
 	}
 
 	

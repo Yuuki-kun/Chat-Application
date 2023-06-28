@@ -5,10 +5,12 @@ import accounttype.AccountType;
 public class LoginSuccessfully extends Request{
 
 	private AccountType accountType;
+	private String usernameFromDB;
 	
-	public LoginSuccessfully(RequestType rqType, AccountType accType) {
+	public LoginSuccessfully(RequestType rqType, AccountType accType, String usrn) {
 		super(rqType);
 		this.accountType = accType;
+		this.usernameFromDB = usrn;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -27,5 +29,9 @@ public class LoginSuccessfully extends Request{
 	
 	public AccountType getAccountType() {
 		return accountType;
+	}
+	
+	public String getUsernameFromDB() {
+		return usernameFromDB;
 	}
 }

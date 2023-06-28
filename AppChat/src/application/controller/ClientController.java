@@ -45,6 +45,7 @@ public class ClientController implements Initializable {
 
 	}
 
+	//add inbox box vao friend inbox view
 	public void addNewMessage(String name, String message, String time) {
 
 		HBox h = null;

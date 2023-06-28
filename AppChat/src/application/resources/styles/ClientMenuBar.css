@@ -1,0 +1,51 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.main_menu_container{
+	
+	-fx-background-color: linear-gradient(to top right,#5e69bd, #543eb5 );
+		
+	-fx-font-family: "Tahoma";
+	-fx-font-size: 15.0;
+	-fx-border-width: 0.0 1.0 0.0 0.0;
+	-fx-border-color: #ffffff;
+	-fx-border-radius: 5.0;
+	-fx-background-radius: 0.0 5.0 0.0 0.0;
+}
+
+.user_infor_container{
+	-fx-alignment: center;
+	-fx-spacing: 10.0;	
+}
+
+.user_infor_container .image-view{
+	-fx-effect: dropshadow(three-pass-box, #eeeeee, 5.0, 0.0, 0.0, 3.0); 
+
+}
+
+.label{
+	-fx-text-fill: #ffffff;
+}
+
+.center_menu_container{
+	-fx-spacing: 10.0;
+}
+.center_menu_container JFXButton{
+	-fx-text-fill: #ffffff;
+}
+
+.center_menu_container FontAwesomeIconView{
+	-fx-fill: #ffffff;
+}
+
+.center_menu_container Line{
+	-fx-stroke: #ffffff;
+}
+
+.bottom_menu_container{
+	-fx-alignment: center;
+}
+
+.bottom_menu_container JFXButton{
+	-fx-alignment: center;
+	-fx-text-fill: #ffffff;
+}

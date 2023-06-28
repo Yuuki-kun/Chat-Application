@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox alignment="CENTER_LEFT" prefHeight="72.0" prefWidth="302.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="84.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../application/resources/images/logo_small.png" />
+         </image>
+      </ImageView>
+      <VBox prefHeight="94.0" prefWidth="215.0">
+         <children>
+            <Label maxWidth="200.0" prefHeight="54.0" prefWidth="107.0" text="Label" />
+            <Label maxWidth="200.0" text="LabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabel" />
+            <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="17.0" prefWidth="195.0" text="Label" />
+         </children>
+      </VBox>
+   </children>
+</HBox>
