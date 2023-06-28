@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -9,39 +10,61 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="180.0" styleClass="main_menu_container" stylesheets="@../styles/ClientMenuBar.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.ClientMenuController">
    <children>
       <BorderPane prefHeight="650.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="185.0" styleClass="user_infor_container" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="95.0" fitWidth="225.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/logo.png" />
                      </image>
                   </ImageView>
-                  <Label text="Tống Công Minh" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="182.0" text="Tống Công Minh" />
                </children>
             </VBox>
          </top>
          <center>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="center_menu_container" BorderPane.alignment="CENTER">
                <children>
-                  <JFXButton alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Message" />
-                  <JFXButton alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Group" />
-                  <JFXButton alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Friends" />
-                  <Line endX="150.0" />
-                  <JFXButton alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Profile" />
-                  <JFXButton alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Logout" />
+                  <JFXButton fx:id="message_btn" alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Message">
+                     <font>
+                        <Font size="15.0" />
+                     </font></JFXButton>
+                  <JFXButton fx:id="group_btn" alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Group">
+                     <font>
+                        <Font size="15.0" />
+                     </font></JFXButton>
+                  <JFXButton alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Friends">
+                     <font>
+                        <Font size="15.0" />
+                     </font></JFXButton>
+                  <Line endX="150.0" fill="WHITE" />
+                  <JFXButton alignment="BASELINE_LEFT" graphicTextGap="16.0" prefHeight="26.0" prefWidth="135.0" ripplerFill="BLACK" text="Profile">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="USER" />
+                     </graphic>
+                     <font>
+                        <Font size="15.0" />
+                     </font></JFXButton>
+                  <JFXButton alignment="BASELINE_LEFT" graphicTextGap="16.0" layoutX="33.0" layoutY="98.0" prefHeight="26.0" prefWidth="135.0" ripplerFill="BLACK" text="Logout">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="EXTERNAL_LINK" />
+                     </graphic>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </JFXButton>
                </children>
             </VBox>
          </center>
          <bottom>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" prefHeight="47.0" prefWidth="180.0" styleClass="bottom_menu_container" BorderPane.alignment="CENTER">
                <children>
-                  <JFXButton text="Setting" />
+                  <JFXButton prefHeight="29.0" prefWidth="153.0" text="Setting" textFill="WHITE" />
                </children>
             </HBox>
          </bottom>
