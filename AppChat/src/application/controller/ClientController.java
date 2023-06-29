@@ -90,7 +90,6 @@ public class ClientController implements Initializable {
 
 	public void show() {
 		clientBorderPane.getCenter().setVisible(true);
-		
 
 	}
 
