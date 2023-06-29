@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -80,6 +81,47 @@ public class ClientController implements Initializable {
 
 	public ArrayList<String> searchIboxByName(String searchName, ArrayList<String> inboxF){
 		ArrayList<String> resultList = new ArrayList<>();
+		
+		// sắp xếp theo thứ tự từ điển
+        Collections.sort(inboxF);
+        
+        int n = inboxF.size();
+        int step = (int) Math.floor(Math.sqrt(n));
+        int prev = 0;
+
+        
+        // so sánh nếu vị trí cuối cùng của đoạn lớn hơn searchName thì bắt đầu tìm kiếm cụ thể (loại bỏ các đoạn nhỏ hơn searchName)
+        while (inboxF.get(Math.min(step, n) - 1).compareTo(searchName) < 0) {
+            prev = step; 
+            step += (int) Math.floor(Math.sqrt(n));
+            if (prev >= n)
+                return resultList;
+        }
+
+        
+        //Tìm vị trí đầu tiên lớn hơn hoặc bằng searchName trong phạm vi đã xác định.
+        while (inboxF.get(prev).compareTo(searchName) < 0) {
+            prev++;
+            if (prev == Math.min(step, n))
+                return resultList;
+        }
+
+        
+        //tim kiếm cụ thể (Tìm các vị trí có giá trị là searchName trong đoạn đã xác định)
+        while (inboxF.get(prev).equals(searchName)) {
+            resultList.add(inboxF.get(prev));
+            prev++;
+            if (prev == Math.min(step, n))
+                return resultList;
+        }
+
+        // Kiểm tra các phần tử trước prev trong danh sách inboxF
+        while (prev > 0 && inboxF.get(prev - 1).equals(searchName)) {
+            prev--;
+            resultList.add(inboxF.get(prev));
+        }
+
+		
 		return resultList;
 	}
 	
