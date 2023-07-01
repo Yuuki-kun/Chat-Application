@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 
 import accounttype.AccountType;
 import javafx.application.Platform;
+import request.GetFriendList;
 import request.LoginSuccessfully;
 import request.Message;
 import request.Request;
@@ -55,6 +56,10 @@ public class ListeningServer implements Runnable {
 				if(!((Message)rq).getMessage().equals(null)) {
 					Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().addNewMessage("SERVER",((Message)rq).getMessage().toString(), ((Message)rq).getTimeSend()));
 				}
+				break;
+			case GET_FRIEND_LIST:
+				System.out.print("Da nhan danh sach ban be!");
+				Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().addFriendToListView(((GetFriendList)rq).getFriendList()));
 				break;
 			default:
 				break;

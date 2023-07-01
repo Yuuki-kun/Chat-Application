@@ -109,7 +109,7 @@ public class ServerController implements Initializable{
 	
 	public void connectDB() throws SQLException {
 //		ServerModel.getInstance().connectSQL(dbname_tf.getText(), username_tf.getText(), password_tf.getText());
-		ServerModel.getInstance().connectSQL("TTTTT", "sa", "reallyStrongPwd123");
+		ServerModel.getInstance().connectSQL("AppChatV3", "sa", "reallyStrongPwd123");
 		//co the dung duoc cau lenh nay
 //		
 //		Statement st = Model.getInstance().getConn().createStatement();

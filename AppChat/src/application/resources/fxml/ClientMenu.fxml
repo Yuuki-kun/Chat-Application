@@ -38,7 +38,7 @@
                      <font>
                         <Font size="15.0" />
                      </font></JFXButton>
-                  <JFXButton alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Friends">
+                  <JFXButton fx:id="friendBook_btn" alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Friends">
                      <font>
                         <Font size="15.0" />
                      </font></JFXButton>

@@ -16,19 +16,21 @@ public class ClientMenuController implements Initializable{
     @FXML
     private JFXButton message_btn;
 
+    @FXML
+    private JFXButton friendBook_btn;
     
-    public void show() {
-    		ClientModel.getInstance().getViewFactory().sh();
+    public void showMessageView() {
+    		ClientModel.getInstance().getViewFactory().showMessageView();
     }
-    public void hide() {
-		ClientModel.getInstance().getViewFactory().hi();
+    public void showFriendBookView() {
+		ClientModel.getInstance().getViewFactory().showFriendBookView();
 
     }
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
-		message_btn.setOnAction(event -> show());
-		group_btn.setOnAction(event -> hide());
+		message_btn.setOnAction(event -> showMessageView());
+		friendBook_btn.setOnAction(event -> showFriendBookView());
 	}
     
 }

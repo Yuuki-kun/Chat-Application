@@ -1,0 +1,90 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.client_container{
+	-fx-background-color: #e9e9f0;
+}
+.client_container FontAwesomeIconView{
+	-fx-fill: #363535;
+}
+
+.client_topbar_container{
+	-fx-effect: dropshadow(three-pass-box, #dddddd, 5, 0, 0, 3); 
+	-fx-background-color: #ffffff;
+}
+.client_topbar_container Button{
+	-fx-background-color: transparent;
+	-fx-font-family: "Comic Sans MS";
+	-fx-font-weight: bold;
+	-fx-font-size: 16;
+	-fx-text-fill: #b700c7;
+}
+.client_topbar_container Button:hover{
+	-fx-cursor: hand;
+	-fx-background-color: #ff1c46;
+	-fx-text-fill: #ffffff;
+}
+
+.search-bar{
+	-fx-spacing: 10;
+	-fx-background-color: linear-gradient(to right, #e0dfed,#dfe9ed, #dfe1ed);
+}
+
+.search-bar .text-field{
+	-fx-padding: 0 0 3 26;
+	-fx-border-radius: .8px;
+	-fx-background-radius: 15;
+	-fx-border-radius: 15;
+}
+
+.search-bar .text-field:focused{
+	-fx-border-width: 1.5px;
+	-fx-border-color: linear-gradient(to right, #1b2bbf, #a970db, #721bbf);
+}
+
+.search-bar Button{
+	-fx-background-color: transparent;
+}
+
+.search-bar Button:hover{
+	-fx-cursor: hand;
+	-fx-background-color: #bbbbbb;
+}
+
+.friend_book_container{
+	-fx-font-family: "Tahoma";
+	-fx-background-color: linear-gradient(to top right, #e1e2f2, #ced1f0, #c6bbf0);
+	-fx-background-radius: 7 7 0 0;
+}
+.friend_book_container JFXButton{
+	-fx-alignment: baseline-left;
+	-fx-font-size: 18;
+	-fx-text-fill: #363535;
+	-fx-pref-width: 345;
+	-fx-pref-height: 60;
+}
+.friend_book_container JFXButton:hover{
+	-fx-cursor: hand;
+	-fx-background-color: linear-gradient(to right, #cccccc, #dddddd);
+}
+
+.friend_list_container{
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 7;
+	-fx-font-family: "Tahoma";
+}
+.friend_list_top_label{
+	-fx-font-family: "Tahoma";
+	-fx-background-color: #d3d1eb;
+	-fx-background-radius: 7 7 0 0;
+	-fx-font-weight: bold;
+}
+
+.friend_list_show_container{
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 5;
+	-fx-effect: dropshadow(three-pass-box, rgba(0.0,0.0,0.0,0.5), 6.0,0.0,0.0,0.0); 
+	
+}
+
+
+

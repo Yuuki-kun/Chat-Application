@@ -127,11 +127,11 @@ public class ViewFactory {
 		return clientControllers;
 	}
 	
-	public void sh() {
-		clientControllers.show();
+	public void showMessageView() {
+		clientControllers.showMessageView();
 	}
-	public void hi() {
-		clientControllers.hide();
+	public void showFriendBookView() {
+		clientControllers.showfriendBookView();
 	}
 }
 

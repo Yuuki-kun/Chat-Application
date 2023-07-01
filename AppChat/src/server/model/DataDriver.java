@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 public class DataDriver {
 
@@ -30,7 +32,7 @@ public class DataDriver {
 		// use PrepareStatement execute query
 
 		try {
-			String query = "SELECT * FROM newaccount WHERE username = ? AND password = ?";
+			String query = "SELECT * FROM account WHERE username = ? AND password = ?";
 			statement = conn.prepareStatement(query);
 			statement.setString(1, username);
 			statement.setString(2, password);
@@ -42,6 +44,47 @@ public class DataDriver {
 
 		return resultSet;
 	}
+	public PreparedStatement getStatement() {
+		return statement;
+	}
+	//lay danh sach id ban be cua usernameid
+	public ArrayList<String> getUserFriendID(String userid) throws SQLException {
+		String query = "SELECT frienduserid FROM has_friend WHERE userid = '"+userid+"'";
+		Statement statement = conn.createStatement();
+		resultSet = statement.executeQuery(query);
+		
+		ArrayList<String> userfrId = new ArrayList<>();
+		ArrayList<String> listFriend = new ArrayList<>();
+
+		
+		while(resultSet.next()) {
+			userfrId.add(resultSet.getString("frienduserid"));
+			System.out.println("user friend id = "+resultSet.getString("frienduserid"));
+		}
+		
+		
+		for(String userFriendID : userfrId) {
+			resultSet = statement.executeQuery("SELECT name FROM users WHERE userid = '"+userFriendID+"'");
+			if(resultSet.next()) {
+				listFriend.add(resultSet.getString("name"));
+			}
+		}
+		
+		return listFriend;
+	}
+	
+	public boolean checkExistedUsername(String username) {
+		/*
+		doi tuong conn da duoc khoi tao san, su dung this.conn de su dung doi tuong connection
+		kiem tra username co ton tai trong column "username" cua table "users" hay chua
+		tra ve true neu da ton tai
+		Note: test cau truy van trong mot lop ben ngoai project nay truoc, chi code vao day
+		*/
+	
+		//Your code here
+		
+	}
+	
 	public Connection getConn() {
 		return conn;
 	}

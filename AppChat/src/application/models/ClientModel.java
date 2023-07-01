@@ -1,6 +1,7 @@
 package application.models;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import accounttype.AccountType;
 import application.controller.FriendInboxController;
@@ -21,7 +22,11 @@ public class ClientModel {
 	
 	private ClientModel() {
 		this.viewFactory = new ViewFactory(logginAccountType);
+	}
+	
+	public void initialClient() {
 		this.client = new Client("localhost", 1234);
+
 	}
 	
 	public static synchronized ClientModel getInstance() {
@@ -41,6 +46,7 @@ public class ClientModel {
 	}
 	
 	public void sendLoginRequest(String username, String password) {
+		initialClient();
 		Request rq = new LoginRequest(RequestType.LOGIN, username, password);
 		rq.sendRequest();
 	}
@@ -56,6 +62,7 @@ public class ClientModel {
 	public boolean getLoginSuccessfully() {
 		return this.loginSuccessfully;
 	}
+	
 	
 
 }
