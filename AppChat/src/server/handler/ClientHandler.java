@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import accounttype.AccountType;
@@ -134,6 +137,7 @@ public class ClientHandler implements Runnable {
 
 	
 	public void signUp(Request signUpRequest) {
+		
 		SignUp signupRequest = (SignUp)signUpRequest;
 		String username = signupRequest.getUsername(),
 				   password = signupRequest.getPassword(),
@@ -145,22 +149,57 @@ public class ClientHandler implements Runnable {
 		
 		boolean checkSiggup = checkSignUp(username, password, name,city, district ,district2,street);
 		
-		if(checkSiggup) {
-			
-			// soluongtk = dem tat cac cac tai khoang trong table account
-			//id = soluongtk + 1;
-			int id;
-			
-			
-			String userId = "u"+ id;
-			
-			/*
-			 *viet vao cac truong tuong ung trong csdl users va account
-			 * 
-			 * */
-		}else {
-			
+//		if(checkSiggup) {
+//			
+//			// soluongtk = dem tat cac cac tai khoang trong table account
+//			//id = soluongtk + 1;         
+//			int id=;
+//			
+//			String userId = "u"+ id;
+//			
+//			/*
+//			 *viet vao cac truong tuong ung trong csdl users va account ( đăng ký tk lên sql )
+//			 * 
+//			 * */
+//		}
+		if (checkSiggup) {
+		    try {
+		        // Lấy số lượng tài khoản bằng cách đếm tất cả các tài khoản có trong bảng account
+		        Statement countStatement = ServerModel.getInstance().getDatadriver().getConn().createStatement();
+		        String countQuery = "SELECT COUNT(*) FROM account";
+		        ResultSet countResult = countStatement.executeQuery(countQuery);
+		        int accountCount = 0;
+		        if (countResult.next()) {
+		            accountCount = countResult.getInt(1);
+		        }
+		        countResult.close();
+		        countStatement.close();
+
+		        // Tính toán id và userId mới
+		        int id = accountCount + 1;
+		        String userId = "u" + id;
+
+		        // Thêm userId vào cột userid của bảng account
+		        PreparedStatement updateAccountStatement = ServerModel.getInstance().getDatadriver().getConn().prepareStatement("UPDATE account SET userid = ? WHERE username = ?");
+		        updateAccountStatement.setString(1, userId);
+		        updateAccountStatement.setString(2, username);
+		        updateAccountStatement.executeUpdate();
+		        updateAccountStatement.close();
+
+		        // Thêm userId vào cột userid của bảng "user"
+		        PreparedStatement updateUserStatement = ServerModel.getInstance().getDatadriver().getConn().prepareStatement("UPDATE \"user\" SET userid = ?");
+		        updateUserStatement.setString(1, userId);
+		        updateUserStatement.executeUpdate();
+		        updateUserStatement.close();
+
+		        System.out.println("Đã thêm thành công userId: " + userId + " vào bảng account và user.");
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		} else {
+		    System.out.println("thêm không thành công");
 		}
+
 		
 	}
 	
