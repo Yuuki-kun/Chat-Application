@@ -163,7 +163,7 @@ public class ClientHandler implements Runnable {
 //			 * */
 //		}
 		if (checkSiggup) {
-		    try { 
+		    try {
 		        // Lấy số lượng tài khoản bằng cách đếm tất cả các tài khoản có trong bảng account
 		        Statement countStatement = ServerModel.getInstance().getDatadriver().getConn().createStatement();
 		        String countQuery = "SELECT COUNT(*) FROM account";
