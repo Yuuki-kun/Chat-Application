@@ -22,7 +22,6 @@ public class ServerMessage extends Request{
 		
 	}
 	
-
 	
 	public String getMessage() {
 		return message;
