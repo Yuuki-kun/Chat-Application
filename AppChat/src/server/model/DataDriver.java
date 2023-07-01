@@ -82,6 +82,25 @@ public class DataDriver {
 		*/
 	
 		//Your code here
+		  boolean isExisted = false;
+
+	        try {
+	            String query = "SELECT COUNT(*) FROM account WHERE username = ?";
+	            statement = conn.prepareStatement(query);
+	            statement.setString(1, username);
+
+	            resultSet = statement.executeQuery();
+	            resultSet.next();
+	            int count = resultSet.getInt(1);
+
+	            if (count > 0) {
+	                isExisted = true;
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+	        return isExisted;
 		
 	}
 	

@@ -176,6 +176,24 @@ public class ClientHandler implements Runnable {
 		
 		viet ham checkExistedUsername
 		*/
+		
+		 // Kiểm tra user có chứa space hay không nếu có return false
+	    if (username.contains(" ") || password.contains(" ")) {
+	        return false;
+	    }
+
+	    // Tiếp tục kiểm tra các trường còn lại nếu có bất kỳ trường nào có độ dài lớn hơn 30 hoặc bằng rỗng thì return false
+	    if (username.isEmpty() || username.length() > 30 ||
+	        password.isEmpty() || password.length() > 30 ||
+	        name.isEmpty() || name.length() > 30 ||
+	        city.isEmpty() || city.length() > 30 ||
+	        district.isEmpty() || district.length() > 30 ||
+	        district2.isEmpty() || district2.length() > 30 ||
+	        street.isEmpty() || street.length() > 30) {
+	        return false;
+	    }
+		
+		
 		boolean isExisted = ServerModel.getInstance().getDatadriver().checkExistedUsername(username);
 		
 		//neu username da ton tai -> return false, nguoc lai true -> !isExisted
