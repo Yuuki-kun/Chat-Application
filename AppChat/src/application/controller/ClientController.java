@@ -67,7 +67,8 @@ public class ClientController implements Initializable {
 		this.friend_ib.setVisible(true);
 		this.friend_book.setVisible(false);
 		this.friend_list_view.setVisible(false);
-		
+//		this.messScrollPane.setOnMouseClicked(event -> System.out.println("scroll pane clicked"));
+//		this.messVBox.setOnMouseClicked(event -> System.out.println("vbox clicked"));
 		messVBox.heightProperty().addListener(new ChangeListener<Number>() {
 
 			@Override
@@ -186,13 +187,34 @@ public class ClientController implements Initializable {
 		
 //		Label a = new Label("TONG CONG MINH");
 //		this.friend_list_view_vbox.getChildren().add(a);
-		System.out.println(friendList.get(0));
-		for(String friend : friendList) {
-			System.out.println(friend);
-			Label l = new Label(friend);
-			this.friend_list_view_vbox.getChildren().add(l);
+//		System.out.println(friendList.get(0));
+//		for(String friend : friendList) {
+//			System.out.println(friend);
+//			Label l = new Label(friend);
+//			this.friend_list_view_vbox.getChildren().add(l);
+//		}
+		
+		for(String friendName : friendList) {
+			HBox h = null;
+			try {
+				FriendBoxViewController friendBoxView = new FriendBoxViewController();
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/test/guiobjectjson/friendBoxView.fxml"));
+				loader.setController(friendBoxView);
+				h = loader.load();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// lay con vbox ra tu hbox
+
+			Label friendNameLabel = (Label)h.getChildren().get(1);
+			friendNameLabel.setText(friendName);
+
+			friend_list_view_vbox.getChildren().add(h);
 		}
+		
 	}
+	
 	
 
 }

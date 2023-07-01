@@ -2,5 +2,6 @@ package accounttype;
 
 public enum AccountType {
 	ADMIN,
-	CLIENT
+	CLIENT,
+	CREATOR
 }

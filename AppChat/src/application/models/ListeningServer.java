@@ -10,6 +10,7 @@ import request.GetFriendList;
 import request.LoginSuccessfully;
 import request.Message;
 import request.Request;
+import request.ServerMessage;
 
 public class ListeningServer implements Runnable {
 
@@ -26,9 +27,6 @@ public class ListeningServer implements Runnable {
 	public void run() {
 		
 		while (ClientModel.getInstance().getClient().getSocket().isConnected()) {
-			
-			
-
 			
 			try {
 				rq = (Request) in.readObject();
@@ -51,10 +49,10 @@ public class ListeningServer implements Runnable {
 				}
 				
 				break;
-			case MESSAGE:
-				System.out.print("DA NHAN MESSAGE + "+((Message)rq).getMessage().toString());
-				if(!((Message)rq).getMessage().equals(null)) {
-					Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().addNewMessage("SERVER",((Message)rq).getMessage().toString(), ((Message)rq).getTimeSend()));
+			case SERVER_MESSAGE:
+				System.out.print("DA NHAN MESSAGE + "+((ServerMessage)rq).getMessage().toString());
+				if(!((ServerMessage)rq).getMessage().equals(null)) {
+					Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().addNewMessage("SERVER",((ServerMessage)rq).getMessage().toString(), ((ServerMessage)rq).getTimeSend()));
 				}
 				break;
 			case GET_FRIEND_LIST:
