@@ -3,36 +3,26 @@ package request;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class Message extends Request{
+public class ServerMessage extends Request{
 
+	private static final long serialVersionUID = 1L;
 	private String message;
 	private String timeSend;
-	private String sendID;
 	
-	public Message(RequestType rqType, String message) {
+	public ServerMessage(RequestType rqType, String message) {
 		super(rqType);
 		this.message = message;
 		this.timeSend = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
 		// TODO Auto-generated constructor stub
 	}
 
-	public Message(RequestType rqType, String message, String sendID) {
-		super(rqType);
-		this.message = message;
-		this.timeSend = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
-		this.sendID = sendID;
-		// TODO Auto-generated constructor stub
-	}
-	
 	@Override
 	public void writeRequest() {
 		// TODO Auto-generated method stub
 		
 	}
 	
-	public String getSendID() {
-		return sendID;
-	}
+
 	
 	public String getMessage() {
 		return message;

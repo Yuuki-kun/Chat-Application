@@ -11,6 +11,7 @@ import accounttype.AccountType;
 import request.GetFriendList;
 import request.LoginRequest;
 import request.LoginSuccessfully;
+import request.Message;
 import request.Request;
 import request.RequestType;
 import request.SignUp;
@@ -20,6 +21,7 @@ import server.model.ServerModel;
 
 public class ClientHandler implements Runnable {
 
+	public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
@@ -31,6 +33,10 @@ public class ClientHandler implements Runnable {
 			this.socket = socket;
 			this.out = new ObjectOutputStream(socket.getOutputStream());
 			this.in = new ObjectInputStream(socket.getInputStream());
+			
+			//add client handler thread to array list
+			clientHandlers.add(this);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -59,6 +65,11 @@ public class ClientHandler implements Runnable {
 						// TODO Auto-generated catch block
 						System.out.println("get friend list error");
 						e.printStackTrace();
+					}
+					break;
+				case SEND_MESSAGE:
+					if(((Message)rq).getSendID()!=null){
+						sendMessageTo(((Message)rq).getSendID(), ((Message)rq).getMessage());
 					}
 				default:
 					break;
@@ -149,7 +160,7 @@ public class ClientHandler implements Runnable {
 			
 			// soluongtk = dem tat cac cac tai khoang trong table account
 			//id = soluongtk + 1;
-			int id;
+			int id=0;
 			
 			
 			String userId = "u"+ id;
@@ -183,9 +194,27 @@ public class ClientHandler implements Runnable {
 		
 	}
 	
+	public void sendMessageTo(String userid, String message) {
+		for(ClientHandler client : clientHandlers) {
+			if(userid.equals(client.getClientID())) {
+				Request sendMessageToUserID = new Message(RequestType.MESSAGE, message, userid);
+				try {
+					client.getOut().writeObject(sendMessageToUserID);
+				} catch (IOException e) {
+					System.out.println("send message to user "+userid+" error.");
+					closeEverything();
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	
+	public void removeClientHandler() {
+		clientHandlers.remove(this);
+	}
 	
 	public void closeEverything() {
+		removeClientHandler();
 		if (in != null) {
 			try {
 				in.close();
@@ -212,6 +241,9 @@ public class ClientHandler implements Runnable {
 		}
 	}
 	
+	public String getClientID() {
+		return clientID;
+	}
 	public ObjectOutputStream getOut() {
 		return out;
 	}

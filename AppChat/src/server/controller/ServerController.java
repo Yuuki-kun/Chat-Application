@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import request.Message;
 import request.Request;
 import request.RequestType;
+import request.ServerMessage;
 import server.handler.ClientHandler;
 import server.model.ServerModel;
 
@@ -128,7 +129,7 @@ public class ServerController implements Initializable{
 		this.sayToClient.getText();
 		
 		
-		Request rq = new Message(RequestType.MESSAGE,this.sayToClient.getText());
+		Request rq = new ServerMessage(RequestType.SERVER_MESSAGE,this.sayToClient.getText());
 		try {
 			
 			out.writeObject(rq);
