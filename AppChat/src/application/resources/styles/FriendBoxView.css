@@ -1,0 +1,19 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.client_box_view_container{
+	-fx-background-color: #ffffff;
+	-fx-cursor: hand;
+}
+.client_box_view_container Button{
+	-fx-background-radius: 25;
+	-fx-font-family: "Tahoma";
+	-fx-text-fill: #aaaaaa;
+	-fx-background-color: #dddddd;
+}
+
+.client_box_view_container Button:hover{
+	-fx-cursor: hand;
+	-fx-effect: dropshadow(three-pass-box, #aaaaaa, 5,0,0,3); 
+}
+
+

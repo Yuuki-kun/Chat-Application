@@ -162,7 +162,6 @@ public class ClientHandler implements Runnable {
 			//id = soluongtk + 1;
 			int id=0;
 			
-			
 			String userId = "u"+ id;
 			
 			/*
