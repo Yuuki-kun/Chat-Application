@@ -22,8 +22,7 @@ public class ClientBoxController {
 		
 		this.friend_box_hbox.setOnMouseClicked(event ->{
 			System.out.println("Set v box cua "+clientname);
-			
-			ClientModel.getInstance().getViewFactory().getClientController().resetVBox(this.chatVBox);
+						ClientModel.getInstance().getViewFactory().getClientController().resetVBox(this.chatVBox);
 		});
 	}
 	
