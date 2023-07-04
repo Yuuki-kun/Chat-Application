@@ -1,0 +1,6 @@
+-Dfile.encoding=UTF-8
+-p
+"/Users/tongcongminh/git/Chat-Application/AppChat/bin:/Users/tongcongminh/.p2/pool/plugins/org.eclipse.fx.ide.css.jfx8_3.8.0.202204150904.jar:/Users/tongcongminh/Downloads/App/javafx-sdk-20.0.1/lib/javafx-swt.jar:/Users/tongcongminh/Downloads/App/javafx-sdk-20.0.1/lib/javafx.base.jar:/Users/tongcongminh/Downloads/App/javafx-sdk-20.0.1/lib/javafx.controls.jar:/Users/tongcongminh/Downloads/App/javafx-sdk-20.0.1/lib/javafx.fxml.jar:/Users/tongcongminh/Downloads/App/javafx-sdk-20.0.1/lib/javafx.graphics.jar:/Users/tongcongminh/Downloads/App/javafx-sdk-20.0.1/lib/javafx.media.jar:/Users/tongcongminh/Downloads/App/javafx-sdk-20.0.1/lib/javafx.swing.jar:/Users/tongcongminh/Downloads/App/javafx-sdk-20.0.1/lib/javafx.web.jar:/Users/tongcongminh/Downloads/App/de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon/fontawesomefx-commons-9.1.2.jar:/Users/tongcongminh/Downloads/App/de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon/fontawesomefx-fontawesome-4.7.0-9.1.2.jar:/Users/tongcongminh/Downloads/App/jfoenix-19.0.1.jar:/Users/tongcongminh/Downloads/MSSQL/sqljdbc_11.2\\enu/mssql-jdbc-11.2.0.jre17.jar"
+-XX:+ShowCodeDetailsInExceptionMessages
+-m
+AppChat/application.Main

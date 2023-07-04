@@ -24,8 +24,8 @@ public class ClientMenuController implements Initializable{
     }
     public void showFriendBookView() {
 		ClientModel.getInstance().getViewFactory().showFriendBookView();
-
     }
+    
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub

@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DataDriver {
 
@@ -48,13 +50,14 @@ public class DataDriver {
 		return statement;
 	}
 	//lay danh sach id ban be cua usernameid
-	public ArrayList<String> getUserFriendID(String userid) throws SQLException {
+	public Map<String, String> getUserFriendID(String userid) throws SQLException {
 		String query = "SELECT frienduserid FROM has_friend WHERE userid = '"+userid+"'";
 		Statement statement = conn.createStatement();
 		resultSet = statement.executeQuery(query);
 		
 		ArrayList<String> userfrId = new ArrayList<>();
-		ArrayList<String> listFriend = new ArrayList<>();
+		
+		Map<String, String> listFriend = new HashMap<>();
 
 		
 		while(resultSet.next()) {
@@ -66,7 +69,8 @@ public class DataDriver {
 		for(String userFriendID : userfrId) {
 			resultSet = statement.executeQuery("SELECT name FROM users WHERE userid = '"+userFriendID+"'");
 			if(resultSet.next()) {
-				listFriend.add(resultSet.getString("name"));
+//				listFriend.add(resultSet.getString("name"));
+				listFriend.put(userFriendID,resultSet.getString("name"));
 			}
 		}
 		

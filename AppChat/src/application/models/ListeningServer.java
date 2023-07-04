@@ -52,12 +52,32 @@ public class ListeningServer implements Runnable {
 			case SERVER_MESSAGE:
 				System.out.print("DA NHAN MESSAGE + "+((ServerMessage)rq).getMessage().toString());
 				if(!((ServerMessage)rq).getMessage().equals(null)) {
-					Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().addNewMessage("SERVER",((ServerMessage)rq).getMessage().toString(), ((ServerMessage)rq).getTimeSend()));
+					Platform.runLater(()->{
+						try {
+							ClientModel.getInstance().getViewFactory().getClientController().addNewMessage("server",((ServerMessage)rq).getMessage().toString(), ((ServerMessage)rq).getTimeSend(), true);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					});
 				}
 				break;
 			case GET_FRIEND_LIST:
 				System.out.print("Da nhan danh sach ban be!");
 				Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().addFriendToListView(((GetFriendList)rq).getFriendList()));
+				break;
+			case MESSAGE:
+				System.out.print("Da nhan tin nhan");
+				System.out.print("From: "+((Message)rq).getFromID()+"\nMessage: "+((Message)rq).getMessage()+" to my id = "+((Message)rq).getSendID());
+//				Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().addNewMessage(((Message)rq).getSendID(), ((Message)rq).getMessage(), ((Message)rq).getTimeSend()));
+				Platform.runLater(()->{
+					try {
+						ClientModel.getInstance().getViewFactory().getClientController().displayReceiveMessage(((Message)rq).getFromID(), ((Message)rq).getMessage());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				});
 				break;
 			default:
 				break;

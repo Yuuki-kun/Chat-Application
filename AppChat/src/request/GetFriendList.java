@@ -1,12 +1,12 @@
 package request;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 public class GetFriendList extends Request{
 
-	private ArrayList<String> friendList; 
+	private Map<String, String> friendList; 
 	
-	public GetFriendList(RequestType rqType, ArrayList<String> friendList) {
+	public GetFriendList(RequestType rqType, Map<String, String> friendList) {
 		super(rqType);
 		this.friendList = friendList;
 	}
@@ -18,7 +18,7 @@ public class GetFriendList extends Request{
 		
 	}
 
-	public ArrayList<String> getFriendList() {
+	public Map<String, String> getFriendList() {
 		return friendList;
 	}
 }

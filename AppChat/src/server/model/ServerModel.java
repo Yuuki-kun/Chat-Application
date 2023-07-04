@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Map;
 
 import accounttype.AccountType;
 
@@ -79,7 +80,7 @@ public class ServerModel {
 		return datadriver;
 	}
 	
-	public ArrayList<String> getFriendList(String userid) throws SQLException{
+	public Map<String, String> getFriendList(String userid) throws SQLException{
 		return datadriver.getUserFriendID(userid);
 	}
 	

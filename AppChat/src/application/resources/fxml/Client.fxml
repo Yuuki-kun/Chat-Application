@@ -50,7 +50,12 @@
                   <FontAwesomeIconView glyphName="SEARCH" layoutX="34.0" layoutY="105.0" />
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="741.0" prefWidth="566.0" style="-fx-background-color: #abcdef;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <AnchorPane fx:id="chat_view" prefHeight="741.0" prefWidth="566.0" style="-fx-background-color: #dddddd;" styleClass="chat_view_container" stylesheets="@../styles/ChatView.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ScrollPane fx:id="message_view_sp" layoutX="8.0" layoutY="59.0" prefHeight="615.0" prefWidth="548.0" />
+                  <TextField fx:id="message_tf" layoutX="21.0" layoutY="690.0" prefHeight="26.0" prefWidth="404.0" />
+                  <Button fx:id="sendMessageBtn" layoutX="441.0" layoutY="691.0" mnemonicParsing="false" text="Send" />
+               </children></AnchorPane>
          </children></AnchorPane>
 
 
@@ -113,7 +118,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane fx:id="friend_ib" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="friend_ib" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             	<children>
             		      	      <ScrollPane fx:id="messScrollPane" minHeight="580.0" minWidth="354.0" stylesheets="@../styles/MessageBar.css" BorderPane.alignment="CENTER">
          <content>
@@ -130,7 +135,7 @@
       </ScrollPane>
             	</children>
             </AnchorPane>
-            <AnchorPane fx:id="friend_book" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="friend_book" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <VBox layoutY="35.0" prefHeight="705.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
                      <children>

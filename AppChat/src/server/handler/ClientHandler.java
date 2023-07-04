@@ -17,6 +17,7 @@ import request.LoginSuccessfully;
 import request.Message;
 import request.Request;
 import request.RequestType;
+import request.SendMessage;
 import request.SignUp;
 import server.model.ServerModel;
 
@@ -71,8 +72,8 @@ public class ClientHandler implements Runnable {
 					}
 					break;
 				case SEND_MESSAGE:
-					if(((Message)rq).getSendID()!=null){
-						sendMessageTo(((Message)rq).getSendID(), ((Message)rq).getMessage());
+					if(((SendMessage)rq).getSendID()!=null){
+						sendMessageTo(((SendMessage)rq).getSendID(), ((SendMessage)rq).getMessage(), ((SendMessage)rq).getTimeSend());
 					}
 				default:
 					break;
@@ -94,8 +95,8 @@ public class ClientHandler implements Runnable {
 
 	public void getFriendListFromDB() throws SQLException{
 		
-		Request sendFriendListForClient = new GetFriendList(RequestType.GET_FRIEND_LIST, 		ServerModel.getInstance().getFriendList(clientID));
-		System.out.println("FRIEND LIST = "+ServerModel.getInstance().getFriendList(clientID));
+		Request sendFriendListForClient = new GetFriendList(RequestType.GET_FRIEND_LIST, ServerModel.getInstance().getFriendList(clientID));
+//		System.out.println("FRIEND LIST = "+ServerModel.getInstance().getFriendList(clientID));
 		try {
 			this.out.writeObject(sendFriendListForClient);
 		} catch (IOException e) {
@@ -256,14 +257,15 @@ public class ClientHandler implements Runnable {
 		
 	}
 	
-	public void sendMessageTo(String userid, String message) {
+	public void sendMessageTo(String userid, String message, String time) {
 		for(ClientHandler client : clientHandlers) {
 			if(userid.equals(client.getClientID())) {
-				Request sendMessageToUserID = new Message(RequestType.MESSAGE, message, userid);
+				Request sendMessageToUserID = new Message(RequestType.MESSAGE, message, userid, time, this.clientID);
 				try {
 					client.getOut().writeObject(sendMessageToUserID);
+					System.out.println("da gui tin nhan qua +"+userid);
 				} catch (IOException e) {
-					System.out.println("send message to user "+userid+" error.");
+					System.out.println("from "+clientID+" send message to user "+userid+" error.");
 					closeEverything();
 					e.printStackTrace();
 				}

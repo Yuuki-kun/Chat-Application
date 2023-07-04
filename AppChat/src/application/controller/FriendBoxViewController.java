@@ -1,8 +1,10 @@
 package application.controller;
 
+import java.net.Authenticator.RequestorType;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.models.ClientModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,6 +15,9 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.robot.Robot;
+import request.Message;
+import request.Request;
+import request.RequestType;
 
 public class FriendBoxViewController implements Initializable{
 
@@ -27,6 +32,9 @@ public class FriendBoxViewController implements Initializable{
 
     @FXML
     private Label friend_name_label;
+    
+    private String UserID;
+    
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -53,7 +61,10 @@ public class FriendBoxViewController implements Initializable{
 					
 				});		
 				chatOption.setOnAction(event ->{
-					//xu ly su kien chat
+					//Open chat view
+					System.out.println("Option = "+UserID+"; "+friend_name_label.getText());
+					ClientModel.getInstance().getViewFactory().getClientController().showMessageView();
+					ClientModel.getInstance().getViewFactory().getClientController().setSendToUserID(UserID);
 				});
 				
 				option2.setOnAction(event ->{
@@ -74,5 +85,12 @@ public class FriendBoxViewController implements Initializable{
 				
 				this.chooces_btn.setOnMouseClicked(event -> contextMenu.show(chooces_btn, event.getScreenX(), event.getScreenY()));
 	}
+	
+	public void setUserID(String userID) {
+		UserID = userID;
+	}
     
+	public String getUserID() {
+		return UserID;
+	}
 }
