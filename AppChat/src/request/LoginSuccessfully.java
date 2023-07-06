@@ -6,11 +6,13 @@ public class LoginSuccessfully extends Request{
 
 	private AccountType accountType;
 	private String usernameFromDB;
+	private String id;
 	
-	public LoginSuccessfully(RequestType rqType, AccountType accType, String usrn) {
+	public LoginSuccessfully(RequestType rqType, AccountType accType, String usrn, String id) {
 		super(rqType);
 		this.accountType = accType;
 		this.usernameFromDB = usrn;
+		this.id = id;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -33,5 +35,9 @@ public class LoginSuccessfully extends Request{
 	
 	public String getUsernameFromDB() {
 		return usernameFromDB;
+	}
+	
+	public String getId() {
+		return id;
 	}
 }
