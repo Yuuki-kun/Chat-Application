@@ -21,9 +21,18 @@ public class ClientBoxController {
 
 		
 		this.friend_box_hbox.setOnMouseClicked(event ->{
-			System.out.println("Set v box cua "+clientname);
+			System.out.println("Set v box cua "+this.clientname+" user id = "+this.userID);
+			//neu click vao inboxview -> chuyen doi tuong can gui tin nhan sang doi tuong do
+			ClientModel.getInstance().getViewFactory().getClientController().setSendToUserID(userID);
+			
+			//chuyen message view sang doi tuong duoc chon 
 						ClientModel.getInstance().getViewFactory().getClientController().resetVBox(this.chatVBox);
+						ClientModel.getInstance().getViewFactory().getClientController().setOriginVBox(chatVBox);
+
 		});
+		
+		
+		
 	}
 	
 	public String getUserID() {
@@ -36,5 +45,8 @@ public class ClientBoxController {
 	
 	public VBox getChatVBox() {
 		return chatVBox;
+	}
+	public String getClientname() {
+		return clientname;
 	}
 }
