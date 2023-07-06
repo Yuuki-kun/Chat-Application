@@ -117,7 +117,7 @@ public class ClientHandler implements Runnable {
 		
 		if (ServerModel.getInstance().getLoginSuccessfully()) {
 			if (ServerModel.getInstance().getLoginAccoutType() == AccountType.CLIENT) {
-				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.CLIENT, clientName);
+				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.CLIENT, clientName, clientID);
 
 				try {
 					this.out.writeObject(loginSuccessfully);
@@ -131,7 +131,7 @@ public class ClientHandler implements Runnable {
 				}
 			} else {
 				System.out.println("ADMIN LOGIN.");
-				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.ADMIN, clientName);
+				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.ADMIN, clientName, clientID);
 				try {
 					this.out.writeObject(loginSuccessfully);
 					System.out.println("Da gui doi tuong login admin.");
