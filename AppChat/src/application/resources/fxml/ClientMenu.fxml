@@ -23,7 +23,7 @@
                         <Image url="@../images/logo.png" />
                      </image>
                   </ImageView>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="182.0" text="Tống Công Minh" />
+                  <Label fx:id="clientName" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="182.0" text="Tống Công Minh" />
                </children>
             </VBox>
          </top>
@@ -43,14 +43,14 @@
                         <Font size="15.0" />
                      </font></JFXButton>
                   <Line endX="150.0" fill="WHITE" />
-                  <JFXButton alignment="BASELINE_LEFT" graphicTextGap="16.0" prefHeight="26.0" prefWidth="135.0" ripplerFill="BLACK" text="Profile">
+                  <JFXButton fx:id="profile_btn" alignment="BASELINE_LEFT" graphicTextGap="16.0" prefHeight="26.0" prefWidth="135.0" ripplerFill="BLACK" text="Profile">
                      <graphic>
                         <FontAwesomeIconView glyphName="USER" />
                      </graphic>
                      <font>
                         <Font size="15.0" />
                      </font></JFXButton>
-                  <JFXButton alignment="BASELINE_LEFT" graphicTextGap="16.0" layoutX="33.0" layoutY="98.0" prefHeight="26.0" prefWidth="135.0" ripplerFill="BLACK" text="Logout">
+                  <JFXButton fx:id="logout_btn" alignment="BASELINE_LEFT" graphicTextGap="16.0" layoutX="33.0" layoutY="98.0" prefHeight="26.0" prefWidth="135.0" ripplerFill="BLACK" text="Logout">
                      <graphic>
                         <FontAwesomeIconView glyphName="EXTERNAL_LINK" />
                      </graphic>
@@ -64,7 +64,7 @@
          <bottom>
             <HBox alignment="CENTER" prefHeight="47.0" prefWidth="180.0" styleClass="bottom_menu_container" BorderPane.alignment="CENTER">
                <children>
-                  <JFXButton prefHeight="29.0" prefWidth="153.0" text="Setting" textFill="WHITE" />
+                  <JFXButton fx:id="setting_btn" prefHeight="29.0" prefWidth="153.0" text="Setting" textFill="WHITE" />
                </children>
             </HBox>
          </bottom>
