@@ -56,7 +56,7 @@ public class ViewFactory {
 		transparentStageFadeIn(stage);
 	}
 	
-	public void showClientWindow(String username) {
+	public void showClientWindow(String clientID, String clientname) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/Client.fxml"));
 		ClientController clientController = new ClientController();
 		loader.setController(clientController);
@@ -66,8 +66,12 @@ public class ViewFactory {
 		clientControllers = clientController;
 		System.out.println("CLIENT CONTROLLER");
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setContentText("Hello "+username);
+		alert.setContentText("Hello "+clientname);
 		alert.showAndWait();
+		
+		clientController.setClientID(clientID);
+		clientController.setClientName(clientname);
+		clientController.setNameLabel();
 		
 	}
 	
