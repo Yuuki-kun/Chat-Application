@@ -65,6 +65,8 @@ public class FriendBoxViewController implements Initializable{
 					System.out.println("Option = "+UserID+"; "+friend_name_label.getText());
 					ClientModel.getInstance().getViewFactory().getClientController().showMessageView();
 					ClientModel.getInstance().getViewFactory().getClientController().setSendToUserID(UserID);
+					ClientModel.getInstance().getViewFactory().getClientController().setSendToName(friend_name_label.getText());
+					
 				});
 				
 				option2.setOnAction(event ->{
