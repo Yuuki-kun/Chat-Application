@@ -15,156 +15,226 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="clientBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="806.0" prefWidth="1100.0" styleClass="client_container" stylesheets="@../styles/Client.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
 	<left>
-		<fx:include source="ClientMenu.fxml" />
+		<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="180.0" styleClass="main_menu_container" stylesheets="@../styles/ClientMenuBar.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+			<children>
+				<BorderPane prefHeight="650.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+					<top>
+						<VBox alignment="CENTER" prefHeight="200.0" prefWidth="185.0" styleClass="user_infor_container" BorderPane.alignment="CENTER">
+							<children>
+								<ImageView fitHeight="95.0" fitWidth="225.0" pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="@../images/logo.png" />
+									</image>
+								</ImageView>
+								<Label fx:id="clientNameLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="182.0" text="Hello There" />
+							</children>
+						</VBox>
+					</top>
+					<center>
+						<VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="center_menu_container" BorderPane.alignment="CENTER">
+							<children>
+								<JFXButton fx:id="message_btn" alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Message">
+									<font>
+										<Font size="15.0" />
+									</font>
+								</JFXButton>
+								<JFXButton fx:id="group_btn" alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Group">
+									<font>
+										<Font size="15.0" />
+									</font>
+								</JFXButton>
+								<JFXButton fx:id="friendBook_btn" alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Friends">
+									<font>
+										<Font size="15.0" />
+									</font>
+								</JFXButton>
+								<Line endX="150.0" fill="WHITE" />
+								<JFXButton fx:id="profile_btn" alignment="BASELINE_LEFT" graphicTextGap="16.0" prefHeight="26.0" prefWidth="135.0" ripplerFill="BLACK" text="Profile">
+									<graphic>
+										<FontAwesomeIconView glyphName="USER" />
+									</graphic>
+									<font>
+										<Font size="15.0" />
+									</font>
+								</JFXButton>
+								<JFXButton fx:id="logout_btn" alignment="BASELINE_LEFT" graphicTextGap="16.0" layoutX="33.0" layoutY="98.0" prefHeight="26.0" prefWidth="135.0" ripplerFill="BLACK" text="Logout">
+									<graphic>
+										<FontAwesomeIconView glyphName="EXTERNAL_LINK" />
+									</graphic>
+									<font>
+										<Font size="15.0" />
+									</font>
+								</JFXButton>
+							</children>
+						</VBox>
+					</center>
+					<bottom>
+						<HBox alignment="CENTER" prefHeight="47.0" prefWidth="180.0" styleClass="bottom_menu_container" BorderPane.alignment="CENTER">
+							<children>
+								<JFXButton fx:id="setting_btn" prefHeight="29.0" prefWidth="153.0" text="Setting" textFill="WHITE" />
+							</children>
+						</HBox>
+					</bottom>
+				</BorderPane>
+			</children>
+		</AnchorPane>
 	</left>
 	<right>
 
 		<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="566.0" style="-fx-background-color: #eeeeee;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
-         <children>
-            <AnchorPane fx:id="friend_list_view" prefHeight="741.0" prefWidth="566.0" styleClass="friend_list_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Pane layoutX="25.0" layoutY="17.0" prefHeight="47.0" prefWidth="566.0" styleClass="friend_list_top_label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutX="22.0" layoutY="11.0" prefHeight="24.0" prefWidth="82.0" text="Friend List">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </Pane>
-                  <AnchorPane layoutX="209.0" layoutY="125.0" prefHeight="606.0" prefWidth="546.0" styleClass="friend_list_show_container" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="130.0">
-                     <children>
-                        <ScrollPane fx:id="friend_list_view_scroll" layoutX="8.0" layoutY="8.0" prefHeight="587.0" prefWidth="530.0" styleClass="no-focus-visual">
-                           <content>
-                              <VBox fx:id="friend_list_view_vbox" prefHeight="571.0" prefWidth="525.0" styleClass="no-focus-visual" />
-                           </content>
-                        </ScrollPane>
-                     </children>
-                  </AnchorPane>
-                  <Label layoutX="25.0" layoutY="53.0" text="Total Friend:" AnchorPane.leftAnchor="25.0" />
-                  <FontAwesomeIconView glyphName="SEARCH" layoutX="34.0" layoutY="105.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="chat_view" prefHeight="741.0" prefWidth="566.0" style="-fx-background-color: #dddddd;" styleClass="chat_view_container" stylesheets="@../styles/ChatView.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <ScrollPane fx:id="message_view_sp" layoutX="8.0" layoutY="59.0" prefHeight="615.0" prefWidth="548.0" />
-                  <TextField fx:id="message_tf" layoutX="21.0" layoutY="690.0" prefHeight="26.0" prefWidth="404.0" />
-                  <Button fx:id="sendMessageBtn" layoutX="441.0" layoutY="691.0" mnemonicParsing="false" text="Send" />
-               </children></AnchorPane>
-         </children></AnchorPane>
+			<children>
+				<AnchorPane fx:id="friend_list_view" prefHeight="741.0" prefWidth="566.0" styleClass="friend_list_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+					<children>
+						<Pane layoutX="25.0" layoutY="17.0" prefHeight="47.0" prefWidth="566.0" styleClass="friend_list_top_label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+							<children>
+								<Label layoutX="22.0" layoutY="11.0" prefHeight="24.0" prefWidth="82.0" text="Friend List">
+									<font>
+										<Font name="System Bold" size="18.0" />
+									</font>
+								</Label>
+							</children>
+						</Pane>
+						<AnchorPane layoutX="209.0" layoutY="125.0" prefHeight="606.0" prefWidth="546.0" styleClass="friend_list_show_container" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="130.0">
+							<children>
+								<ScrollPane fx:id="friend_list_view_scroll" layoutX="8.0" layoutY="8.0" prefHeight="587.0" prefWidth="530.0" styleClass="no-focus-visual">
+									<content>
+										<VBox fx:id="friend_list_view_vbox" prefHeight="571.0" prefWidth="525.0" styleClass="no-focus-visual" />
+									</content>
+								</ScrollPane>
+							</children>
+						</AnchorPane>
+						<Label layoutX="25.0" layoutY="53.0" text="Total Friend:" AnchorPane.leftAnchor="25.0" />
+						<FontAwesomeIconView glyphName="SEARCH" layoutX="34.0" layoutY="105.0" />
+					</children>
+				</AnchorPane>
+				<AnchorPane fx:id="chat_view" prefHeight="741.0" prefWidth="566.0" style="-fx-background-color: #dddddd;" styleClass="chat_view_container" stylesheets="@../styles/ChatView.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+					<children>
+						<ScrollPane fx:id="message_view_sp" layoutX="8.0" layoutY="59.0" prefHeight="615.0" prefWidth="548.0" />
+						<TextField fx:id="message_tf" layoutX="21.0" layoutY="690.0" prefHeight="26.0" prefWidth="404.0" />
+						<Button fx:id="sendMessageBtn" layoutX="441.0" layoutY="691.0" mnemonicParsing="false" text="Send" />
+					</children>
+				</AnchorPane>
+			</children>
+		</AnchorPane>
 
 
 	</right>
-   <top>
-      <AnchorPane prefHeight="66.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
-         <children>
-            <VBox fillWidth="false" layoutX="56.0" layoutY="-74.0" prefHeight="126.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <HBox alignment="CENTER" prefHeight="33.0" prefWidth="1099.0" styleClass="client_topbar_container">
-                     <children>
-                        <ImageView fitHeight="28.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" translateX="-5.0">
-                           <image>
-                              <Image url="@../images/logo_small.png" />
-                           </image></ImageView>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="1048.0" layoutY="11.0" minHeight="25.0" minWidth="45.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="54.0" text="-" translateX="920.0">
-                           <font>
-                              <Font name="Monaco" size="13.0" />
-                           </font>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" minHeight="25.0" minWidth="45.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="54.0" text="X">
-                           <HBox.margin>
-                              <Insets left="920.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Monaco" size="13.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="1101.0" styleClass="search-bar">
-                     <children>
-                        <TextField alignment="BOTTOM_LEFT" prefHeight="26.0" prefWidth="243.0" promptText="Search ..." translateX="190.0">
-                           <padding>
-                              <Insets bottom="3.0" left="30.0" />
-                           </padding></TextField>
-                        <FontAwesomeIconView glyphName="SEARCH" size="15" translateX="-55.0" />
-                        <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="41.0" translateX="170.0">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="USER_PLUS" size="18" />
-                           </graphic>
-                        </Button>
-                        <Button layoutX="251.0" layoutY="15.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="52.0" text="+" translateX="160.0">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="USERS" size="18" />
-                           </graphic>
-                           <font>
-                              <Font name="Tahoma Bold" size="13.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </children></AnchorPane>
-   </top>
-   <center>
+	<top>
+		<AnchorPane prefHeight="66.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
+			<children>
+				<VBox fillWidth="false" layoutX="56.0" layoutY="-74.0" prefHeight="126.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+					<children>
+						<HBox alignment="CENTER" prefHeight="33.0" prefWidth="1099.0" styleClass="client_topbar_container">
+							<children>
+								<ImageView fitHeight="28.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" translateX="-5.0">
+									<image>
+										<Image url="@../images/logo_small.png" />
+									</image>
+								</ImageView>
+								<Button alignment="CENTER" contentDisplay="CENTER" layoutX="1048.0" layoutY="11.0" minHeight="25.0" minWidth="45.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="54.0" text="-" translateX="920.0">
+									<font>
+										<Font name="Monaco" size="13.0" />
+									</font>
+								</Button>
+								<Button alignment="CENTER" contentDisplay="CENTER" minHeight="25.0" minWidth="45.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="54.0" text="X">
+									<HBox.margin>
+										<Insets left="920.0" />
+									</HBox.margin>
+									<font>
+										<Font name="Monaco" size="13.0" />
+									</font>
+								</Button>
+							</children>
+						</HBox>
+						<HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="1101.0" styleClass="search-bar">
+							<children>
+								<TextField alignment="BOTTOM_LEFT" prefHeight="26.0" prefWidth="243.0" promptText="Search ..." translateX="190.0">
+									<padding>
+										<Insets bottom="3.0" left="30.0" />
+									</padding>
+								</TextField>
+								<FontAwesomeIconView glyphName="SEARCH" size="15" translateX="-55.0" />
+								<Button mnemonicParsing="false" prefHeight="31.0" prefWidth="41.0" translateX="170.0">
+									<graphic>
+										<FontAwesomeIconView glyphName="USER_PLUS" size="18" />
+									</graphic>
+								</Button>
+								<Button layoutX="251.0" layoutY="15.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="52.0" text="+" translateX="160.0">
+									<graphic>
+										<FontAwesomeIconView glyphName="USERS" size="18" />
+									</graphic>
+									<font>
+										<Font name="Tahoma Bold" size="13.0" />
+									</font>
+								</Button>
+							</children>
+						</HBox>
+					</children>
+				</VBox>
+			</children>
+		</AnchorPane>
+	</top>
+	<center>
 
-   </center>
-   <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <AnchorPane fx:id="friend_ib" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            	<children>
-            		      	      <ScrollPane fx:id="messScrollPane" minHeight="580.0" minWidth="354.0" stylesheets="@../styles/MessageBar.css" BorderPane.alignment="CENTER">
-         <content>
-            <VBox fx:id="messVBox" prefHeight="735.0" prefWidth="338.0" stylesheets="@../styles/MessageBar.css">
-                           <styleClass>
-                              <String fx:value="vbox" />
-                              <String fx:value="no-focus-visual" />
-                           </styleClass></VBox>
-         </content>
-                     <styleClass>
-                        <String fx:value="message_bar_container" />
-                        <String fx:value="no-focus-visual" />
-                     </styleClass>
-      </ScrollPane>
-            	</children>
-            </AnchorPane>
-            <AnchorPane fx:id="friend_book" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <VBox layoutY="35.0" prefHeight="705.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
-                     <children>
-                        <JFXButton fx:id="friend_list_btn" alignment="BASELINE_LEFT" graphicTextGap="20.0" text="  Friends">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="USER" size="18" />
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutX="10.0" layoutY="10.0" text=" Groups">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="USERS" size="18" />
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutX="10.0" layoutY="36.0" text=" Friend Requests">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="ENVELOPE" size="18" />
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutX="10.0" layoutY="62.0" text="  Blocked Users">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="BAN" size="18" />
-                           </graphic>
-                        </JFXButton>
-                     </children>
-                  </VBox>
-               </children>
-            </AnchorPane>
-            
-         </children></AnchorPane>
-   </center>
+	</center>
+	<center>
+		<AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+			<children>
+				<AnchorPane fx:id="friend_ib" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+					<children>
+						<ScrollPane fx:id="messScrollPane" minHeight="580.0" minWidth="354.0" stylesheets="@../styles/MessageBar.css" BorderPane.alignment="CENTER">
+							<content>
+								<VBox fx:id="messVBox" prefHeight="735.0" prefWidth="338.0" stylesheets="@../styles/MessageBar.css">
+									<styleClass>
+										<String fx:value="vbox" />
+										<String fx:value="no-focus-visual" />
+									</styleClass>
+								</VBox>
+							</content>
+							<styleClass>
+								<String fx:value="message_bar_container" />
+								<String fx:value="no-focus-visual" />
+							</styleClass>
+						</ScrollPane>
+					</children>
+				</AnchorPane>
+				<AnchorPane fx:id="friend_book" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+					<children>
+						<VBox layoutY="35.0" prefHeight="705.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
+							<children>
+								<JFXButton fx:id="friend_list_btn" alignment="BASELINE_LEFT" graphicTextGap="20.0" text="  Friends">
+									<graphic>
+										<FontAwesomeIconView glyphName="USER" size="18" />
+									</graphic>
+								</JFXButton>
+								<JFXButton alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutX="10.0" layoutY="10.0" text=" Groups">
+									<graphic>
+										<FontAwesomeIconView glyphName="USERS" size="18" />
+									</graphic>
+								</JFXButton>
+								<JFXButton alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutX="10.0" layoutY="36.0" text=" Friend Requests">
+									<graphic>
+										<FontAwesomeIconView glyphName="ENVELOPE" size="18" />
+									</graphic>
+								</JFXButton>
+								<JFXButton alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutX="10.0" layoutY="62.0" text="  Blocked Users">
+									<graphic>
+										<FontAwesomeIconView glyphName="BAN" size="18" />
+									</graphic>
+								</JFXButton>
+							</children>
+						</VBox>
+					</children>
+				</AnchorPane>
+
+			</children>
+		</AnchorPane>
+	</center>
 
 </BorderPane>
