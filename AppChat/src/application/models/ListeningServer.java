@@ -41,10 +41,11 @@ public class ListeningServer implements Runnable {
 			case LOGIN_SUCCESSFULLY:
 				System.out.println("Da nhan doi tuong login client "+((LoginSuccessfully)rq).getUsernameFromDB());
 				String clientNameFromDB = ((LoginSuccessfully)rq).getUsernameFromDB();
+				String clientID = ((LoginSuccessfully)rq).getId();
 				
 				if (((LoginSuccessfully) rq).getAccountType() == AccountType.CLIENT) {
 
-					Platform.runLater(() ->ClientModel.getInstance().getViewFactory().showClientWindow(clientNameFromDB));
+					Platform.runLater(() ->ClientModel.getInstance().getViewFactory().showClientWindow(clientID, clientNameFromDB));
 					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().closeLoginWindow());
 				}
 				
@@ -72,7 +73,7 @@ public class ListeningServer implements Runnable {
 //				Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().addNewMessage(((Message)rq).getSendID(), ((Message)rq).getMessage(), ((Message)rq).getTimeSend()));
 				Platform.runLater(()->{
 					try {
-						ClientModel.getInstance().getViewFactory().getClientController().displayReceiveMessage(((Message)rq).getFromID(), ((Message)rq).getMessage());
+						ClientModel.getInstance().getViewFactory().getClientController().displayReceiveMessage(((Message)rq).getFromID(), ((Message)rq).getMessage(), ((Message)rq).getTimeSend());
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
