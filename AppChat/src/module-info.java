@@ -9,7 +9,6 @@ module AppChat {
 	
 	opens application to javafx.graphics, javafx.fxml;
 	opens application.controller to javafx.graphics,javafx.fxml;
-
 	
     exports server;
     exports server.controller to  javafx.fxml;
