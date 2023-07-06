@@ -48,48 +48,76 @@ import request.SendMessage;
 
 public class ClientController implements Initializable {
 
-	@FXML
-	private BorderPane clientBorderPane;
+    @FXML
+    private AnchorPane chat_view;
 
-	@FXML
-	private ScrollPane messScrollPane;
+    @FXML
+    private BorderPane clientBorderPane;
 
-	@FXML
-	private VBox messVBox;
+    @FXML
+    private Label clientNameLabel;
 
-	@FXML
-	private AnchorPane friend_ib;
+    @FXML
+    private JFXButton friendBook_btn;
 
-	@FXML
-	private AnchorPane friend_book;
+    @FXML
+    private AnchorPane friend_book;
 
-	@FXML
-	private JFXButton friend_list_btn;
+    @FXML
+    private AnchorPane friend_ib;
 
-	@FXML
-	private AnchorPane friend_list_view;
+    @FXML
+    private JFXButton friend_list_btn;
 
-	@FXML
-	private ScrollPane friend_list_view_scroll;
+    @FXML
+    private AnchorPane friend_list_view;
 
-	@FXML
-	private VBox friend_list_view_vbox;
+    @FXML
+    private ScrollPane friend_list_view_scroll;
 
-	@FXML
-	private ScrollPane message_view_sp;
+    @FXML
+    private VBox friend_list_view_vbox;
 
-	@FXML
-	private Button sendMessageBtn;
+    @FXML
+    private JFXButton group_btn;
 
-	@FXML
-	private TextField message_tf;
+    @FXML
+    private JFXButton logout_btn;
 
-	@FXML
-	private AnchorPane chat_view;
+    @FXML
+    private ScrollPane messScrollPane;
+
+    @FXML
+    private VBox messVBox;
+
+    @FXML
+    private JFXButton message_btn;
+
+    @FXML
+    private TextField message_tf;
+
+    @FXML
+    private ScrollPane message_view_sp;
+
+    @FXML
+    private JFXButton profile_btn;
+
+    @FXML
+    private Button sendMessageBtn;
+
+    @FXML
+    private JFXButton setting_btn;
 
 	private String sendToUserID;
+	
+	private String sendToName;
 
 	private VBox originVBox;
+	
+	private String clientID;
+	
+	private String clientName;
+	
 
 	private static final Duration FLASH_DURATION = Duration.seconds(0.5);
 	private static final Duration STOP_DURATION = Duration.seconds(5);
@@ -114,7 +142,15 @@ public class ClientController implements Initializable {
 		this.friend_list_view.setVisible(false);
 //		this.messScrollPane.setOnMouseClicked(event -> System.out.println("scroll pane clicked"));
 //		this.messVBox.setOnMouseClicked(event -> System.out.println("vbox clicked"));
+//		AnchorPane clientMenu = (AnchorPane)this.clientBorderPane.getLeft();
+//		BorderPane clientMenuBorder = (BorderPane)clientMenu.getChildren().get(0);
+//		VBox clientmenuvbox = (VBox)clientMenuBorder.getTop();
+//		Label nameLabel = (Label)clientmenuvbox.getChildren().get(1);
+//		nameLabel.setText(clientName);
+		
+		//getcontroller cua clientmenu
 
+		
 		messVBox.heightProperty().addListener(new ChangeListener<Number>() {
 
 			@Override
@@ -132,6 +168,9 @@ public class ClientController implements Initializable {
 				e.printStackTrace();
 			}
 		});
+		
+		message_btn.setOnAction(event -> showMessageView());
+		friendBook_btn.setOnAction(event -> showfriendBookView());
 
 		sendgetfriendlistrequest();
 	}
@@ -164,14 +203,18 @@ public class ClientController implements Initializable {
 			messbox.getChildren().addAll(textFlow);
 			message_tf.clear();
 
-			writeSendMessageRequest(sendToUserID, messToSend);
+			String timeSend = writeSendMessageRequest(sendToUserID, messToSend);
+			addNewMessage(sendToUserID, messToSend, timeSend, false);
+			
+			
+			
 			originVBox.getChildren().add(messbox);
 
 		}
 	}
 
 	// sau khi nhan message tu user -> hien thi vao chat view
-	public void displayReceiveMessage(String receiveFromID, String message) throws IOException {
+	public void displayReceiveMessage(String receiveFromID, String message, String timeReceive) throws IOException {
 		HBox receiveMess = new HBox();
 		receiveMess.setAlignment(Pos.TOP_LEFT);
 		receiveMess.setPadding(new Insets(5, 5, 5, 10));
@@ -194,16 +237,19 @@ public class ClientController implements Initializable {
 		text.setFill(Color.color(0.934, 0.945, 0.996));
 		receiveMess.getChildren().addAll(imageView, textFlow);
 
-		addNewMessage(receiveFromID, message, "time receive here", true);
-
+		addNewMessage(receiveFromID, message, timeReceive, true);
+		
+		
 		originVBox.getChildren().add(receiveMess);
 
 		// neu chua bam vao xem (clicked) thi se chop chop do do
 
 	}
 
-	public void writeSendMessageRequest(String toUserId, String message) throws IOException {
+	public String writeSendMessageRequest(String toUserId, String message) throws IOException {
+		String timeSend;
 		Request sendMessageRequest = new SendMessage(RequestType.SEND_MESSAGE, message, toUserId);
+		timeSend = ((SendMessage)sendMessageRequest).getTimeSend();
 		try {
 			ClientModel.getInstance().getClient().getOut().writeObject(sendMessageRequest);
 		} catch (IOException e) {
@@ -211,95 +257,86 @@ public class ClientController implements Initializable {
 			System.out.println("Send message request to " + toUserId + " to server error");
 			e.printStackTrace();
 		}
+		return timeSend;
 		// sau khi gui tin nhan qua ben kia -> add vao new friend box view
-		addNewMessage(toUserId, message, "time send here", false);
-//		resetVBox(originVBox);
 	}
 
 	// add inbox box vao friend inbox view
 	public void addNewMessage(String userID, String message, String time, boolean isReceive) throws IOException {
-		String name;
-		if (userID.equals("server")) {
-			name = "SERVER";
-		} else {
-			name = friendList.get(userID);
-
-		}
+	
+		
 
 		// tao mot arraylist luu cac clientboxcontroller lai
 		// neu doi tuong inbox da co trong list -> khong them vao nua
+		
+		boolean had = false;
+		
 		if (!clientInBoxFriend.isEmpty()) {
 			for (ClientBoxController clientbox : clientInBoxFriend) {
 				System.out.println("client box = id = " + clientbox.getUserID());
 				// found
 				if (clientbox.getUserID().equals(userID)) {
+					System.out.println("userIDVBOX = "+userID);
+					had = true;
+					setIn4InboxHBox(clientbox.getFriend_box_hbox(), clientbox.getClientname(), message, time);
+
 					resetVBox(clientbox.getChatVBox());
 					if (isReceive) {
 						startFlashing(clientbox.getFriend_box_hbox());
 						startStopTimer((clientbox.getFriend_box_hbox()));
 					}
-					return;
+					break;
 				}
 			}
 		}
 
-		HBox h;
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/test/guiobjectjson/testHBox.fxml"));
-		h = loader.load();
+		if (!had) {
+			
+			String name;
+			if (userID.equals("server")) {
+				name = "SERVER";
+			} else {
+				name = friendList.get(userID);
 
-		h.setOnMouseEntered(event -> {
-			h.setStyle("-fx-background-color: #cccccc;");
-
-		});
-
-		h.setOnMouseExited(event -> {
-			h.setStyle("-fx-background-color: #ffffff;");
-
-		});
-
-		VBox viewb = new VBox();
-		this.originVBox = viewb;
-
-		resetVBox(viewb);
-
-		ClientBoxController clientBoxController = new ClientBoxController(name, userID, h, viewb);
-		loader.setController(clientBoxController);
-
-		viewb.heightProperty().addListener(new ChangeListener<Number>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				message_view_sp.setVvalue((Double) arg2);
 			}
-		});
+			
+			
+			HBox h;
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/test/guiobjectjson/testHBox.fxml"));
+			h = loader.load();
+			h.setOnMouseEntered(event -> {
+				h.setStyle("-fx-background-color: #cccccc;");
 
-		clientInBoxFriend.add(clientBoxController);
+			});
+			h.setOnMouseExited(event -> {
+				h.setStyle("-fx-background-color: #ffffff;");
 
-		// lay con vbox ra tu hbox
-		VBox v = (VBox) h.getChildren().get(1);
+			});
+			VBox viewb = new VBox();
+			this.originVBox = viewb;
+			resetVBox(viewb);
+			ClientBoxController clientBoxController = new ClientBoxController(name, userID, h, viewb);
+			loader.setController(clientBoxController);
+			viewb.heightProperty().addListener(new ChangeListener<Number>() {
 
-		// lay con label ra tu vbox
-		Label l = (Label) v.getChildren().get(0);
-		l.setText(name);
+				@Override
+				public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+					message_view_sp.setVvalue((Double) arg2);
+				}
+			});
+			clientInBoxFriend.add(clientBoxController);
+			// lay con vbox ra tu hbox
+			
+			//set thong tin cho hbox
+			setIn4InboxHBox(h, name, message, time);
+			
+			if (isReceive) {
+				startFlashing(h);
+				startStopTimer(h);
 
-		Label t = (Label) v.getChildren().get(1);
-		t.setText(message);
-
-		Label i = (Label) v.getChildren().get(2);
-
-		i.setText(time);
-
-		if (isReceive) {
-			startFlashing(h);
-			startStopTimer(h);
-
+			}
+			messVBox.getChildren().add(h);
 		}
-
-//		h.setOnMouseClicked(event ->{
-//			this.resetVBox(this.originVBox);
-//		});
-
-		messVBox.getChildren().add(h);
 
 	}
 
@@ -465,9 +502,55 @@ public class ClientController implements Initializable {
 
 	public void setSendToUserID(String sendToUserID) {
 		this.sendToUserID = sendToUserID;
+		//set vbox cua id nay
+		if (!clientInBoxFriend.isEmpty()) {
+			for (ClientBoxController clientbox : clientInBoxFriend) {
+				// found
+				if (clientbox.getUserID().equals(sendToUserID)) {
+					setOriginVBox(clientbox.getChatVBox());
+					resetVBox(clientbox.getChatVBox());
+					break;
+				}
+			}
+		}
 	}
 
+	public void setIn4InboxHBox(HBox h, String name, String message, String time) {
+		VBox v = (VBox) h.getChildren().get(1);
+		// lay con label ra tu vbox
+		Label l = (Label) v.getChildren().get(0);
+		l.setText(name);
+		Label t = (Label) v.getChildren().get(1);
+		t.setText(message);
+		Label i = (Label) v.getChildren().get(2);
+		i.setText(time);
+	}
+	
 	public String getSendToUserID() {
 		return sendToUserID;
 	}
+	
+	public void setClientID(String clientID) {
+		this.clientID = clientID;
+	}
+	
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+	public String getClientID() {
+		return clientID;
+	}
+	public String getClientName() {
+		return clientName;
+	}
+	
+	public void setNameLabel() {
+		this.clientNameLabel.setText(clientName);
+	}
+	
+	public void setSendToName(String sendToName) {
+		this.sendToName = sendToName;
+	}
+	
+
 }
