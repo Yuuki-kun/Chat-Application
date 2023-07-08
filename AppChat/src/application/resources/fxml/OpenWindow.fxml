@@ -11,15 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="517.0" styleClass="open-window-container" stylesheets="@../styles/openwindow.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.OpenWindowController">
    <children>
-      <Group layoutX="129.0" layoutY="5.0">
-         <children>
-            <ImageView fitHeight="153.0" fitWidth="273.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/logo.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Group>
+      <Group layoutX="129.0" layoutY="5.0" />
       <Text layoutX="234.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Created by">
          <font>
             <Font size="10.0" />
@@ -36,5 +28,10 @@
          </font>
       </Label>
       <ProgressBar fx:id="loadingOpen" layoutX="157.0" layoutY="264.0" prefWidth="200.0" progress="0.0" styleClass="modern-progress-bar" />
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="159.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/logo.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

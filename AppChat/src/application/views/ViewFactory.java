@@ -3,18 +3,16 @@ package application.views;
 import accounttype.AccountType;
 import application.controller.ClientController;
 import application.controller.LoginController;
-import application.controller.OpenWindowController;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+//import javafx.animation.KeyFrame;
+//import javafx.animation.KeyValue;
+//import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Duration;
+//import javafx.util.Duration;
 
 public class ViewFactory {
 	
@@ -55,7 +53,8 @@ public class ViewFactory {
 		stage.setResizable(false);
 		stage.setTitle("Chat");
 		stage.show();
-		transparentStageFadeIn(stage);
+		
+//		transparentStageFadeIn(stage);
 	}
 	
 	public void showClientWindow(String clientID, String clientname) {
@@ -103,23 +102,23 @@ public class ViewFactory {
 		stage.show();
 	}
 	
-	public void transparentStageFadeout(Stage stage) {
-        Timeline timeline = new Timeline();
-        KeyValue kv = new KeyValue(stage.opacityProperty(), 0);
-        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
-        timeline.getKeyFrames().add(kf);
-        timeline.setOnFinished(event -> stage.close());
-        timeline.play();
-	}
-	
-	public void transparentStageFadeIn(Stage stage) {
-		stage.setOpacity(0);
-        Timeline timeline = new Timeline();
-        KeyValue kv = new KeyValue(stage.opacityProperty(), 1);
-        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
-        timeline.getKeyFrames().add(kf);
-        timeline.play();
-	}
+//	public void transparentStageFadeout(Stage stage) {
+//        Timeline timeline = new Timeline();
+//        KeyValue kv = new KeyValue(stage.opacityProperty(), 0);
+//        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
+//        timeline.getKeyFrames().add(kf);
+//        timeline.setOnFinished(event -> stage.close());
+//        timeline.play();
+//	}
+//	
+//	public void transparentStageFadeIn(Stage stage) {
+//		stage.setOpacity(0);
+//        Timeline timeline = new Timeline();
+//        KeyValue kv = new KeyValue(stage.opacityProperty(), 1);
+//        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
+//        timeline.getKeyFrames().add(kf);
+//        timeline.play();
+//	}
 	
 	public void closeStage(Stage stage) {
 		stage.close();

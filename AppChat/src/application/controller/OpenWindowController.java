@@ -38,7 +38,9 @@ public class OpenWindowController implements Initializable{
 			if (newValue.doubleValue() >= 1.0) {
 				timer.cancel();
 				Stage stage = (Stage)loadingOpen.getScene().getWindow();
-				ClientModel.getInstance().getViewFactory().transparentStageFadeout(stage);
+				stage.close();
+				//				ClientModel.getInstance().getViewFactory().transparentStageFadeout(stage);
+
 				ClientModel.getInstance().getViewFactory().showLoginWindow();
 			}
 			
