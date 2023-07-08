@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox alignment="CENTER_LEFT" prefHeight="72.0" prefWidth="302.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fx:id="friend_image_view" fitHeight="84.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/logo_small.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="friend_name_label" text="Label" />
+      <VBox fx:id="button_vbox" prefHeight="73.0" prefWidth="95.0" translateX="80.0">
+         <children>
+            <Button fx:id="FR_accept_btn" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="Accept" />
+            <Button fx:id="FR_refuse_btn" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="Refuse" />
+         </children>
+      </VBox>
+      <Label fx:id="status_lbl" prefHeight="28.0" prefWidth="78.0" text="Label" visible="false" />
+   </children>
+</HBox>

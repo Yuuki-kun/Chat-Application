@@ -5,6 +5,7 @@
 }
 
 .chat_view_container VBox{
-	-fx-pref-width: 535;
+	-fx-pref-width: 530;
 	-fx-pref-height: 607;
+	-fx-padding: 14 7 14 0;
 }

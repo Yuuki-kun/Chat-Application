@@ -1,11 +1,16 @@
 package application.controller;
 
+import java.io.IOException;
+
 import application.models.ClientModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import request.Request;
+import request.RequestType;
+import request.SeenStatus;
 
 public class ClientBoxController {
 	private String clientname;
@@ -28,6 +33,16 @@ public class ClientBoxController {
 			//chuyen message view sang doi tuong duoc chon 
 						ClientModel.getInstance().getViewFactory().getClientController().resetVBox(this.chatVBox);
 						ClientModel.getInstance().getViewFactory().getClientController().setOriginVBox(chatVBox);
+						
+			//send request seen to server
+			Request rq = new SeenStatus(RequestType.SEEN_STATUS, true, this.userID);
+			try {
+				ClientModel.getInstance().getClient().getOut().writeObject(rq);
+			} catch (IOException e) {
+				System.out.println("send 'seening' status error.");
+				e.printStackTrace();
+			}			
+			//
 
 		});
 		

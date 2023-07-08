@@ -9,16 +9,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import accounttype.AccountType;
+import application.models.ClientModel;
+import request.FriendRequest;
 import request.GetFriendList;
+import request.GetSearchList;
 import request.LoginRequest;
 import request.LoginSuccessfully;
 import request.Message;
 import request.Request;
 import request.RequestType;
+import request.ResponeFriendRq;
+import request.SeenStatus;
 import request.SendMessage;
+import request.SendMessageStatus;
 import request.SignUp;
+import searchalgorithm.Search;
 import server.model.ServerModel;
 
 //import application.models.request.Request;
@@ -31,6 +40,7 @@ public class ClientHandler implements Runnable {
 	private ObjectInputStream in;
 	private String clientName;
 	private String clientID;
+	private Map<String, String> friendList = new HashMap<>();
 	
 	public ClientHandler(Socket socket) {
 		try {
@@ -75,6 +85,93 @@ public class ClientHandler implements Runnable {
 					if(((SendMessage)rq).getSendID()!=null){
 						sendMessageTo(((SendMessage)rq).getSendID(), ((SendMessage)rq).getMessage(), ((SendMessage)rq).getTimeSend());
 					}
+					
+					
+					
+					break;
+				case GET_SEARCH_ADDFRIEND_LIST:
+					String inputToSearch = ((GetSearchList)rq).getInput();
+					
+					ArrayList<String> clientNameList = new ArrayList<>();
+					Map<String, String> clientIDAndName = new HashMap<>();
+				
+					setClientMap(clientIDAndName);
+					
+					 for(Map.Entry<String, String> entry : clientIDAndName.entrySet()) {
+						 clientNameList.add(entry.getValue());
+					 }
+					 
+					 //tim kiem client trong client name list -> tra ve list tim thay
+					 ArrayList<String> result = Search.searchIboxByName(inputToSearch, clientNameList);
+					 
+					 Map<String, String> resultMap = new HashMap<>();
+					 
+					 //neu ket qua tra ve k rong
+					 
+					 if(!result.isEmpty()) {
+						 for(String name : result) {
+							 for(Map.Entry<String, String> entry : clientIDAndName.entrySet()) {
+								 if(entry.getValue().equals(name) && !name.equals(clientName)) {
+									 resultMap.put(entry.getKey(), entry.getValue());
+								 }
+							 }	
+						 }
+					 }
+					 
+					 //loai tru ket qua tra ve voi list ban be
+					 
+					 for(Map.Entry<String, String> entri : resultMap.entrySet()) {
+						 for(Map.Entry<String, String> entry : friendList.entrySet()) {
+							 if(entri.getKey().equals(entry.getKey())) {
+								 resultMap.remove(entri.getKey());
+							 }
+						 }
+					 }
+					 
+					 //send to client
+					 ((GetSearchList)rq).setSearchList(resultMap);
+					 
+					 this.out.writeObject(rq);
+					 
+					break;
+				case SEND_FRIEND_REQUEST:
+					//gui yc ket ban qua ben kia
+					System.out.println(clientID+"Yeu cau ket ban voi + "+((FriendRequest)rq).getFriendId());
+					friendRequestHandler(((FriendRequest)rq).getFriendId());
+					break;
+				case ACCEPT_FR:
+					//accept fq with id
+					makeFriendWith(((ResponeFriendRq)rq).getId());
+					try {
+						getFriendListFromDB();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					//send accepted message to id
+					//clientid accepted id
+					
+					for(ClientHandler client : clientHandlers) {
+						if(((ResponeFriendRq)rq).getId().equals(client.getClientID())) {
+							Request accepted = new ResponeFriendRq(RequestType.ACCEPT_FR, clientID, clientName);
+							try {
+								client.getOut().writeObject(accepted);
+								System.out.println("da gui tin nhan qua +"+((ResponeFriendRq)rq).getId());
+							} catch (IOException e) {
+								System.out.println("from "+clientID+" send accepted friend message to user "+((ResponeFriendRq)rq).getId()+" error.");
+								closeEverything();
+								e.printStackTrace();
+							}
+						}
+					}
+					
+					break;
+				case SEEN_STATUS:
+
+					String sendToID = (((SeenStatus)rq).getId());
+					sendSeenStatusToId(sendToID, rq);
+					
+					break;
 				default:
 					break;
 				}
@@ -92,10 +189,52 @@ public class ClientHandler implements Runnable {
 			}
 		}
 	}
+	
+	public synchronized void sendSeenStatusToId(String sendToID, Request rq) {
+
+		for(ClientHandler client : clientHandlers) {
+			if(sendToID.equals(client.getClientID())) {
+				try {
+					client.getOut().writeObject(rq);
+				} catch (IOException e) {
+					System.out.println("Send seen status to "+sendToID+" error.");
+					e.printStackTrace();
+				}
+				break;
+			}
+		}
+	}
+	
+	public void makeFriendWith(String id) {
+		ServerModel.getInstance().writeFriend(clientID, id);
+	}
+	
+	public synchronized void setClientMap(Map<String, String> clientIdAndName) {
+		for(ClientHandler client : clientHandlers) {
+			clientIdAndName.put(client.getClientID(), client.getClientName());
+		}
+	}
+	
+	public synchronized void friendRequestHandler(String friendId) {
+		for(ClientHandler client : clientHandlers) {
+			if(client.getClientID().equals(friendId)) {
+				//send friend request to friendId with sender's id
+				Request friendRq = new FriendRequest(RequestType.FRIEND_REQUEST, clientID, clientName);
+				try {
+					client.getOut().writeObject(friendRq);
+				} catch (IOException e) {
+					System.out.println("friend request error.");
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 	public void getFriendListFromDB() throws SQLException{
 		
-		Request sendFriendListForClient = new GetFriendList(RequestType.GET_FRIEND_LIST, ServerModel.getInstance().getFriendList(clientID));
+		friendList = ServerModel.getInstance().getFriendList(clientID);
+		
+		Request sendFriendListForClient = new GetFriendList(RequestType.GET_FRIEND_LIST, friendList);
 //		System.out.println("FRIEND LIST = "+ServerModel.getInstance().getFriendList(clientID));
 		try {
 			this.out.writeObject(sendFriendListForClient);
@@ -262,10 +401,24 @@ public class ClientHandler implements Runnable {
 			if(userid.equals(client.getClientID())) {
 				Request sendMessageToUserID = new Message(RequestType.MESSAGE, message, userid, time, this.clientID);
 				try {
+					
 					client.getOut().writeObject(sendMessageToUserID);
 					System.out.println("da gui tin nhan qua +"+userid);
+					
+					Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, true);	
+					this.out.writeObject(sendMessageSuccessfully);
+					
 				} catch (IOException e) {
+					
 					System.out.println("from "+clientID+" send message to user "+userid+" error.");
+					Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, false);	
+					
+					try {
+						this.out.writeObject(sendMessageSuccessfully);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					closeEverything();
 					e.printStackTrace();
 				}
@@ -307,6 +460,10 @@ public class ClientHandler implements Runnable {
 	
 	public String getClientID() {
 		return clientID;
+	}
+	
+	public String getClientName() {
+		return clientName;
 	}
 	public ObjectOutputStream getOut() {
 		return out;

@@ -6,10 +6,15 @@ import java.io.ObjectOutputStream;
 
 import accounttype.AccountType;
 import javafx.application.Platform;
+import request.FriendRequest;
 import request.GetFriendList;
+import request.GetSearchList;
 import request.LoginSuccessfully;
 import request.Message;
 import request.Request;
+import request.ResponeFriendRq;
+import request.SeenStatus;
+import request.SendMessageStatus;
 import request.ServerMessage;
 
 public class ListeningServer implements Runnable {
@@ -65,7 +70,14 @@ public class ListeningServer implements Runnable {
 				break;
 			case GET_FRIEND_LIST:
 				System.out.print("Da nhan danh sach ban be!");
-				Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().addFriendToListView(((GetFriendList)rq).getFriendList()));
+				Platform.runLater(()->{
+					try {
+						ClientModel.getInstance().getViewFactory().getClientController().addFriendToListView(((GetFriendList)rq).getFriendList());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				});
 				break;
 			case MESSAGE:
 				System.out.print("Da nhan tin nhan");
@@ -80,7 +92,41 @@ public class ListeningServer implements Runnable {
 					}
 				});
 				break;
-			default:
+			case GET_SEARCH_ADDFRIEND_LIST:
+				try {
+					ClientModel.getInstance().getViewFactory().getClientController().addFriendResultSearch(((GetSearchList)rq).getSearchList());
+				} catch (IOException e) {
+					System.out.println("Error display list friend");
+					e.printStackTrace();
+				}
+				break;
+			case FRIEND_REQUEST:
+				//hien thi vao friend request
+				System.out.println("DA NHAN YC KET BAN");
+				try {
+					ClientModel.getInstance().getViewFactory().getClientController().addFriendRequest(((FriendRequest)rq).getFriendId(), ((FriendRequest)rq).getName());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case ACCEPT_FR:
+				//received accepted message from server
+				//accepted by id and name
+				Platform.runLater(()->				ClientModel.getInstance().getViewFactory().getClientController().displayAcceptedFR(((ResponeFriendRq)rq).getName())
+);
+				break;
+			case SEND_MESSAGE_STATUS:
+				if(((SendMessageStatus)rq).getSent()) {
+					Platform.runLater(()->					ClientModel.getInstance().getViewFactory().getClientController().getSendMessageStatus().setText("received"));
+				}
+				break;
+			case SEEN_STATUS:
+				if(((SeenStatus)rq).getSeen()) {
+					Platform.runLater(()->					ClientModel.getInstance().getViewFactory().getClientController().getSendMessageStatus().setText("seen"));
+				}
+				break;
+			default:	
 				break;
 			}
 		}

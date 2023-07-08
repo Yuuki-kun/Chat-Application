@@ -12,6 +12,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.robot.Robot;
@@ -32,6 +33,10 @@ public class FriendBoxViewController implements Initializable{
 
     @FXML
     private Label friend_name_label;
+    
+
+    @FXML
+    private TextField search_friend_tf;
     
     private String UserID;
     
@@ -58,8 +63,9 @@ public class FriendBoxViewController implements Initializable{
 				contextMenu.getItems().addAll(chatOption, separator, option2, option3);
 				
 				contextMenu.setOnHidden(event ->{
-					
-				});		
+					friend_imageview.requestFocus();
+				});	
+				
 				chatOption.setOnAction(event ->{
 					//Open chat view
 					System.out.println("Option = "+UserID+"; "+friend_name_label.getText());

@@ -24,6 +24,8 @@ public class ViewFactory {
 	
 	private ClientController clientControllers;
 	
+
+	
 	public ViewFactory(AccountType loginAccountType) {
 		this.loginAccountType = loginAccountType;
 	}
@@ -47,7 +49,7 @@ public class ViewFactory {
 			e.printStackTrace();
 		}
 		Stage stage = new Stage();
-		stage.initStyle(StageStyle.TRANSPARENT);
+//		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.setScene(scene);
 		stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/application/resources/images/logo_small.png"))));
 		stage.setResizable(false);
@@ -93,7 +95,7 @@ public class ViewFactory {
 			e.printStackTrace();
 		}
 		stage = new Stage();
-		stage.initStyle(StageStyle.TRANSPARENT);
+//		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.setScene(scene);
 		stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/application/resources/images/logo_small.png"))));
 		stage.setResizable(false);

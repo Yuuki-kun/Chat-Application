@@ -18,7 +18,7 @@
 }
 
 .user_infor_container .image-view{
-	-fx-effect: dropshadow(three-pass-box, #eeeeee, 5.0, 0.0, 0.0, 3.0); 
+	-fx-effect: dropshadow(three-pass-box, #ffffff, 5.0, 0.0, 0.0, 3.0); 
 
 }
 

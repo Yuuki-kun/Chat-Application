@@ -89,7 +89,7 @@
 
 		<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="566.0" style="-fx-background-color: #eeeeee;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
 			<children>
-				<AnchorPane fx:id="friend_list_view" prefHeight="741.0" prefWidth="566.0" styleClass="friend_list_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+				<AnchorPane fx:id="friend_list_view" prefHeight="741.0" prefWidth="566.0" styleClass="friend_list_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<children>
 						<Pane layoutX="25.0" layoutY="17.0" prefHeight="47.0" prefWidth="566.0" styleClass="friend_list_top_label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 							<children>
@@ -110,6 +110,7 @@
 							</children>
 						</AnchorPane>
 						<Label layoutX="25.0" layoutY="53.0" text="Total Friend:" AnchorPane.leftAnchor="25.0" />
+                  <TextField fx:id="search_friend_tf" layoutX="25.0" layoutY="88.0" />
 						<FontAwesomeIconView glyphName="SEARCH" layoutX="34.0" layoutY="105.0" />
 					</children>
 				</AnchorPane>
@@ -120,6 +121,16 @@
 						<Button fx:id="sendMessageBtn" layoutX="441.0" layoutY="691.0" mnemonicParsing="false" text="Send" />
 					</children>
 				</AnchorPane>
+            <AnchorPane fx:id="friendRequestView" layoutX="215.0" layoutY="122.0" prefHeight="741.0" prefWidth="566.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label text="Friend Request" />
+                  <ScrollPane fx:id="friendRequestSP" layoutX="62.0" layoutY="60.0" prefHeight="681.0" prefWidth="566.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+                     <content>
+                        <VBox fx:id="friendRequestVB" prefHeight="675.0" prefWidth="558.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
 			</children>
 		</AnchorPane>
 
@@ -154,18 +165,18 @@
 						</HBox>
 						<HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="1101.0" styleClass="search-bar">
 							<children>
-								<TextField alignment="BOTTOM_LEFT" prefHeight="26.0" prefWidth="243.0" promptText="Search ..." translateX="190.0">
+								<TextField fx:id="searchFriendTf" alignment="BOTTOM_LEFT" prefHeight="26.0" prefWidth="243.0" promptText="Search ..." translateX="190.0">
 									<padding>
 										<Insets bottom="3.0" left="30.0" />
 									</padding>
 								</TextField>
 								<FontAwesomeIconView glyphName="SEARCH" size="15" translateX="-55.0" />
-								<Button mnemonicParsing="false" prefHeight="31.0" prefWidth="41.0" translateX="170.0">
+								<Button fx:id="addFriendBtn" mnemonicParsing="false" prefHeight="31.0" prefWidth="41.0" translateX="170.0">
 									<graphic>
 										<FontAwesomeIconView glyphName="USER_PLUS" size="18" />
 									</graphic>
 								</Button>
-								<Button layoutX="251.0" layoutY="15.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="52.0" text="+" translateX="160.0">
+								<Button fx:id="addGroupBtn" layoutX="251.0" layoutY="15.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="52.0" text="+" translateX="160.0">
 									<graphic>
 										<FontAwesomeIconView glyphName="USERS" size="18" />
 									</graphic>
@@ -186,7 +197,7 @@
 	<center>
 		<AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 			<children>
-				<AnchorPane fx:id="friend_ib" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+				<AnchorPane fx:id="friend_ib" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<children>
 						<ScrollPane fx:id="messScrollPane" minHeight="580.0" minWidth="354.0" stylesheets="@../styles/MessageBar.css" BorderPane.alignment="CENTER">
 							<content>
@@ -204,7 +215,7 @@
 						</ScrollPane>
 					</children>
 				</AnchorPane>
-				<AnchorPane fx:id="friend_book" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+				<AnchorPane fx:id="friend_book" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<children>
 						<VBox layoutY="35.0" prefHeight="705.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
 							<children>
@@ -218,7 +229,7 @@
 										<FontAwesomeIconView glyphName="USERS" size="18" />
 									</graphic>
 								</JFXButton>
-								<JFXButton alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutX="10.0" layoutY="36.0" text=" Friend Requests">
+								<JFXButton fx:id="friendRequestBtn" alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutX="10.0" layoutY="36.0" text=" Friend Requests">
 									<graphic>
 										<FontAwesomeIconView glyphName="ENVELOPE" size="18" />
 									</graphic>
@@ -232,6 +243,15 @@
 						</VBox>
 					</children>
 				</AnchorPane>
+            <AnchorPane fx:id="addFriendAnchor" prefHeight="740.0" prefWidth="354.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ScrollPane fx:id="addFriendSP" layoutX="-2.0" layoutY="2.0" prefHeight="738.0" prefWidth="355.0">
+                     <content>
+                        <VBox fx:id="addFriendViewVBox" prefHeight="736.0" prefWidth="353.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
 
 			</children>
 		</AnchorPane>

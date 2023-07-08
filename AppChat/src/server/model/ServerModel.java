@@ -75,6 +75,21 @@ public class ServerModel {
 		return IDandName;
 		
 	}
+	
+	public void writeFriend(String clientId, String id) {
+		try {
+			Statement st = datadriver.getConn().createStatement();
+			String query1 = "INSERT INTO has_friend (userid, frienduserid, dateadd, status) VALUES ('"+clientId+"','"+id+"', NULL, NULL)";
+			st.executeUpdate(query1);
+			
+			String query2 = "INSERT INTO has_friend (userid, frienduserid, dateadd, status) VALUES ('"+id+"','"+clientId+"', NULL, NULL)";
+			st.executeUpdate(query2);
+			
+		} catch (SQLException e) {
+			System.out.println("insert friend error");
+			e.printStackTrace();
+		}
+	}
 
 	public DataDriver getDatadriver() {
 		return datadriver;

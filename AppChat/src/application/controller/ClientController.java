@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -16,6 +17,7 @@ import application.models.ClientModel;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -24,6 +26,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -38,9 +42,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import request.GetFriendList;
+import request.GetSearchList;
 import request.Message;
 import request.Request;
 import request.RequestType;
@@ -107,7 +113,39 @@ public class ClientController implements Initializable {
 
     @FXML
     private JFXButton setting_btn;
+    
+    @FXML
+    private TextField searchFriendTf;
 
+    @FXML
+    private Button addFriendBtn;
+
+    @FXML
+    private Button addGroupBtn;
+
+
+    @FXML
+    private AnchorPane addFriendAnchor;
+
+    @FXML
+    private ScrollPane addFriendSP;
+
+    @FXML
+    private VBox addFriendViewVBox;
+    
+
+    @FXML
+    private ScrollPane friendRequestSP;
+
+    @FXML
+    private VBox friendRequestVB;
+
+    @FXML
+    private AnchorPane friendRequestView;
+    
+    @FXML
+    private JFXButton friendRequestBtn;
+    
 	private String sendToUserID;
 	
 	private String sendToName;
@@ -129,7 +167,7 @@ public class ClientController implements Initializable {
 
 	// Map chua danh danh ban be -> hien tai app chi cho phep nhan tin qua lai giua
 	// ban be voi nhau
-	private Map<String, String> friendList;
+	private Map<String, String> friendList = new HashMap<>();
 
 	private boolean getListFriend = false;
 
@@ -140,15 +178,6 @@ public class ClientController implements Initializable {
 		this.chat_view.setVisible(true);
 		this.friend_book.setVisible(false);
 		this.friend_list_view.setVisible(false);
-//		this.messScrollPane.setOnMouseClicked(event -> System.out.println("scroll pane clicked"));
-//		this.messVBox.setOnMouseClicked(event -> System.out.println("vbox clicked"));
-//		AnchorPane clientMenu = (AnchorPane)this.clientBorderPane.getLeft();
-//		BorderPane clientMenuBorder = (BorderPane)clientMenu.getChildren().get(0);
-//		VBox clientmenuvbox = (VBox)clientMenuBorder.getTop();
-//		Label nameLabel = (Label)clientmenuvbox.getChildren().get(1);
-//		nameLabel.setText(clientName);
-		
-		//getcontroller cua clientmenu
 
 		
 		messVBox.heightProperty().addListener(new ChangeListener<Number>() {
@@ -171,10 +200,22 @@ public class ClientController implements Initializable {
 		
 		message_btn.setOnAction(event -> showMessageView());
 		friendBook_btn.setOnAction(event -> showfriendBookView());
+		
+		addFriendBtn.setOnAction(event -> addFriend());
 
+	    friendRequestBtn.setOnAction(event -> showFriendRequestView());
+		
 		sendgetfriendlistrequest();
 	}
+	
+	private Label sendMessageStatus, timeSendMessage;
 
+	
+	
+	public Label getSendMessageStatus() {
+		return sendMessageStatus;
+	}
+	
 	public void sendMessage(String sendToUserID) throws IOException {
 
 		String messToSend = this.message_tf.getText();
@@ -182,6 +223,16 @@ public class ClientController implements Initializable {
 		// add message text to chat area
 		System.out.println("chat = " + messToSend);
 		if (messToSend != null) {
+			
+			//remove status label
+			
+			if(originVBox.getChildren().size()>2) {
+				originVBox.getChildren().remove(originVBox.getChildren().size()-1);
+				originVBox.getChildren().remove(originVBox.getChildren().size()-1);
+			}
+
+			//
+			
 			HBox messbox = new HBox();
 
 			messbox.setAlignment(Pos.TOP_RIGHT);
@@ -206,10 +257,26 @@ public class ClientController implements Initializable {
 			String timeSend = writeSendMessageRequest(sendToUserID, messToSend);
 			addNewMessage(sendToUserID, messToSend, timeSend, false);
 			
-			
-			
 			originVBox.getChildren().add(messbox);
+			
+			sendMessageStatus = new Label();
+			timeSendMessage = new Label(); 
+			
+			sendMessageStatus.setMinWidth(100.0);
+			timeSendMessage.setMinWidth(100.0);
 
+			sendMessageStatus.setAlignment(Pos.BASELINE_RIGHT);
+			timeSendMessage.setAlignment(Pos.BASELINE_RIGHT);
+
+			sendMessageStatus.setText("sent");
+			
+			String t = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+			timeSendMessage.setText(t);
+			
+			originVBox.setAlignment(Pos.BASELINE_RIGHT);
+			originVBox.getChildren().add(timeSendMessage);
+			originVBox.getChildren().add(sendMessageStatus);
+			
 		}
 	}
 
@@ -379,49 +446,7 @@ public class ClientController implements Initializable {
 				(int) (color.getBlue() * 255));
 	}
 
-	public ArrayList<String> searchIboxByName(String searchName, ArrayList<String> inboxF) {
-		ArrayList<String> resultList = new ArrayList<>();
 
-		// sắp xếp theo thứ tự từ điển
-		Collections.sort(inboxF);
-
-		int n = inboxF.size();
-		int step = (int) Math.floor(Math.sqrt(n));
-		int prev = 0;
-
-		// so sánh nếu vị trí cuối cùng của đoạn lớn hơn searchName thì bắt đầu tìm kiếm
-		// cụ thể (loại bỏ các đoạn nhỏ hơn searchName)
-		while (inboxF.get(Math.min(step, n) - 1).compareTo(searchName) < 0) {
-			prev = step;
-			step += (int) Math.floor(Math.sqrt(n));
-			if (prev >= n)
-				return resultList;
-		}
-
-		// Tìm vị trí đầu tiên lớn hơn hoặc bằng searchName trong phạm vi đã xác định.
-		while (inboxF.get(prev).compareTo(searchName) < 0) {
-			prev++;
-			if (prev == Math.min(step, n))
-				return resultList;
-		}
-
-		// tim kiếm cụ thể (Tìm các vị trí có giá trị là searchName trong đoạn đã xác
-		// định)
-		while (inboxF.get(prev).equals(searchName)) {
-			resultList.add(inboxF.get(prev));
-			prev++;
-			if (prev == Math.min(step, n))
-				return resultList;
-		}
-
-		// Kiểm tra các phần tử trước prev trong danh sách inboxF
-		while (prev > 0 && inboxF.get(prev - 1).equals(searchName)) {
-			prev--;
-			resultList.add(inboxF.get(prev));
-		}
-
-		return resultList;
-	}
 
 	public void showMessageView() {
 //		clientBorderPane.getCenter().setVisible(false);
@@ -431,6 +456,7 @@ public class ClientController implements Initializable {
 		this.chat_view.setVisible(true);
 		this.friend_book.setVisible(false);
 		this.friend_list_view.setVisible(false);
+		this.friendRequestView.setVisible(false);
 
 	}
 
@@ -440,10 +466,21 @@ public class ClientController implements Initializable {
 		this.chat_view.setVisible(false);
 		this.friend_book.setVisible(true);
 		this.friend_list_view.setVisible(true);
+		this.friendRequestView.setVisible(false);
+		addFriendAnchor.setVisible(false);
+
+	}
+	
+	public void showFriendRequestView() {
+		this.friend_ib.setVisible(false);
+		this.chat_view.setVisible(false);
+		this.friend_book.setVisible(true);
+		this.friend_list_view.setVisible(false);
+		this.friendRequestView.setVisible(true);
 
 	}
 
-	private void sendgetfriendlistrequest() {
+	public void sendgetfriendlistrequest() {
 		// TODO Auto-generated method stub
 		if (getListFriend == false) {
 			Request rq = new GetFriendList(RequestType.GET_FRIEND_LIST, null);
@@ -459,31 +496,34 @@ public class ClientController implements Initializable {
 	}
 
 	// add danh sach ban be vao danh ba ban be
-	public void addFriendToListView(Map<String, String> friendList) {
+	public void addFriendToListView(Map<String, String> friendList) throws IOException {
 
+		if(!this.friendList.isEmpty()) {
+			System.out.println("Clear vbox");
+			Platform.runLater(()-> friend_list_view_vbox.getChildren().clear());
+		}
+		
 		this.friendList = friendList;
 
 		for (Map.Entry<String, String> entry : friendList.entrySet()) {
 
 			System.out.println(entry.getKey() + ": " + entry.getValue());
 
-			HBox h = null;
-			try {
+			HBox h;
+			
 				FriendBoxViewController friendBoxView = new FriendBoxViewController();
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/test/guiobjectjson/friendBoxView.fxml"));
 				loader.setController(friendBoxView);
 				h = loader.load();
 				friendBoxView.setUserID(entry.getKey());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			// lay con vbox ra tu hbox
 
 			Label friendNameLabel = (Label) h.getChildren().get(1);
 			friendNameLabel.setText(entry.getValue());
 
-			friend_list_view_vbox.getChildren().add(h);
+			Platform.runLater(()->friend_list_view_vbox.getChildren().add(h));
+			System.out.println("Added to hbox");
 		}
 
 	}
@@ -526,6 +566,107 @@ public class ClientController implements Initializable {
 		i.setText(time);
 	}
 	
+	public void addFriend() {
+
+		
+		searchFriendTf.requestFocus();
+		searchFriendTf.setOnKeyPressed(event -> {
+			
+			this.friend_ib.setVisible(false);
+			this.friend_book.setVisible(false);
+			
+			this.friend_list_view.setVisible(false);
+			this.chat_view.setVisible(false);
+			
+			this.addFriendAnchor.setVisible(true);
+			
+			String searchInput = searchFriendTf.getText();
+			if(!(searchInput==null || searchInput=="")) {
+				Request getSearchLiRequest = new GetSearchList(RequestType.GET_SEARCH_ADDFRIEND_LIST, searchInput);
+				try {
+					ClientModel.getInstance()
+							   .getClient()
+							   .getOut().writeObject(getSearchLiRequest);
+				} catch (IOException e) {
+					System.out.println("send search list request error!");
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	private ArrayList<HBox> addFriendResultSearchHBoxList = new ArrayList<>();
+	private ArrayList<AddFriendBoxController> addFriendResultSearchControllerList = new ArrayList<>();
+	private ArrayList<String> sentRequestID = new ArrayList<>();
+	
+	public ArrayList<String> getSentRequestID() {
+		return sentRequestID;
+	}
+	
+	public void addFriendResultSearch(Map<String, String> clientList) throws IOException {
+		
+		
+		if(!addFriendResultSearchHBoxList.isEmpty()) {
+			Platform.runLater(()->
+			addFriendViewVBox.getChildren().clear());
+			addFriendResultSearchHBoxList.removeAll(addFriendResultSearchHBoxList);
+			addFriendResultSearchControllerList.removeAll(addFriendResultSearchControllerList);
+		}
+		
+//		addFriendViewVBox.getChildren().removeAll(clientInBoxFriend);
+		
+		
+		for(Map.Entry<String, String> entry : clientList.entrySet()) {
+			
+//			for(AddFriendBoxController add : sentRequest) {
+//				
+//			}
+			
+			HBox h;
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/AddFriend.fxml"));
+			AddFriendBoxController addfriendboxcontroller = new AddFriendBoxController(entry.getKey(), entry.getValue());
+			loader.setController(addfriendboxcontroller);
+			h = loader.load();
+
+//			addfriendboxcontroller.setName();
+			
+			//add vao list label
+			System.out.println("NAMEEEE  =  "+entry.getValue());
+			
+			if(sentRequestID.contains(entry.getKey())){
+				addfriendboxcontroller.disableAddButton();
+			}
+			
+			Platform.runLater(()-> addFriendViewVBox.getChildren().add(h));
+			
+			addFriendResultSearchHBoxList.add(h);
+			addFriendResultSearchControllerList.add(addfriendboxcontroller);
+			
+			addfriendboxcontroller.setName();
+
+		}
+	}
+	
+	public void addFriendRequest(String id, String name) throws IOException  {
+			HBox h;
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/AddFriendRequest.fxml"));
+			FriendRequestController friendRequestController = new FriendRequestController(id, name);
+			loader.setController(friendRequestController);
+			h = loader.load();
+
+//			addfriendboxcontroller.setName();
+			
+			//add vao list label
+			System.out.println("NAMEEEE  =  "+name);
+			Platform.runLater(()-> friendRequestVB.getChildren().add(h));
+			friendRequestController.setName();
+
+	}
+	
+	public void sendFriendRequest() {
+		
+	}
+	
 	public String getSendToUserID() {
 		return sendToUserID;
 	}
@@ -550,6 +691,30 @@ public class ClientController implements Initializable {
 	
 	public void setSendToName(String sendToName) {
 		this.sendToName = sendToName;
+	}
+
+	public void displayAcceptedFR(String name) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setContentText(name + " Accepted your request!");
+		alert.setTitle("Response Friend Request");
+		alert.initModality(Modality.WINDOW_MODAL);
+		alert.initOwner((Stage)addFriendBtn.getScene().getWindow());
+		alert.showAndWait();
+		
+//		 Stage alertStage = new Stage();
+//	        alertStage.initModality(Modality.WINDOW_MODAL);
+//	        alertStage.initOwner(primaryStage);
+//	        alertStage.setTitle("Alert");
+//
+//	        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//	        alert.setHeaderText("This is a custom alert");
+//	        alert.setContentText("Alert message goes here");
+//
+//	        alertStage.setScene(alert.getDialogPane().getScene());
+//	        alertStage.showAndWait();
+		
+		this.getListFriend = false;
+		sendgetfriendlistrequest();
 	}
 	
 
