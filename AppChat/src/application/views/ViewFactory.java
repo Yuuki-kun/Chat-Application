@@ -96,8 +96,8 @@ public class ViewFactory {
 		stage = new Stage();
 //		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.setScene(scene);
-		stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/application/resources/images/logo_small.png"))));
-		stage.setResizable(false);
+//		stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/application/resources/images/appchatIcon.png"))));
+//		stage.setResizable(false);
 		stage.setTitle("Chat");
 		stage.show();
 	}

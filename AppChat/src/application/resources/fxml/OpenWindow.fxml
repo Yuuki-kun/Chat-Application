@@ -28,9 +28,9 @@
          </font>
       </Label>
       <ProgressBar fx:id="loadingOpen" layoutX="157.0" layoutY="264.0" prefWidth="200.0" progress="0.0" styleClass="modern-progress-bar" />
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="159.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="251.0" layoutX="186.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true" smooth="false">
          <image>
-            <Image url="@../images/logo.png" />
+            <Image url="@../images/appchatIcon.png" />
          </image>
       </ImageView>
    </children>

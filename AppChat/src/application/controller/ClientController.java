@@ -289,7 +289,7 @@ public class ClientController implements Initializable {
 		ImageView imageView = new ImageView();
 		imageView.setFitWidth(50);
 		imageView.setFitHeight(50);
-		Image image = new Image(getClass().getResourceAsStream("/application/resources/images/logo_small.png"));
+		Image image = new Image(getClass().getResourceAsStream("/application/resources/images/appchatIcon.png"));
 		imageView.setImage(image);
 
 		Text text = new Text(message);

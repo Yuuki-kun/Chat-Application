@@ -29,7 +29,7 @@
 							<children>
 								<ImageView fitHeight="95.0" fitWidth="225.0" pickOnBounds="true" preserveRatio="true">
 									<image>
-										<Image url="@../images/logo.png" />
+										<Image url="@../images/appchatIcon.png" />
 									</image>
 								</ImageView>
 								<Label fx:id="clientNameLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="182.0" text="Hello There" />
@@ -145,7 +145,7 @@
 							<children>
 								<ImageView fitHeight="28.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" translateX="-5.0">
 									<image>
-										<Image url="@../images/logo_small.png" />
+										<Image url="@../images/appchatIcon.png" />
 									</image>
 								</ImageView>
 								<Button alignment="CENTER" contentDisplay="CENTER" layoutX="1048.0" layoutY="11.0" minHeight="25.0" minWidth="45.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="54.0" text="-" translateX="920.0">
@@ -197,7 +197,7 @@
 	<center>
 		<AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 			<children>
-				<AnchorPane fx:id="friend_ib" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+				<AnchorPane fx:id="friend_ib" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<children>
 						<ScrollPane fx:id="messScrollPane" minHeight="580.0" minWidth="354.0" stylesheets="@../styles/MessageBar.css" BorderPane.alignment="CENTER">
 							<content>
@@ -215,7 +215,7 @@
 						</ScrollPane>
 					</children>
 				</AnchorPane>
-				<AnchorPane fx:id="friend_book" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+				<AnchorPane fx:id="friend_book" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<children>
 						<VBox layoutY="35.0" prefHeight="705.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
 							<children>

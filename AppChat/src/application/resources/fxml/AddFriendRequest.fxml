@@ -11,7 +11,7 @@
    <children>
       <ImageView fx:id="friend_image_view" fitHeight="84.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/logo_small.png" />
+            <Image url="@../images/appchatIcon.png" />
          </image>
       </ImageView>
       <Label fx:id="friend_name_label" text="Label" />

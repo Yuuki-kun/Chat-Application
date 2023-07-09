@@ -10,7 +10,7 @@
    <children>
       <ImageView fx:id="friend_imageview" fitHeight="84.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../application/resources/images/logo_small.png" />
+            <Image url="@../../application/resources/images/appchatIcon.png" />
          </image>
       </ImageView>
       <Label fx:id="friend_name_label" text="Label" />
