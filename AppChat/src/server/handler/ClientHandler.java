@@ -20,6 +20,7 @@ import request.GetSearchList;
 import request.LoginRequest;
 import request.LoginSuccessfully;
 import request.Message;
+import request.UpdateFStatus;
 import request.Request;
 import request.RequestType;
 import request.ResponeFriendRq;
@@ -35,13 +36,21 @@ import server.model.ServerModel;
 public class ClientHandler implements Runnable {
 
 	public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+	
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private String clientName;
 	private String clientID;
 	private Map<String, String> friendList = new HashMap<>();
+	private ArrayList<String> friendID = new ArrayList<>();
+	//Map contains friend online
+	private Map<String, Boolean> friendOnlineStatus = new HashMap<>();
+	private ArrayList<ClientHandler> clientHandlerFriendOnline = new ArrayList<>();
 	
+	public static boolean online = true;
+	public static boolean offline = false;
+
 	public ClientHandler(Socket socket) {
 		try {
 			this.socket = socket;
@@ -49,6 +58,7 @@ public class ClientHandler implements Runnable {
 			this.in = new ObjectInputStream(socket.getInputStream());
 			
 			//add client handler thread to array list
+			
 			clientHandlers.add(this);
 			
 		} catch (Exception e) {
@@ -177,17 +187,24 @@ public class ClientHandler implements Runnable {
 				}
 
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				closeEverything();
 				e.printStackTrace();
 				break;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				//update state
+				
+				updateNewThreadStatus(offline);
+				
+				removeClient();
 				closeEverything();
 				e.printStackTrace();
 				break;
 			}
 		}
+	}
+	
+	public synchronized void removeClient() {
+		clientHandlers.remove(this);
 	}
 	
 	public synchronized void sendSeenStatusToId(String sendToID, Request rq) {
@@ -231,10 +248,26 @@ public class ClientHandler implements Runnable {
 	}
 
 	public void getFriendListFromDB() throws SQLException{
-		
+		//get friend list and friend online list
 		friendList = ServerModel.getInstance().getFriendList(clientID);
 		
-		Request sendFriendListForClient = new GetFriendList(RequestType.GET_FRIEND_LIST, friendList);
+		//get friend id;
+		for(Map.Entry<String, String> entry : friendList.entrySet()) {
+			//friend list id
+			friendID.add(entry.getKey());
+		}
+		
+//		m*n - n*n		
+		for(ClientHandler client : clientHandlers) {
+			if(friendID.contains(client.getClientID())) {
+				//map client id friend online
+				friendOnlineStatus.put(client.getClientID(), true);
+				//list thread client friend online
+				clientHandlerFriendOnline.add(client);
+			}
+		}
+		
+		Request sendFriendListForClient = new GetFriendList(RequestType.GET_FRIEND_LIST, friendList,friendOnlineStatus);
 //		System.out.println("FRIEND LIST = "+ServerModel.getInstance().getFriendList(clientID));
 		try {
 			this.out.writeObject(sendFriendListForClient);
@@ -252,7 +285,6 @@ public class ClientHandler implements Runnable {
 		
 		clientID = IDandName.get(0);
 		clientName = IDandName.get(1);
-		
 		
 		if (ServerModel.getInstance().getLoginSuccessfully()) {
 			if (ServerModel.getInstance().getLoginAccoutType() == AccountType.CLIENT) {
@@ -284,8 +316,35 @@ public class ClientHandler implements Runnable {
 		} else {
 			System.out.println("Login failed");
 		}
+		
+		//when a new client connect -> reset
+		
+		//send list friend
+		try {
+			getFriendListFromDB();
+		} catch (SQLException e) {
+			System.out.println("g f l e");
+			e.printStackTrace();
+		}
+		updateNewThreadStatus(online);
+	}
+	
+	public synchronized void updateNewThreadStatus (boolean status){
+		for(ClientHandler client : clientHandlerFriendOnline) {
+			client.updateFriendHandlerList(this, status);
+		}
 	}
 
+	public synchronized void updateFriendHandlerList(ClientHandler newClientConnect, boolean status) {
+
+		this.clientHandlerFriendOnline.add(newClientConnect);
+		Request newF = new UpdateFStatus(RequestType.UPDATE_F_STATUS, newClientConnect.getClientID(), status);
+		try {
+			this.out.writeObject(newF);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void signUp(Request signUpRequest) {
 		

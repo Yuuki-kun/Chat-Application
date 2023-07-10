@@ -11,6 +11,7 @@ import request.GetFriendList;
 import request.GetSearchList;
 import request.LoginSuccessfully;
 import request.Message;
+import request.UpdateFStatus;
 import request.Request;
 import request.ResponeFriendRq;
 import request.SeenStatus;
@@ -72,7 +73,7 @@ public class ListeningServer implements Runnable {
 				System.out.print("Da nhan danh sach ban be!");
 				Platform.runLater(()->{
 					try {
-						ClientModel.getInstance().getViewFactory().getClientController().addFriendToListView(((GetFriendList)rq).getFriendList());
+						ClientModel.getInstance().getViewFactory().getClientController().addFriendToListView(((GetFriendList)rq).getFriendList(), ((GetFriendList)rq).getFriendListOnlineStatus());
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -125,6 +126,9 @@ public class ListeningServer implements Runnable {
 				if(((SeenStatus)rq).getSeen()) {
 					Platform.runLater(()->					ClientModel.getInstance().getViewFactory().getClientController().getSendMessageStatus().setText("seen"));
 				}
+				break;
+			case UPDATE_F_STATUS:
+				Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().updateFriendOnline(((UpdateFStatus)rq).getId(), ((UpdateFStatus)rq).getStatus()));
 				break;
 			default:	
 				break;

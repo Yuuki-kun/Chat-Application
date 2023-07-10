@@ -15,7 +15,9 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.robot.Robot;
+import javafx.scene.shape.Circle;
 import request.Message;
 import request.Request;
 import request.RequestType;
@@ -34,12 +36,16 @@ public class FriendBoxViewController implements Initializable{
     @FXML
     private Label friend_name_label;
     
-
+    @FXML
+    private Circle online_status_shape;
+    
     @FXML
     private TextField search_friend_tf;
     
+    
     private String UserID;
     
+    private boolean isOnline = false;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -101,4 +107,19 @@ public class FriendBoxViewController implements Initializable{
 	public String getUserID() {
 		return UserID;
 	}
+	
+	public void setIsOnline(boolean h) {
+		this.isOnline = h;
+		this.online_status_shape.setVisible(true);
+		if(h) {
+			this.online_status_shape.setFill(Color.DARKGREEN);
+		}else {
+			this.online_status_shape.setFill(Color.DARKRED);
+		}
+	}
+	
+	public boolean getIsOnline() {
+		return this.isOnline;
+	}
+	
 }
