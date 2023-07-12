@@ -1,22 +1,9 @@
 package application.models;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-import com.xuggle.mediatool.ToolFactory;
-import com.xuggle.mediatool.IMediaWriter;
-import com.xuggle.xuggler.IRational;
-import com.xuggle.xuggler.IStreamCoder;
-import com.xuggle.xuggler.video.IConverter;
-import com.xuggle.xuggler.ICodec;
-import com.xuggle.xuggler.IPixelFormat;
-
-
 
 import accounttype.AccountType;
 import javafx.application.Platform;
@@ -156,7 +143,7 @@ public class ListeningServer implements Runnable {
 				System.out.println(((VideoRequest)rq).getBuffer().length);
 
 
-			        String outputFilePath = "video-form"+((VideoRequest)rq).getSenderID()+".mp4";
+			        String outputFilePath = "video-from"+((VideoRequest)rq).getSenderID()+".mp4";
 
 			        byte[] buffer = (byte[])((VideoRequest)rq).getBuffer(); /* your video data buffer */;
 
