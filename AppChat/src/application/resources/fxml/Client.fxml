@@ -18,10 +18,10 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="clientBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="806.0" prefWidth="1100.0" styleClass="client_container" stylesheets="@../styles/Client.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="clientBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="668.0" prefWidth="1100.0" styleClass="client_container" stylesheets="@../styles/Client.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
 	<left>
-		<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="180.0" styleClass="main_menu_container" stylesheets="@../styles/ClientMenuBar.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+		<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="180.0" styleClass="main_menu_container" stylesheets="@../styles/ClientMenuBar.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
 			<children>
 				<BorderPane prefHeight="650.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<top>
@@ -87,7 +87,7 @@
 	</left>
 	<right>
 
-		<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="566.0" style="-fx-background-color: #eeeeee;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+		<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="566.0" style="-fx-background-color: #eeeeee;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
 			<children>
 				<AnchorPane fx:id="friend_list_view" prefHeight="741.0" prefWidth="566.0" styleClass="friend_list_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<children>
@@ -116,11 +116,11 @@
 				</AnchorPane>
 				<AnchorPane fx:id="chat_view" prefHeight="741.0" prefWidth="566.0" style="-fx-background-color: #dddddd;" styleClass="chat_view_container" stylesheets="@../styles/ChatView.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<children>
-						<ScrollPane fx:id="message_view_sp" layoutX="8.0" layoutY="31.0" prefHeight="624.0" prefWidth="548.0" />
-						<TextField fx:id="message_tf" layoutX="21.0" layoutY="690.0" prefHeight="26.0" prefWidth="404.0" />
-						<Button fx:id="sendMessageBtn" layoutX="441.0" layoutY="691.0" mnemonicParsing="false" text="Send" />
+						<ScrollPane fx:id="message_view_sp" layoutX="8.0" layoutY="31.0" prefHeight="500.0" prefWidth="548.0" />
+						<TextField fx:id="message_tf" layoutX="23.0" layoutY="563.0" prefHeight="26.0" prefWidth="404.0" />
+						<Button fx:id="sendMessageBtn" layoutX="443.0" layoutY="564.0" mnemonicParsing="false" text="Send" />
                   <Label fx:id="typing_lbl" layoutX="9.0" layoutY="657.0" prefHeight="17.0" prefWidth="114.0" />
-                  <Button fx:id="sendVideoBtn" layoutX="147.0" layoutY="662.0" mnemonicParsing="false" text="video" />
+                  <Button fx:id="sendVideoBtn" layoutX="149.0" layoutY="535.0" mnemonicParsing="false" text="video" />
 					</children>
 				</AnchorPane>
             <AnchorPane fx:id="friendRequestView" layoutX="215.0" layoutY="122.0" prefHeight="741.0" prefWidth="566.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -197,13 +197,13 @@
 
 	</center>
 	<center>
-		<AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+		<AnchorPane prefHeight="940.0" prefWidth="466.0" BorderPane.alignment="CENTER">
 			<children>
-				<AnchorPane fx:id="friend_ib" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+				<AnchorPane fx:id="friend_ib" layoutY="140.0" prefHeight="601.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="135.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="140.0">
 					<children>
-						<ScrollPane fx:id="messScrollPane" minHeight="580.0" minWidth="354.0" stylesheets="@../styles/MessageBar.css" BorderPane.alignment="CENTER">
+						<ScrollPane fx:id="messScrollPane" layoutX="5.0" layoutY="4.0" minHeight="529.0" minWidth="346.0" prefHeight="597.0" prefWidth="346.0" stylesheets="@../styles/MessageBar.css" BorderPane.alignment="CENTER">
 							<content>
-								<VBox fx:id="messVBox" prefHeight="735.0" prefWidth="338.0" stylesheets="@../styles/MessageBar.css">
+								<VBox fx:id="messVBox" prefHeight="525.0" prefWidth="330.0" stylesheets="@../styles/MessageBar.css">
 									<styleClass>
 										<String fx:value="vbox" />
 										<String fx:value="no-focus-visual" />
@@ -217,7 +217,7 @@
 						</ScrollPane>
 					</children>
 				</AnchorPane>
-				<AnchorPane fx:id="friend_book" prefHeight="740.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+				<AnchorPane fx:id="friend_book" layoutY="136.0" prefHeight="602.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="138.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="136.0">
 					<children>
 						<VBox layoutY="35.0" prefHeight="705.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
 							<children>
@@ -245,11 +245,11 @@
 						</VBox>
 					</children>
 				</AnchorPane>
-            <AnchorPane fx:id="addFriendAnchor" prefHeight="740.0" prefWidth="354.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="addFriendAnchor" layoutY="287.0" prefHeight="708.0" prefWidth="354.0" AnchorPane.bottomAnchor="398.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="286.0">
                <children>
-                  <ScrollPane fx:id="addFriendSP" layoutX="-2.0" layoutY="2.0" prefHeight="738.0" prefWidth="355.0">
+                  <ScrollPane fx:id="addFriendSP" layoutX="5.0" layoutY="111.0" prefHeight="597.0" prefWidth="346.0">
                      <content>
-                        <VBox fx:id="addFriendViewVBox" prefHeight="736.0" prefWidth="353.0" />
+                        <VBox fx:id="addFriendViewVBox" prefHeight="579.0" prefWidth="333.0" />
                      </content>
                   </ScrollPane>
                </children>
