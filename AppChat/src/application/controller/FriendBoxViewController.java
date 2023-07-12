@@ -69,7 +69,7 @@ public class FriendBoxViewController implements Initializable{
 				contextMenu.getItems().addAll(chatOption, separator, option2, option3);
 				
 				contextMenu.setOnHidden(event ->{
-					friend_imageview.requestFocus();
+//					friend_imageview.requestFocus();
 				});	
 				
 				chatOption.setOnAction(event ->{
@@ -97,7 +97,9 @@ public class FriendBoxViewController implements Initializable{
 		        		);
 		        
 				
-				this.chooces_btn.setOnMouseClicked(event -> contextMenu.show(chooces_btn, event.getScreenX(), event.getScreenY()));
+				this.chooces_btn.setOnMouseClicked(event ->{
+					contextMenu.show(chooces_btn.getScene().getWindow(), event.getScreenX(), event.getScreenY());
+				});
 	}
 	
 	public void setUserID(String userID) {

@@ -9,7 +9,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		ClientModel.getInstance().getViewFactory().showOpenWindow();
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}

@@ -1,6 +1,10 @@
 package application.controller;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -15,8 +19,11 @@ import com.jfoenix.controls.JFXButton;
 
 import application.models.ClientModel;
 import javafx.animation.Animation;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,6 +33,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -37,11 +45,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -51,6 +64,9 @@ import request.Message;
 import request.Request;
 import request.RequestType;
 import request.SendMessage;
+import request.SendMessageStatus;
+import request.TypingRequest;
+import request.VideoRequest;
 
 public class ClientController implements Initializable {
 
@@ -144,6 +160,12 @@ public class ClientController implements Initializable {
 	@FXML
 	private JFXButton friendRequestBtn;
 
+	@FXML
+	private Label typing_lbl;
+
+    @FXML
+    private Button sendVideoBtn;
+	
 	private String sendToUserID;
 
 	private String sendToName;
@@ -169,6 +191,7 @@ public class ClientController implements Initializable {
 	private Map<String, String> friendList = new HashMap<>();
 
 	private boolean getListFriend = false;
+	boolean typing = false;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -203,10 +226,104 @@ public class ClientController implements Initializable {
 
 		friendRequestBtn.setOnAction(event -> showFriendRequestView());
 
+		// listening message tf
+		message_tf.textProperty().addListener((obsv, oldv, newv) -> {
+			// textfield dang duoc nhap
+			// thong bao cho server biet la dang nhap
+
+			if(this.typing==false) {
+				System.out.println("SEND");
+				String mess = message_tf.getText();
+
+				Request typing = new TypingRequest(RequestType.TYPING, clientID, sendToUserID, 3);
+
+				try {
+					ClientModel.getInstance().getClient().getOut().writeObject(typing);
+					this.typing = true;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				PauseTransition pauseTransition = new PauseTransition(Duration.seconds(3));
+				pauseTransition.setOnFinished(event -> {
+					this.typing = false;
+				});
+
+				pauseTransition.play();
+			}
+
+
+		});
+		
+		sendVideoBtn.setOnAction(event-> chooseVideo((Stage)sendVideoBtn.getScene().getWindow()));
+
 //		sendgetfriendlistrequest();
 	}
+	
+	public void chooseVideo(Stage primaryStage) {
+		  FileChooser fileChooser = new FileChooser();
+	        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Video files (*.mp4)", "*.mp4");
+	        fileChooser.getExtensionFilters().add(extFilter);
+	        fileChooser.setTitle("Select Video");
 
-	private Label sendMessageStatus, timeSendMessage;
+	        // Chọn video từ máy tính
+	        Stage fileStage = new Stage();
+	        fileStage.initOwner(primaryStage);
+	        fileStage.setTitle("File Selection");
+
+	        File selectedFile = fileChooser.showOpenDialog(fileStage);
+	        if (selectedFile != null) {
+	            sendVideo(selectedFile.getPath());
+	        } else {
+	        }
+	}
+	
+	private void sendVideo(String videoPath) {
+        try {
+           
+            FileInputStream fis = new FileInputStream(videoPath);
+
+            //thong bao sap nhan video cho server
+            
+            byte[] videoData = fis.readAllBytes();
+            Request videorq = new VideoRequest(RequestType.SEND_VIDEO, sendToUserID, videoData);
+            ClientModel.getInstance().getClient().getOut().writeObject(videorq);
+
+            
+            fis.close();
+//            dos.close();
+//            socket.close();
+            System.out.println("Video sent to server.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(("Error sending video."));
+        }
+    }
+
+	public void playTypingMessage(int dur) {
+
+		this.typing_lbl.setText("Typinggg ...");
+		TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(dur), typing_lbl);
+		translateTransition.setFromY(5);
+		translateTransition.setToY(-5);
+		translateTransition.setCycleCount(TranslateTransition.INDEFINITE);
+		translateTransition.setAutoReverse(true);
+		translateTransition.setInterpolator(Interpolator.SPLINE(0.4, 0.1, 0.2, 0.9));
+		translateTransition.play();
+
+		PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1));
+		pauseTransition.setOnFinished(event -> {
+			translateTransition.stop();
+			this.typing_lbl.setText("");
+
+		});
+
+		pauseTransition.play();
+
+	}
+
+	private Label sendMessageStatus, timeSendMessage, timeReceiveMessage;
 
 	public Label getSendMessageStatus() {
 		return sendMessageStatus;
@@ -258,13 +375,18 @@ public class ClientController implements Initializable {
 			sendMessageStatus = new Label();
 			timeSendMessage = new Label();
 
-			sendMessageStatus.setMinWidth(100.0);
-			timeSendMessage.setMinWidth(100.0);
+			sendMessageStatus.setMinWidth(55.5);
+			timeSendMessage.setMinWidth(50.0);
 
 			sendMessageStatus.setAlignment(Pos.BASELINE_RIGHT);
 			timeSendMessage.setAlignment(Pos.BASELINE_RIGHT);
 
-			sendMessageStatus.setText("sent");
+			sendMessageStatus.setStyle("-fx-background-color:grey;"
+					+ "-fx-text-fill:white;"
+					+ "-fx-background-radius: 10;"
+					+ "-fx-padding: 0 10 0 10;");
+
+			sendMessageStatus.setText("✓ sent");
 
 			String t = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
 			timeSendMessage.setText(t);
@@ -298,13 +420,145 @@ public class ClientController implements Initializable {
 				+ "-fx-max-width: 330;");
 		textFlow.setPadding(new Insets(10, 15, 10, 15));
 		text.setFill(Color.color(0.934, 0.945, 0.996));
+
+		timeReceiveMessage = new Label();
+
+		timeReceiveMessage.setMinWidth(110.0);
+
+		timeReceiveMessage.setPadding(new Insets(0, 0, 0, 60));
+
+		timeReceiveMessage.setAlignment(Pos.BASELINE_LEFT);
+
+		timeReceiveMessage.setText(timeReceive);
+
 		receiveMess.getChildren().addAll(imageView, textFlow);
 
 		addNewMessage(receiveFromID, message, timeReceive, true);
 
-		originVBox.getChildren().add(receiveMess);
+		// remove last child
+
+		if (originVBox.getChildren().size() > 1) {
+			originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+		}
+
+		originVBox.getChildren().addAll(receiveMess, timeReceiveMessage);
 
 		// neu chua bam vao xem (clicked) thi se chop chop do do
+	}
+    MediaPlayer mediaPlayer;
+
+	public void displayReceiveVideo(String receiveFromID, String videoURL, String timeReceive) throws IOException {
+		HBox receiveVideo = new HBox();
+		receiveVideo.setAlignment(Pos.TOP_LEFT);
+		receiveVideo.setPadding(new Insets(5, 5, 5, 10));
+
+		ImageView imageView = new ImageView();
+		imageView.setFitWidth(50);
+		imageView.setFitHeight(50);
+		Image image = new Image(getClass().getResourceAsStream("/application/resources/images/appchatIcon.png"));
+		imageView.setImage(image);
+
+		File file = new File(videoURL);
+		Media media = new Media(file.toURI().toString());
+		mediaPlayer = new MediaPlayer(media);
+		MediaView mdav = new MediaView();
+		mdav.setMediaPlayer(mediaPlayer);
+		mdav.setStyle("-fx-background-radius:10;");
+		
+		
+
+		timeReceiveMessage = new Label();
+
+		timeReceiveMessage.setMinWidth(110.0);
+
+		timeReceiveMessage.setPadding(new Insets(0, 0, 0, 60));
+
+		timeReceiveMessage.setAlignment(Pos.BASELINE_LEFT);
+
+		timeReceiveMessage.setText(timeReceive);
+
+		Button openVideo = new Button("Open");
+		
+		openVideo.setOnAction(event->{
+			openNewPlayVideoWindow((Stage)(openVideo.getScene().getWindow()), mdav);
+		});
+		
+		receiveVideo.getChildren().addAll(imageView, mdav, openVideo);
+
+		addNewMessage(receiveFromID, "video", timeReceive, true);
+
+		
+		
+		// remove last child
+
+		if (originVBox.getChildren().size() > 1) {
+			originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+		}
+
+		
+		
+		originVBox.getChildren().addAll(receiveVideo, timeReceiveMessage);
+		
+		mediaPlayer.setOnReady(() -> {
+			mdav.setFitHeight(270);
+            mdav.setFitWidth(350);
+        });
+		
+		mdav.setOnMouseClicked(event ->{
+			if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+				mediaPlayer.pause();
+			}else {
+				mediaPlayer.play();
+			}
+		});
+		// neu chua bam vao xem (clicked) thi se chop chop do do
+	}
+	
+	public void openNewPlayVideoWindow(Stage father, MediaView mdav) {
+//		MediaView newmdav = new MediaView();
+//		newmdav.setMediaPlayer(mdav.getMediaPlayer());
+//		newmdav.setFitHeight(550);
+//		newmdav.setFitWidth(800);
+//		
+//		Stage videoStage = new Stage();
+//        StackPane root = new StackPane();
+//		Scene newScene = new Scene(root, 800, 550);
+//		
+//		VBox v = new VBox();
+//		v.setMinWidth(1000);
+//		v.setMinHeight(650);
+//		
+//		videoStage.setScene(newScene);
+//		videoStage.initOwner(father);
+//		videoStage.initModality(Modality.WINDOW_MODAL);
+//		
+//		v.getChildren().add(newmdav);
+//		
+//		HBox buttonBar = new HBox();
+//		buttonBar.setMinWidth(1000);
+//		buttonBar.setMinHeight(75);
+//		
+//	
+//		
+//		Button play = new Button("play");
+//		play.setOnAction(event -> {
+//			newmdav.getMediaPlayer().play();
+//		});
+//		
+//		Button pause = new Button("pause");
+//		pause.setOnAction(event -> {
+//			newmdav.getMediaPlayer().pause();
+//		});
+//		
+//		buttonBar.getChildren().addAll(play, pause);
+//		buttonBar.setAlignment(Pos.CENTER);
+//		v.getChildren().add(buttonBar);
+//		
+//		root.getChildren().add(v);
+//		videoStage.show();
+		
+		Platform.runLater(()->		ClientModel.getInstance().getViewFactory().showPlayVideoWindow(mdav, father));
+		
 	}
 
 	public String writeSendMessageRequest(String toUserId, String message) throws IOException {
@@ -510,14 +764,13 @@ public class ClientController implements Initializable {
 			loader.setController(friendBoxView);
 			h = loader.load();
 			friendBoxView.setUserID(entry.getKey());
-			
-			if ((friendListStatus.get(entry.getKey()))==null) {
+
+			if ((friendListStatus.get(entry.getKey())) == null) {
 				friendBoxView.setIsOnline(false);
-			}
-			else {
+			} else {
 				friendBoxView.setIsOnline(true);
 			}
-			
+
 			friendListController.add(friendBoxView);
 
 			// lay con vbox ra tu hbox
@@ -592,6 +845,7 @@ public class ClientController implements Initializable {
 			this.addFriendAnchor.setVisible(true);
 
 			String searchInput = searchFriendTf.getText();
+
 			if (!(searchInput == null || searchInput == "")) {
 				Request getSearchLiRequest = new GetSearchList(RequestType.GET_SEARCH_ADDFRIEND_LIST, searchInput);
 				try {

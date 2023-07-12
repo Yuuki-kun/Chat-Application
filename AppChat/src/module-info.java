@@ -6,11 +6,18 @@ module AppChat {
 	requires java.management;
 	requires java.sql;
 	requires javafx.graphics;
+	requires javafx.media;
+	requires xuggle.xuggler.noarch;
+	requires java.desktop;
 	
 	opens application to javafx.graphics, javafx.fxml;
 	opens application.controller to javafx.graphics,javafx.fxml;
 	
     exports server;
     exports server.controller to  javafx.fxml;
+    
+    exports application.resources.fxml to  javafx.graphics, javafx.fxml; 
+    opens application.resources.fxml to  javafx.graphics, javafx.fxml; 
+    
     opens server.controller to javafx.fxml;
 }
