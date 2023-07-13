@@ -6,7 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import accounttype.AccountType;
+import application.FileData;
 import javafx.application.Platform;
+import request.AudioRequest;
 import request.FriendRequest;
 import request.GetFriendList;
 import request.GetSearchList;
@@ -123,12 +125,12 @@ public class ListeningServer implements Runnable {
 				break;
 			case SEND_MESSAGE_STATUS:
 				if (((SendMessageStatus) rq).getSent()) {
-					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().getSendMessageStatus().setText("✓ received"));
+					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().getSendMessageStatus().setText("✓✓ received"));
 				}
 				break;
 			case SEEN_STATUS:
 				if (((SeenStatus) rq).getSeen()) {
-					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().getSendMessageStatus().setText("✓ seen"));
+					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().getSendMessageStatus().setText("✓✓✓ seen"));
 				}
 				break;
 			case UPDATE_F_STATUS:
@@ -155,7 +157,7 @@ public class ListeningServer implements Runnable {
 			    
 			        Platform.runLater(()->							{
 						try {
-							ClientModel.getInstance().getViewFactory().getClientController().displayReceiveVideo(((VideoRequest)rq).getSenderID(), outputFilePath, "time");
+							ClientModel.getInstance().getViewFactory().getClientController().displayReceiveVideo(((VideoRequest)rq).getSenderID(), outputFilePath, ((VideoRequest)rq).getTimeSend());
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -167,11 +169,31 @@ public class ListeningServer implements Runnable {
 				System.out.println("da nhan video");
 
 				break;
+			case SEND_AUDIO:
+				System.out.println("DA NHAN MP3 TU "+((AudioRequest)rq).getSenderId() + " / filename = "+((AudioRequest)rq).getFileName()+"/ file = "+((AudioRequest)rq).getFileData());
+				//display mp3 here
+
+                try {
+					saveFile(((AudioRequest)rq).getFileName(), ((AudioRequest)rq).getFileData());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                
+                Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().displayReceiveAudio(((AudioRequest)rq).getSenderId(), ((AudioRequest)rq).getFileName(), "time"));
+                
+				break;
 			default:
 				break;
 			}
 		}
 	}
+	
+    private void saveFile(String fileName, byte[] fileData) throws IOException {
+        try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
+            outputStream.write(fileData);
+        }
+    }
 
 
 }

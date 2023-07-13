@@ -120,10 +120,56 @@
 				<AnchorPane fx:id="chat_view" layoutX="221.0" layoutY="13.0" maxWidth="900.0" minHeight="445.0" prefHeight="514.0" prefWidth="556.0" style="-fx-background-color: #dddddd;" styleClass="chat_view_container" stylesheets="@../styles/ChatView.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
 					<children>
 						<ScrollPane fx:id="message_view_sp" layoutX="2.0" layoutY="40.0" prefHeight="524.0" prefWidth="552.0" />
-						<TextField fx:id="message_tf" layoutX="24.0" layoutY="585.0" prefHeight="26.0" prefWidth="404.0" AnchorPane.bottomAnchor="10.0" />
-						<Button fx:id="sendMessageBtn" layoutX="455.0" layoutY="601.0" mnemonicParsing="false" text="Send" />
-                  <Label fx:id="typing_lbl" layoutX="24.0" layoutY="566.0" prefHeight="17.0" prefWidth="114.0" />
-                  <Button fx:id="sendVideoBtn" layoutX="201.0" layoutY="574.0" mnemonicParsing="false" text="video" />
+						<TextField fx:id="message_tf" layoutX="36.0" layoutY="585.0" prefHeight="26.0" prefWidth="422.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="100.0" />
+						<Button fx:id="sendMessageBtn" layoutX="467.0" layoutY="596.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="40.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="595.0">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="SEND" size="18" />
+                     </graphic></Button>
+                  <Label fx:id="typing_lbl" layoutX="24.0" layoutY="566.0" prefHeight="23.0" prefWidth="92.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="4.0" />
+                  <AnchorPane layoutX="143.0" layoutY="569.0" maxHeight="40.0" minHeight="25.0" prefHeight="25.0" prefWidth="401.0" style="-fx-border-color: #ffffff; -fx-border-radius: 5;" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="35.0">
+                     <children>
+                        <Button fx:id="sendVideoBtn" layoutX="4.0" layoutY="8.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Video" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="3.0">
+                           <font>
+                              <Font name="Tahoma" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="picture_btn" layoutX="42.0" layoutY="12.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Picture" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="60.0">
+                           <font>
+                              <Font name="Tahoma" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="imoji_btn" layoutX="71.0" layoutY="11.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Imoji" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="120.0">
+                           <font>
+                              <Font name="Tahoma" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="sticker_btn" layoutX="131.0" layoutY="12.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Sticker" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="180.0">
+                           <font>
+                              <Font name="Tahoma" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="record_btn" layoutX="191.0" layoutY="13.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Record" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="241.0">
+                           <font>
+                              <Font name="Tahoma" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="299.0" layoutY="4.0" minHeight="19.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="35.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="362.0" AnchorPane.topAnchor="3.0">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="MICROPHONE" size="16" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="record_btn1" layoutX="252.0" layoutY="13.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="File" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="302.0">
+                           <font>
+                              <Font name="Tahoma" size="10.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+                  <Button layoutX="452.0" layoutY="601.0" mnemonicParsing="false" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="460.0" AnchorPane.topAnchor="595.0">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="THUMBS_UP" size="18" />
+                     </graphic>
+                  </Button>
 					</children>
 				</AnchorPane>
             <AnchorPane fx:id="friendRequestView" layoutX="215.0" layoutY="122.0" maxWidth="900.0" prefHeight="631.0" prefWidth="566.0" visible="false" AnchorPane.bottomAnchor="-1.0" AnchorPane.rightAnchor="0.0">

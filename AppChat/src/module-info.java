@@ -7,6 +7,8 @@ module AppChat {
 	requires java.sql;
 	requires javafx.graphics;
 	requires javafx.media;
+	requires java.desktop;
+	requires TarsosDSP;
 	
 	opens application to javafx.graphics, javafx.fxml;
 	opens application.controller to javafx.graphics,javafx.fxml;

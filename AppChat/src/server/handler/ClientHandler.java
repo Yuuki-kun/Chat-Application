@@ -17,6 +17,7 @@ import java.util.Map;
 import accounttype.AccountType;
 import application.models.ClientModel;
 import javafx.application.Platform;
+import request.AudioRequest;
 import request.FriendRequest;
 import request.GetFriendList;
 import request.GetSearchList;
@@ -205,14 +206,43 @@ public class ClientHandler implements Runnable {
 					System.out.println("Da nhan yeu cau send video");
 
 					// send buffer to id
+					boolean sendVideoSuccessfully = false;
 					for (ClientHandler client : clientHandlerFriendOnline) {
 						if (client.getClientID().equals(((VideoRequest) rq).getSendToID())) {
 							((VideoRequest) rq).setSenderId(clientID);
 							client.getOut().writeObject(rq);
+							sendVideoSuccessfully = true;
 						}
+					}
+					if(sendVideoSuccessfully) {
+						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, true);
+						this.out.writeObject(sendMessageSuccessfully);
+					}else {
+						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, false);
+						this.out.writeObject(sendMessageSuccessfully);
 					}
 					System.out.println("Send video thanh cong");
 
+					break;
+				case SEND_AUDIO:
+					System.out.println("DA NHAN YEU CAU GUI MP3");
+					boolean sendAudioSuccessfully = false;
+					for (ClientHandler client : clientHandlerFriendOnline) {
+						if (client.getClientID().equals(((AudioRequest) rq).getSendToId())) {
+							((AudioRequest) rq).setSenderId(clientID);
+							System.out.println("DA GUI MP3 SANG "+((AudioRequest) rq).getSendToId());
+							client.getOut().writeObject(rq);
+							sendAudioSuccessfully = true;
+						}
+					}
+					if(sendAudioSuccessfully) {
+						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, true);
+						this.out.writeObject(sendMessageSuccessfully);
+					}else {
+						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, false);
+						this.out.writeObject(sendMessageSuccessfully);
+					}
+					System.out.println("Send video thanh cong");
 					break;
 				default:
 					break;

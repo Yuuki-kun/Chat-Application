@@ -1,9 +1,11 @@
 package application.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
 import java.time.LocalTime;
@@ -17,6 +19,7 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
 
+import application.FileData;
 import application.models.ClientModel;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
@@ -40,6 +43,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -61,6 +65,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import request.AudioRequest;
 import request.GetFriendList;
 import request.GetSearchList;
 import request.Message;
@@ -166,9 +171,9 @@ public class ClientController implements Initializable {
 	@FXML
 	private Label typing_lbl;
 
-    @FXML
-    private Button sendVideoBtn;
-	
+	@FXML
+	private Button sendVideoBtn;
+
 	private String sendToUserID;
 
 	private String sendToName;
@@ -180,9 +185,21 @@ public class ClientController implements Initializable {
 	private String clientName;
 
 	private HBox currentHboxNewIb;
-	
-	private static final long DOUBLE_CLICK_TIME_DELTA = 300; 
-    private long lastClickTime = 0;
+
+	@FXML
+	private Button picture_btn;
+
+	@FXML
+	private Button imoji_btn;
+
+	@FXML
+	private Button sticker_btn;
+
+	@FXML
+	private Button record_btn;
+
+	private static final long DOUBLE_CLICK_TIME_DELTA = 300;
+	private long lastClickTime = 0;
 
 	private static final Duration FLASH_DURATION = Duration.seconds(0.5);
 	private static final Duration STOP_DURATION = Duration.seconds(5);
@@ -237,7 +254,7 @@ public class ClientController implements Initializable {
 			// textfield dang duoc nhap
 			// thong bao cho server biet la dang nhap
 
-			if(this.typing==false) {
+			if (this.typing == false) {
 				System.out.println("SEND");
 				String mess = message_tf.getText();
 
@@ -250,7 +267,7 @@ public class ClientController implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 				PauseTransition pauseTransition = new PauseTransition(Duration.seconds(3));
 				pauseTransition.setOnFinished(event -> {
 					this.typing = false;
@@ -259,161 +276,316 @@ public class ClientController implements Initializable {
 				pauseTransition.play();
 			}
 
-
 		});
-		
-		sendVideoBtn.setOnAction(event-> chooseVideo((Stage)sendVideoBtn.getScene().getWindow()));
+
+		sendVideoBtn.setOnAction(event -> chooseVideo((Stage) sendVideoBtn.getScene().getWindow()));
+
+		record_btn.setOnAction(event -> sendAudioFile());
 
 //		sendgetfriendlistrequest();
 	}
-	
-	public void chooseVideo(Stage primaryStage) {
-		  FileChooser fileChooser = new FileChooser();
-	        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Video files (*.mp4)", "*.mp4");
-	        fileChooser.getExtensionFilters().add(extFilter);
-	        fileChooser.setTitle("Select Video");
 
-	        // Chọn video từ máy tính
-	        Stage fileStage = new Stage();
-	        fileStage.initOwner(primaryStage);
-	        fileStage.setTitle("File Selection");
+	// send mp3 or wav to server
+	private void sendAudioFile() {
+		FileChooser fileChooser = new FileChooser();
+		File selectedFile = fileChooser.showOpenDialog(null);
+		if (selectedFile != null) {
+			try {
+				byte[] fileData = readBytesFromFile(selectedFile);
 
-	        File selectedFile = fileChooser.showOpenDialog(fileStage);
-	        if (selectedFile != null) {
-	            sendVideo(selectedFile, selectedFile.getName(), selectedFile.getPath());
-	        } else {
-	        }
+				Request sendAudio = new AudioRequest(RequestType.SEND_AUDIO, sendToUserID, selectedFile.getName(), fileData);
+				// write fileDataObject
+
+				ClientModel.getInstance().getClient().getOut().writeObject(sendAudio);
+
+				//display
+				if (originVBox.getChildren().size() >= 2) {
+					if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+						// xoa 1 cai
+						System.out.println("Xoa 1 cai label time cua ben kia");
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+					} else {
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+					}
+				}
+				
+				HBox messbox = new HBox();
+
+				messbox.setAlignment(Pos.TOP_RIGHT);
+				messbox.setPadding(new Insets(5, 5, 5, 10));
+				
+				Image playImage = new Image(getClass().getResourceAsStream("/application/resources/images/playbtnPng.png"));
+				ImageView imageViewPlay = new ImageView();
+				imageViewPlay.setFitWidth(45);
+				imageViewPlay.setFitHeight(45);
+				imageViewPlay.setStyle("-fx-margin: 25;");
+				imageViewPlay.setImage(playImage);
+				
+				
+				Media media = new Media(selectedFile.toURI().toString());
+				MediaPlayer mediaPlayer = new MediaPlayer(media);
+				MediaView mdav = new MediaView();
+				mdav.setMediaPlayer(mediaPlayer);
+
+				VBox audioVbox = new VBox();
+				audioVbox.setAlignment(Pos.CENTER);
+				audioVbox.setMaxWidth(250);
+				audioVbox.setMaxHeight(100);
+				
+				Slider audioSlier = new Slider();
+				audioSlier.setPadding(new Insets(35, 5, 5, 5));
+				
+				audioVbox.setStyle("-fx-background-color: #a9bad9;"
+							+ "-fx-background-radius: 10;"
+							+ "-fx-border-radius:10;"
+							+ "-fx-border-color:#ffffff;");
+				
+				audioVbox.getChildren().addAll(imageViewPlay, audioSlier);
+				
+				
+
+				messbox.getChildren().addAll(mdav, audioVbox);
+
+				try {
+					addNewMessage(sendToUserID, "audio", "time", false);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				// remove last child
+
+				if (originVBox.getChildren().size() >= 2) {
+					if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+						// xoa 1 cai
+						System.out.println("Xoa 1 cai label time cua ben kia");
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+					} else {
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+					}
+				}
+
+
+				originVBox.getChildren().add(messbox);
+
+
+				imageViewPlay.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent evt) {
+//						MediaView mdav = (MediaView) evt.getSource();
+
+						if (mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+							mediaPlayer.pause();
+						} else {
+							mediaPlayer.play();
+						}
+
+						if (evt.getButton() == MouseButton.PRIMARY) {
+							long clickTime = System.currentTimeMillis();
+							if (clickTime - lastClickTime <= DOUBLE_CLICK_TIME_DELTA) {
+								// Xử lý double click
+//				                		Thread t = new Thread(new Runnable() {
+//											public void run() {
+								Platform.runLater(() -> ClientModel.getInstance().getViewFactory().showPlayVideoWindow(mdav, (Stage) mdav.getScene().getWindow()));
+//											}
+//										});
+//				                		t.start();
+
+							}
+							lastClickTime = clickTime;
+						}
+
+					}
+				});
+				
+				sendMessageStatus = new Label();
+				timeSendMessage = new Label();
+
+				sendMessageStatus.setMinWidth(55.5);
+				timeSendMessage.setMinWidth(50.0);
+
+				sendMessageStatus.setAlignment(Pos.BASELINE_RIGHT);
+				timeSendMessage.setAlignment(Pos.BASELINE_RIGHT);
+
+				sendMessageStatus.setStyle("-fx-background-color:grey;"
+						+ "-fx-text-fill:white;"
+						+ "-fx-background-radius: 10;"
+						+ "-fx-padding: 0 10 0 10;");
+
+				sendMessageStatus.setText("✓ sent");
+
+				timeSendMessage.setText("time");
+
+				originVBox.setAlignment(Pos.BASELINE_RIGHT);
+				originVBox.getChildren().add(timeSendMessage);
+				originVBox.getChildren().add(sendMessageStatus);
+				
+				
+				System.out.println("File sent successfully.");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
-	
+
+	private byte[] readBytesFromFile(File file) throws IOException {
+		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+			try (FileInputStream inputStream = new FileInputStream(file)) {
+				byte[] buffer = new byte[4096];
+				int bytesRead;
+				while ((bytesRead = inputStream.read(buffer)) != -1) {
+					outputStream.write(buffer, 0, bytesRead);
+				}
+			}
+			return outputStream.toByteArray();
+		}
+	}
+
+	public void chooseVideo(Stage primaryStage) {
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Video files (*.mp4)", "*.mp4");
+		fileChooser.getExtensionFilters().add(extFilter);
+		fileChooser.setTitle("Select Video");
+
+		// Chọn video từ máy tính
+		Stage fileStage = new Stage();
+		fileStage.initOwner(primaryStage);
+		fileStage.setTitle("File Selection");
+
+		File selectedFile = fileChooser.showOpenDialog(fileStage);
+		if (selectedFile != null) {
+			sendVideo(selectedFile, selectedFile.getName(), selectedFile.getPath());
+		} else {
+		}
+	}
+
 	private void sendVideo(File selectedFile, String fileName, String videoPath) {
-        try {
-           
-    
+		try {
+
 //            FileInputStream fis = new FileInputStream(videoPath);
-          FileInputStream fis = new FileInputStream(selectedFile);
+			FileInputStream fis = new FileInputStream(selectedFile);
 
+			// thong bao sap nhan video cho server
 
-            //thong bao sap nhan video cho server
-                        
-            byte[] videoData = fis.readAllBytes();
-            
-            //////////
-            
+			byte[] videoData = fis.readAllBytes();
 
-    		// add message text to chat area
-    		if (fis!=null) {
+			//////////
 
-    			// remove status label
+			// add message text to chat area
+			
+				if (originVBox.getChildren().size() >= 2) {
+					if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+						// xoa 1 cai
+						System.out.println("Xoa 1 cai label time cua ben kia");
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+					} else {
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+					}
+				}
 
-    			if (originVBox.getChildren().size() > 2) {
-    				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
-    				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
-    			}
+				//
 
-    			//
+				HBox messbox = new HBox();
 
-    			HBox messbox = new HBox();
+				messbox.setAlignment(Pos.TOP_RIGHT);
+				messbox.setPadding(new Insets(5, 5, 5, 10));
 
-    			messbox.setAlignment(Pos.TOP_RIGHT);
-    			messbox.setPadding(new Insets(5, 5, 5, 10));
+				// add media view
+				Media media = new Media(selectedFile.toURI().toString());
+				MediaPlayer mediaPlayer = new MediaPlayer(media);
+				MediaView mdav = new MediaView();
+				mdav.setMediaPlayer(mediaPlayer);
+				mdav.setStyle("-fx-background-radius:10;");
 
-    			//add media view
-    			Media media = new Media(selectedFile.toURI().toString());
-    			MediaPlayer mediaPlayer = new MediaPlayer(media);
-    			MediaView mdav = new MediaView();
-    			mdav.setMediaPlayer(mediaPlayer);
-    			mdav.setStyle("-fx-background-radius:10;");
-    			
-    			mdav.setFitHeight(270);
-            mdav.setFitWidth(350);
-    			
-    		mdav.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				mdav.setFitHeight(270);
+				mdav.setFitWidth(350);
 
-    			@Override
-    			public void handle(MouseEvent evt) {
-    				MediaView mdav = (MediaView)evt.getSource();
-    				
-    				if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
-    					mediaPlayer.pause();
-    				}else {
-    					mediaPlayer.play();
-    				}
-    				
-    				 if (evt.getButton() == MouseButton.PRIMARY) {
-    		                long clickTime = System.currentTimeMillis();
-    		                if (clickTime - lastClickTime <= DOUBLE_CLICK_TIME_DELTA) {
-    		                    // Xử lý double click
+				mdav.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent evt) {
+						MediaView mdav = (MediaView) evt.getSource();
+
+						if (mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+							mediaPlayer.pause();
+						} else {
+							mediaPlayer.play();
+						}
+
+						if (evt.getButton() == MouseButton.PRIMARY) {
+							long clickTime = System.currentTimeMillis();
+							if (clickTime - lastClickTime <= DOUBLE_CLICK_TIME_DELTA) {
+								// Xử lý double click
 //    		                		Thread t = new Thread(new Runnable() {
 //    									public void run() {
-    										Platform.runLater(()->ClientModel.getInstance().getViewFactory().showPlayVideoWindow(mdav, (Stage)mdav.getScene().getWindow()));
+								Platform.runLater(() -> ClientModel.getInstance().getViewFactory().showPlayVideoWindow(mdav, (Stage) mdav.getScene().getWindow()));
 //    									}
 //    								});
 //    		                		t.start();
-    		                	
-    		                }
-    		                lastClickTime = clickTime;
-    		            }
-    				
 
-    			}
-    		});
-            
-            
-            //
-            
-            
+							}
+							lastClickTime = clickTime;
+						}
+
+					}
+				});
+
+				//
+
 //    			textFlow.setPrefSize(350, 50);
-    			messbox.getChildren().add(mdav);
-    			///
-    			String timeSend;
+				messbox.getChildren().add(mdav);
+				///
+				String timeSend;
 
-    			  Request videorq = new VideoRequest(RequestType.SEND_VIDEO, sendToUserID, videoData, fileName);
-    	          ClientModel.getInstance().getClient().getOut().writeObject(videorq);
-    			
-    			timeSend = ((VideoRequest) videorq).getTimeSend();
-    			
-    			///
-    			addNewMessage(sendToUserID, "video", timeSend, false);
+				Request videorq = new VideoRequest(RequestType.SEND_VIDEO, sendToUserID, videoData, fileName);
+				ClientModel.getInstance().getClient().getOut().writeObject(videorq);
 
-    			originVBox.getChildren().add(messbox);
+				timeSend = ((VideoRequest) videorq).getTimeSend();
 
-    			sendMessageStatus = new Label();
-    			timeSendMessage = new Label();
+				///
+				addNewMessage(sendToUserID, "video", timeSend, false);
 
-    			sendMessageStatus.setMinWidth(55.5);
-    			timeSendMessage.setMinWidth(50.0);
+				originVBox.getChildren().add(messbox);
 
-    			sendMessageStatus.setAlignment(Pos.BASELINE_RIGHT);
-    			timeSendMessage.setAlignment(Pos.BASELINE_RIGHT);
+				sendMessageStatus = new Label();
+				timeSendMessage = new Label();
 
-    			sendMessageStatus.setStyle("-fx-background-color:grey;"
-    					+ "-fx-text-fill:white;"
-    					+ "-fx-background-radius: 10;"
-    					+ "-fx-padding: 0 10 0 10;");
+				sendMessageStatus.setMinWidth(55.5);
+				timeSendMessage.setMinWidth(50.0);
 
-    			sendMessageStatus.setText("✓ sent");
+				sendMessageStatus.setAlignment(Pos.BASELINE_RIGHT);
+				timeSendMessage.setAlignment(Pos.BASELINE_RIGHT);
 
-    			timeSendMessage.setText(timeSend);
+				sendMessageStatus.setStyle("-fx-background-color:grey;"
+						+ "-fx-text-fill:white;"
+						+ "-fx-background-radius: 10;"
+						+ "-fx-padding: 0 10 0 10;");
 
-    			originVBox.setAlignment(Pos.BASELINE_RIGHT);
-    			originVBox.getChildren().add(timeSendMessage);
-    			originVBox.getChildren().add(sendMessageStatus);
+				sendMessageStatus.setText("✓ sent");
 
-    		}
-            
-            /////////
-          
+				timeSendMessage.setText(timeSend);
 
-            
-            fis.close();
+				originVBox.setAlignment(Pos.BASELINE_RIGHT);
+				originVBox.getChildren().add(timeSendMessage);
+				originVBox.getChildren().add(sendMessageStatus);
+
+			
+
+			/////////
+
+			fis.close();
 //            dos.close();
 //            socket.close();
-            System.out.println("Video sent to server.");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println(("Error sending video."));
-        }
-    }
+			System.out.println("Video sent to server.");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println(("Error sending video."));
+		}
+	}
 
 	public void playTypingMessage(int dur) {
 
@@ -451,11 +623,19 @@ public class ClientController implements Initializable {
 		System.out.println("chat = " + messToSend);
 		if (messToSend != null) {
 
-			// remove status label
+			// remove status label && time label
+			// neu tin nhan truoc do la cua minh -> co 2 label time and status
+			// neu tin nhan truoc do la cua ban be -> co 1 label time
 
-			if (originVBox.getChildren().size() > 2) {
-				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
-				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			if (originVBox.getChildren().size() >= 2) {
+				if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+					// xoa 1 cai
+					System.out.println("Xoa 1 cai label time cua ben kia");
+					originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+				} else {
+					originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+					originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+				}
 			}
 
 			//
@@ -512,7 +692,6 @@ public class ClientController implements Initializable {
 		}
 	}
 
-
 	// sau khi nhan message tu user -> hien thi vao chat view
 	public void displayReceiveMessage(String receiveFromID, String message, String timeReceive) throws IOException {
 		HBox receiveMess = new HBox();
@@ -520,8 +699,8 @@ public class ClientController implements Initializable {
 		receiveMess.setPadding(new Insets(5, 5, 5, 10));
 
 		ImageView imageView = new ImageView();
-		imageView.setFitWidth(50);
-		imageView.setFitHeight(50);
+		imageView.setFitWidth(25);
+		imageView.setFitHeight(25);
 		Image image = new Image(getClass().getResourceAsStream("/application/resources/images/appchatIcon.png"));
 		imageView.setImage(image);
 
@@ -537,8 +716,7 @@ public class ClientController implements Initializable {
 		text.setFill(Color.color(0.934, 0.945, 0.996));
 
 		timeReceiveMessage = new Label();
-
-		timeReceiveMessage.setMinWidth(110.0);
+//		timeReceiveMessage.setStyle("-fx-background-color:red;");
 
 		timeReceiveMessage.setPadding(new Insets(0, 0, 0, 60));
 
@@ -552,11 +730,26 @@ public class ClientController implements Initializable {
 
 		// remove last child
 
-		if (originVBox.getChildren().size() > 1) {
-			originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
-		}
+//		if (originVBox.getChildren().size() > 1) {
+//			originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+//		}
 
-		originVBox.getChildren().addAll(receiveMess, timeReceiveMessage);
+		if (originVBox.getChildren().size() >= 2) {
+			if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+				// xoa 1 cai
+				System.out.println("Xoa 1 cai label time cua ben kia");
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			} else {
+
+				System.out.println("Xoa 2 cai label");
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			}
+		}
+		timeReceiveMessage.setMaxWidth(message_view_sp.getWidth());
+
+		originVBox.getChildren().add(receiveMess);
+		originVBox.getChildren().add(timeReceiveMessage);
 
 		// neu chua bam vao xem (clicked) thi se chop chop do do
 	}
@@ -567,8 +760,8 @@ public class ClientController implements Initializable {
 		receiveVideo.setPadding(new Insets(5, 5, 5, 10));
 
 		ImageView imageView = new ImageView();
-		imageView.setFitWidth(50);
-		imageView.setFitHeight(50);
+		imageView.setFitWidth(25);
+		imageView.setFitHeight(25);
 		Image image = new Image(getClass().getResourceAsStream("/application/resources/images/appchatIcon.png"));
 		imageView.setImage(image);
 
@@ -578,6 +771,117 @@ public class ClientController implements Initializable {
 		MediaView mdav = new MediaView();
 		mdav.setMediaPlayer(mediaPlayer);
 		mdav.setStyle("-fx-background-radius:10;");
+
+		timeReceiveMessage = new Label();
+
+		timeReceiveMessage.setMinWidth(110.0);
+
+		timeReceiveMessage.setPadding(new Insets(0, 0, 0, 60));
+
+		timeReceiveMessage.setAlignment(Pos.BASELINE_LEFT);
+
+		timeReceiveMessage.setText(timeReceive);
+
+		receiveVideo.getChildren().addAll(imageView, mdav, timeReceiveMessage);
+
+		addNewMessage(receiveFromID, "video", timeReceive, true);
+
+		// remove last child
+
+		if (originVBox.getChildren().size() >= 2) {
+			if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+				// xoa 1 cai
+				System.out.println("Xoa 1 cai label time cua ben kia");
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			} else {
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			}
+		}
+
+		timeReceiveMessage.setMaxWidth(message_view_sp.getWidth());
+
+		originVBox.getChildren().addAll(receiveVideo, timeReceiveMessage);
+
+		mediaPlayer.setOnReady(() -> {
+			mdav.setFitHeight(270);
+			mdav.setFitWidth(350);
+		});
+
+		mdav.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent evt) {
+				MediaView mdav = (MediaView) evt.getSource();
+
+				if (mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+					mediaPlayer.pause();
+				} else {
+					mediaPlayer.play();
+				}
+
+				if (evt.getButton() == MouseButton.PRIMARY) {
+					long clickTime = System.currentTimeMillis();
+					if (clickTime - lastClickTime <= DOUBLE_CLICK_TIME_DELTA) {
+						// Xử lý double click
+//		                		Thread t = new Thread(new Runnable() {
+//									public void run() {
+						Platform.runLater(() -> ClientModel.getInstance().getViewFactory().showPlayVideoWindow(mdav, (Stage) mdav.getScene().getWindow()));
+//									}
+//								});
+//		                		t.start();
+
+					}
+					lastClickTime = clickTime;
+				}
+
+			}
+		});
+
+		// neu chua bam vao xem (clicked) thi se chop chop do do
+	}
+
+	public void displayReceiveAudio(String receiveFromID, String audioURL, String timeReceive) {
+		HBox receiveAudio = new HBox();
+		receiveAudio.setAlignment(Pos.TOP_LEFT);
+		receiveAudio.setPadding(new Insets(5, 5, 5, 10));
+		
+		ImageView imageView = new ImageView();
+		imageView.setFitWidth(25);
+		imageView.setFitHeight(25);
+		Image image = new Image(getClass().getResourceAsStream("/application/resources/images/appchatIcon.png"));
+		imageView.setImage(image);
+
+		Image playImage = new Image(getClass().getResourceAsStream("/application/resources/images/playbtnPng.png"));
+		ImageView imageViewPlay = new ImageView();
+		imageViewPlay.setFitWidth(45);
+		imageViewPlay.setFitHeight(45);
+		imageViewPlay.setStyle("-fx-margin: 25;");
+		imageViewPlay.setImage(playImage);
+		
+		
+		File file = new File(audioURL);
+		Media media = new Media(file.toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(media);
+		MediaView mdav = new MediaView();
+		mdav.setMediaPlayer(mediaPlayer);
+//		mdav.setFitHeight(100);
+//		mdav.setFitWidth(100);
+		
+		VBox audioVbox = new VBox();
+		audioVbox.setAlignment(Pos.CENTER);
+		audioVbox.setMaxWidth(250);
+		audioVbox.setMaxHeight(100);
+		
+		Slider audioSlier = new Slider();
+		audioSlier.setPadding(new Insets(35, 5, 5, 5));
+		
+		audioVbox.setStyle("-fx-background-color: #a9bad9;"
+					+ "-fx-background-radius: 10;"
+					+ "-fx-border-radius:10;"
+					+ "-fx-border-color:#ffffff;");
+		
+		audioVbox.getChildren().addAll(imageViewPlay, audioSlier);
 		
 		timeReceiveMessage = new Label();
 
@@ -588,61 +892,65 @@ public class ClientController implements Initializable {
 		timeReceiveMessage.setAlignment(Pos.BASELINE_LEFT);
 
 		timeReceiveMessage.setText(timeReceive);
-		
-		receiveVideo.getChildren().addAll(imageView, mdav, timeReceiveMessage);
 
-		addNewMessage(receiveFromID, "video", timeReceive, true);
+		receiveAudio.getChildren().addAll(imageView, mdav, audioVbox);
+
+		try {
+			addNewMessage(receiveFromID, "audio", timeReceive, true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// remove last child
 
-		if (originVBox.getChildren().size() > 1) {
-			originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+		if (originVBox.getChildren().size() >= 2) {
+			if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+				// xoa 1 cai
+				System.out.println("Xoa 1 cai label time cua ben kia");
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			} else {
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			}
 		}
 
-		
-		
-		originVBox.getChildren().addAll(receiveVideo, timeReceiveMessage);
-		
-		mediaPlayer.setOnReady(() -> {
-			mdav.setFitHeight(270);
-            mdav.setFitWidth(350);
-        });
-	
-		mdav.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		timeReceiveMessage.setMaxWidth(message_view_sp.getWidth());
+
+		originVBox.getChildren().addAll(receiveAudio, timeReceiveMessage);
+
+
+		imageViewPlay.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent evt) {
-				MediaView mdav = (MediaView)evt.getSource();
-				
-				if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+//				MediaView mdav = (MediaView) evt.getSource();
+
+				if (mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
 					mediaPlayer.pause();
-				}else {
+				} else {
 					mediaPlayer.play();
 				}
-				
-				 if (evt.getButton() == MouseButton.PRIMARY) {
-		                long clickTime = System.currentTimeMillis();
-		                if (clickTime - lastClickTime <= DOUBLE_CLICK_TIME_DELTA) {
-		                    // Xử lý double click
+
+				if (evt.getButton() == MouseButton.PRIMARY) {
+					long clickTime = System.currentTimeMillis();
+					if (clickTime - lastClickTime <= DOUBLE_CLICK_TIME_DELTA) {
+						// Xử lý double click
 //		                		Thread t = new Thread(new Runnable() {
 //									public void run() {
-										Platform.runLater(()->ClientModel.getInstance().getViewFactory().showPlayVideoWindow(mdav, (Stage)mdav.getScene().getWindow()));
+						Platform.runLater(() -> ClientModel.getInstance().getViewFactory().showPlayVideoWindow(mdav, (Stage) mdav.getScene().getWindow()));
 //									}
 //								});
 //		                		t.start();
-		                	
-		                }
-		                lastClickTime = clickTime;
-		            }
-				
+
+					}
+					lastClickTime = clickTime;
+				}
 
 			}
 		});
-		
-		// neu chua bam vao xem (clicked) thi se chop chop do do
 	}
-
-
+	
 	public String writeSendMessageRequest(String toUserId, String message) throws IOException {
 		String timeSend;
 		Request sendMessageRequest = new SendMessage(RequestType.SEND_MESSAGE, message, toUserId);
