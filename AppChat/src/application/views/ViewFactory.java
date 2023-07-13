@@ -3,6 +3,7 @@ package application.views;
 import java.io.IOException;
 
 import accounttype.AccountType;
+import application.VideoMediaViewController;
 import application.controller.ClientController;
 import application.controller.LoginController;
 import application.controller.PlayVideoController;
@@ -81,13 +82,13 @@ public class ViewFactory {
 	}
 
 	public void showPlayVideoWindow(MediaView mdav, Stage father) {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/VideoPlayerWindow.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/VideoMediaView.fxml"));
 		
 		Stage stage = new Stage();
-		stage.initOwner(father);
-		stage.initModality(Modality.WINDOW_MODAL);
+//		stage.initOwner(father);
+//		stage.initModality(Modality.WINDOW_MODAL);
 
-		PlayVideoController videocontroller = new PlayVideoController(mdav);
+		VideoMediaViewController videocontroller = new VideoMediaViewController(mdav.getMediaPlayer());
 		loader.setController(videocontroller);
 		
 		Scene scene=null;

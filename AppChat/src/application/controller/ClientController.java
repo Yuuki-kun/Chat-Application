@@ -27,6 +27,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -42,6 +43,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -177,6 +180,9 @@ public class ClientController implements Initializable {
 	private String clientName;
 
 	private HBox currentHboxNewIb;
+	
+	private static final long DOUBLE_CLICK_TIME_DELTA = 300; 
+    private long lastClickTime = 0;
 
 	private static final Duration FLASH_DURATION = Duration.seconds(0.5);
 	private static final Duration STOP_DURATION = Duration.seconds(5);
@@ -274,21 +280,129 @@ public class ClientController implements Initializable {
 
 	        File selectedFile = fileChooser.showOpenDialog(fileStage);
 	        if (selectedFile != null) {
-	            sendVideo(selectedFile.getPath());
+	            sendVideo(selectedFile, selectedFile.getName(), selectedFile.getPath());
 	        } else {
 	        }
 	}
 	
-	private void sendVideo(String videoPath) {
+	private void sendVideo(File selectedFile, String fileName, String videoPath) {
         try {
            
-            FileInputStream fis = new FileInputStream(videoPath);
+    
+//            FileInputStream fis = new FileInputStream(videoPath);
+          FileInputStream fis = new FileInputStream(selectedFile);
+
 
             //thong bao sap nhan video cho server
-            
+                        
             byte[] videoData = fis.readAllBytes();
-            Request videorq = new VideoRequest(RequestType.SEND_VIDEO, sendToUserID, videoData);
-            ClientModel.getInstance().getClient().getOut().writeObject(videorq);
+            
+            //////////
+            
+
+    		// add message text to chat area
+    		if (fis!=null) {
+
+    			// remove status label
+
+    			if (originVBox.getChildren().size() > 2) {
+    				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+    				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+    			}
+
+    			//
+
+    			HBox messbox = new HBox();
+
+    			messbox.setAlignment(Pos.TOP_RIGHT);
+    			messbox.setPadding(new Insets(5, 5, 5, 10));
+
+    			//add media view
+    			Media media = new Media(selectedFile.toURI().toString());
+    			MediaPlayer mediaPlayer = new MediaPlayer(media);
+    			MediaView mdav = new MediaView();
+    			mdav.setMediaPlayer(mediaPlayer);
+    			mdav.setStyle("-fx-background-radius:10;");
+    			
+    			mdav.setFitHeight(270);
+            mdav.setFitWidth(350);
+    			
+    		mdav.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+    			@Override
+    			public void handle(MouseEvent evt) {
+    				MediaView mdav = (MediaView)evt.getSource();
+    				
+    				if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+    					mediaPlayer.pause();
+    				}else {
+    					mediaPlayer.play();
+    				}
+    				
+    				 if (evt.getButton() == MouseButton.PRIMARY) {
+    		                long clickTime = System.currentTimeMillis();
+    		                if (clickTime - lastClickTime <= DOUBLE_CLICK_TIME_DELTA) {
+    		                    // Xử lý double click
+//    		                		Thread t = new Thread(new Runnable() {
+//    									public void run() {
+    										Platform.runLater(()->ClientModel.getInstance().getViewFactory().showPlayVideoWindow(mdav, (Stage)mdav.getScene().getWindow()));
+//    									}
+//    								});
+//    		                		t.start();
+    		                	
+    		                }
+    		                lastClickTime = clickTime;
+    		            }
+    				
+
+    			}
+    		});
+            
+            
+            //
+            
+            
+//    			textFlow.setPrefSize(350, 50);
+    			messbox.getChildren().add(mdav);
+    			///
+    			String timeSend;
+
+    			  Request videorq = new VideoRequest(RequestType.SEND_VIDEO, sendToUserID, videoData, fileName);
+    	          ClientModel.getInstance().getClient().getOut().writeObject(videorq);
+    			
+    			timeSend = ((VideoRequest) videorq).getTimeSend();
+    			
+    			///
+    			addNewMessage(sendToUserID, "video", timeSend, false);
+
+    			originVBox.getChildren().add(messbox);
+
+    			sendMessageStatus = new Label();
+    			timeSendMessage = new Label();
+
+    			sendMessageStatus.setMinWidth(55.5);
+    			timeSendMessage.setMinWidth(50.0);
+
+    			sendMessageStatus.setAlignment(Pos.BASELINE_RIGHT);
+    			timeSendMessage.setAlignment(Pos.BASELINE_RIGHT);
+
+    			sendMessageStatus.setStyle("-fx-background-color:grey;"
+    					+ "-fx-text-fill:white;"
+    					+ "-fx-background-radius: 10;"
+    					+ "-fx-padding: 0 10 0 10;");
+
+    			sendMessageStatus.setText("✓ sent");
+
+    			timeSendMessage.setText(timeSend);
+
+    			originVBox.setAlignment(Pos.BASELINE_RIGHT);
+    			originVBox.getChildren().add(timeSendMessage);
+    			originVBox.getChildren().add(sendMessageStatus);
+
+    		}
+            
+            /////////
+          
 
             
             fis.close();
@@ -398,6 +512,7 @@ public class ClientController implements Initializable {
 		}
 	}
 
+
 	// sau khi nhan message tu user -> hien thi vao chat view
 	public void displayReceiveMessage(String receiveFromID, String message, String timeReceive) throws IOException {
 		HBox receiveMess = new HBox();
@@ -445,7 +560,6 @@ public class ClientController implements Initializable {
 
 		// neu chua bam vao xem (clicked) thi se chop chop do do
 	}
-    MediaPlayer mediaPlayer;
 
 	public void displayReceiveVideo(String receiveFromID, String videoURL, String timeReceive) throws IOException {
 		HBox receiveVideo = new HBox();
@@ -460,13 +574,11 @@ public class ClientController implements Initializable {
 
 		File file = new File(videoURL);
 		Media media = new Media(file.toURI().toString());
-		mediaPlayer = new MediaPlayer(media);
+		MediaPlayer mediaPlayer = new MediaPlayer(media);
 		MediaView mdav = new MediaView();
 		mdav.setMediaPlayer(mediaPlayer);
 		mdav.setStyle("-fx-background-radius:10;");
 		
-		
-
 		timeReceiveMessage = new Label();
 
 		timeReceiveMessage.setMinWidth(110.0);
@@ -476,19 +588,11 @@ public class ClientController implements Initializable {
 		timeReceiveMessage.setAlignment(Pos.BASELINE_LEFT);
 
 		timeReceiveMessage.setText(timeReceive);
-
-		Button openVideo = new Button("Open");
 		
-		openVideo.setOnAction(event->{
-			openNewPlayVideoWindow((Stage)(openVideo.getScene().getWindow()), mdav);
-		});
-		
-		receiveVideo.getChildren().addAll(imageView, mdav, openVideo);
+		receiveVideo.getChildren().addAll(imageView, mdav, timeReceiveMessage);
 
 		addNewMessage(receiveFromID, "video", timeReceive, true);
 
-		
-		
 		// remove last child
 
 		if (originVBox.getChildren().size() > 1) {
@@ -503,63 +607,41 @@ public class ClientController implements Initializable {
 			mdav.setFitHeight(270);
             mdav.setFitWidth(350);
         });
-		
-		mdav.setOnMouseClicked(event ->{
-			if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
-				mediaPlayer.pause();
-			}else {
-				mediaPlayer.play();
+	
+		mdav.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent evt) {
+				MediaView mdav = (MediaView)evt.getSource();
+				
+				if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+					mediaPlayer.pause();
+				}else {
+					mediaPlayer.play();
+				}
+				
+				 if (evt.getButton() == MouseButton.PRIMARY) {
+		                long clickTime = System.currentTimeMillis();
+		                if (clickTime - lastClickTime <= DOUBLE_CLICK_TIME_DELTA) {
+		                    // Xử lý double click
+//		                		Thread t = new Thread(new Runnable() {
+//									public void run() {
+										Platform.runLater(()->ClientModel.getInstance().getViewFactory().showPlayVideoWindow(mdav, (Stage)mdav.getScene().getWindow()));
+//									}
+//								});
+//		                		t.start();
+		                	
+		                }
+		                lastClickTime = clickTime;
+		            }
+				
+
 			}
 		});
+		
 		// neu chua bam vao xem (clicked) thi se chop chop do do
 	}
-	
-	public void openNewPlayVideoWindow(Stage father, MediaView mdav) {
-//		MediaView newmdav = new MediaView();
-//		newmdav.setMediaPlayer(mdav.getMediaPlayer());
-//		newmdav.setFitHeight(550);
-//		newmdav.setFitWidth(800);
-//		
-//		Stage videoStage = new Stage();
-//        StackPane root = new StackPane();
-//		Scene newScene = new Scene(root, 800, 550);
-//		
-//		VBox v = new VBox();
-//		v.setMinWidth(1000);
-//		v.setMinHeight(650);
-//		
-//		videoStage.setScene(newScene);
-//		videoStage.initOwner(father);
-//		videoStage.initModality(Modality.WINDOW_MODAL);
-//		
-//		v.getChildren().add(newmdav);
-//		
-//		HBox buttonBar = new HBox();
-//		buttonBar.setMinWidth(1000);
-//		buttonBar.setMinHeight(75);
-//		
-//	
-//		
-//		Button play = new Button("play");
-//		play.setOnAction(event -> {
-//			newmdav.getMediaPlayer().play();
-//		});
-//		
-//		Button pause = new Button("pause");
-//		pause.setOnAction(event -> {
-//			newmdav.getMediaPlayer().pause();
-//		});
-//		
-//		buttonBar.getChildren().addAll(play, pause);
-//		buttonBar.setAlignment(Pos.CENTER);
-//		v.getChildren().add(buttonBar);
-//		
-//		root.getChildren().add(v);
-//		videoStage.show();
-		
-		Platform.runLater(()->		ClientModel.getInstance().getViewFactory().showPlayVideoWindow(mdav, father));
-		
-	}
+
 
 	public String writeSendMessageRequest(String toUserId, String message) throws IOException {
 		String timeSend;

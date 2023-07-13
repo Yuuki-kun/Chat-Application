@@ -127,9 +127,9 @@ public class ListeningServer implements Runnable {
 				}
 				break;
 			case SEEN_STATUS:
-//				if (((SeenStatus) rq).getSeen()) {
-//					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().getSendMessageStatus().setText("✓ seen"));
-//				}
+				if (((SeenStatus) rq).getSeen()) {
+					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().getSendMessageStatus().setText("✓ seen"));
+				}
 				break;
 			case UPDATE_F_STATUS:
 				Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().updateFriendOnline(((UpdateFStatus) rq).getId(), ((UpdateFStatus) rq).getStatus()));
@@ -143,7 +143,7 @@ public class ListeningServer implements Runnable {
 				System.out.println(((VideoRequest)rq).getBuffer().length);
 
 
-			        String outputFilePath = "video-from"+((VideoRequest)rq).getSenderID()+".mp4";
+			        String outputFilePath = ((VideoRequest)rq).getFileName()+"-from"+((VideoRequest)rq).getSenderID()+".mp4";
 
 			        byte[] buffer = (byte[])((VideoRequest)rq).getBuffer(); /* your video data buffer */;
 
