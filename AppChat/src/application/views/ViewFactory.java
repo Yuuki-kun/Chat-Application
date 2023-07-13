@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import accounttype.AccountType;
 import application.VideoMediaViewController;
+import application.controller.AudioRecordController;
 import application.controller.ClientController;
 import application.controller.LoginController;
 import application.controller.PlayVideoController;
@@ -85,8 +86,6 @@ public class ViewFactory {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/VideoMediaView.fxml"));
 		
 		Stage stage = new Stage();
-//		stage.initOwner(father);
-//		stage.initModality(Modality.WINDOW_MODAL);
 
 		VideoMediaViewController videocontroller = new VideoMediaViewController(mdav.getMediaPlayer());
 		loader.setController(videocontroller);
@@ -105,6 +104,30 @@ public class ViewFactory {
 		stage.setTitle("Chat");
 		stage.show();
 		System.out.println("VIDEO CONTROLLER");
+		
+	}
+	
+	public void showAudioRecording() {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/AudioRecord.fxml"));
+		
+		Stage stage = new Stage();
+
+		AudioRecordController audiocontroller = new AudioRecordController();
+		loader.setController(audiocontroller);
+		
+		Scene scene=null;
+		try {
+			scene = new Scene(loader.load());
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		stage.setScene(scene);
+		stage.setTitle("Chat");
+		stage.show();
+		System.out.println("AUDIO CONTROLLER");
 		
 	}
 

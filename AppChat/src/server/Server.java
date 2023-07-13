@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Server extends Application{
-
 	@Override
 	public void start(@SuppressWarnings("exports") Stage stage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("ui/mui.fxml"));

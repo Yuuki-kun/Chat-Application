@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class AudioRecorderApp {
-
     private File outputFile;
     private TargetDataLine audioLine;
 

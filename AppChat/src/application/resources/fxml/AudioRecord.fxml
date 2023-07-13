@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="342.0" prefWidth="506.0" style="-fx-background-color: linear-gradient(to top right, #e6e6ff, #eee6ff);" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <JFXButton fx:id="start_stop_record_btn" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" layoutX="153.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: red; -fx-background-radius: 100; -fx-border-color: #ffffff; -fx-border-width: 2; -fx-border-radius: 100;" text=" " AnchorPane.topAnchor="30.0">
+         <graphic>
+            <FontAwesomeIconView fx:id="microphone_fasiv" glyphName="MICROPHONE" size="100">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </FontAwesomeIconView>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <Label fx:id="start_lbl" alignment="CENTER" contentDisplay="CENTER" layoutY="258.0" prefHeight="17.0" prefWidth="506.0" text="Click to start record">
+         <font>
+            <Font name="Tahoma" size="18.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="sendAudioRecord_btn" layoutX="197.0" layoutY="299.0" prefHeight="29.0" prefWidth="110.0" text=" ">
+         <graphic>
+            <FontAwesomeIconView glyphName="SEND_ALT" size="20">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></FontAwesomeIconView>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton fx:id="closeAudioRecord_btn" buttonType="RAISED" layoutX="456.0" layoutY="13.0" text="X" textFill="#2900ff">
+         <font>
+            <Font name="Arial Bold" size="18.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+   </children>
+</AnchorPane>

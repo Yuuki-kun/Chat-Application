@@ -148,12 +148,12 @@
                               <Font name="Tahoma" size="10.0" />
                            </font>
                         </Button>
-                        <Button fx:id="record_btn" layoutX="191.0" layoutY="13.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Record" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="241.0">
+                        <Button fx:id="sendAudio_btn" layoutX="191.0" layoutY="13.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Record" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="241.0">
                            <font>
                               <Font name="Tahoma" size="10.0" />
                            </font>
                         </Button>
-                        <Button layoutX="299.0" layoutY="4.0" minHeight="19.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="35.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="362.0" AnchorPane.topAnchor="3.0">
+                        <Button fx:id="audioRecord_btn" layoutX="299.0" layoutY="4.0" minHeight="19.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="35.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="362.0" AnchorPane.topAnchor="3.0">
                            <graphic>
                               <FontAwesomeIconView glyphName="MICROPHONE" size="16" />
                            </graphic>

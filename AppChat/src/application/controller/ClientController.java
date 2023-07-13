@@ -17,6 +17,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.TargetDataLine;
+
 import com.jfoenix.controls.JFXButton;
 
 import application.FileData;
@@ -196,8 +204,11 @@ public class ClientController implements Initializable {
 	private Button sticker_btn;
 
 	@FXML
-	private Button record_btn;
+	private Button sendAudio_btn;
+	@FXML
+	private Button audioRecord_btn;
 
+	
 	private static final long DOUBLE_CLICK_TIME_DELTA = 300;
 	private long lastClickTime = 0;
 
@@ -280,19 +291,164 @@ public class ClientController implements Initializable {
 
 		sendVideoBtn.setOnAction(event -> chooseVideo((Stage) sendVideoBtn.getScene().getWindow()));
 
-		record_btn.setOnAction(event -> sendAudioFile());
+		sendAudio_btn.setOnAction(event -> sendAudioFile());
 
+		audioRecord_btn.setOnAction(event -> {System.out.println("REC");
+									ClientModel.getInstance().getViewFactory().showAudioRecording();	
+		});
 //		sendgetfriendlistrequest();
-	}
-
+	}	
 	// send mp3 or wav to server
-	private void sendAudioFile() {
+	public void sendAudioFile() {
 		FileChooser fileChooser = new FileChooser();
 		File selectedFile = fileChooser.showOpenDialog(null);
 		if (selectedFile != null) {
 			try {
 				byte[] fileData = readBytesFromFile(selectedFile);
+				
+				Request sendAudio = new AudioRequest(RequestType.SEND_AUDIO, sendToUserID, selectedFile.getName(), fileData);
+				// write fileDataObject
 
+				ClientModel.getInstance().getClient().getOut().writeObject(sendAudio);
+
+				//display
+				if (originVBox.getChildren().size() >= 2) {
+					if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+						// xoa 1 cai
+						System.out.println("Xoa 1 cai label time cua ben kia");
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+					} else {
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+					}
+				}
+				
+				HBox messbox = new HBox();
+
+				messbox.setAlignment(Pos.TOP_RIGHT);
+				messbox.setPadding(new Insets(5, 5, 5, 10));
+				
+				Image playImage = new Image(getClass().getResourceAsStream("/application/resources/images/playbtnPng.png"));
+				ImageView imageViewPlay = new ImageView();
+				imageViewPlay.setFitWidth(45);
+				imageViewPlay.setFitHeight(45);
+				imageViewPlay.setStyle("-fx-margin: 25;");
+				imageViewPlay.setImage(playImage);
+				
+				
+				Media media = new Media(selectedFile.toURI().toString());
+				MediaPlayer mediaPlayer = new MediaPlayer(media);
+				MediaView mdav = new MediaView();
+				mdav.setMediaPlayer(mediaPlayer);
+
+				VBox audioVbox = new VBox();
+				audioVbox.setAlignment(Pos.CENTER);
+				audioVbox.setMaxWidth(250);
+				audioVbox.setMaxHeight(100);
+				
+				Slider audioSlier = new Slider();
+				audioSlier.setPadding(new Insets(35, 5, 5, 5));
+				
+				audioVbox.setStyle("-fx-background-color: #a9bad9;"
+							+ "-fx-background-radius: 10;"
+							+ "-fx-border-radius:10;"
+							+ "-fx-border-color:#ffffff;");
+				
+				audioVbox.getChildren().addAll(imageViewPlay, audioSlier);
+				
+				
+
+				messbox.getChildren().addAll(mdav, audioVbox);
+
+				try {
+					addNewMessage(sendToUserID, "audio", "time", false);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				// remove last child
+
+				if (originVBox.getChildren().size() >= 2) {
+					if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+						// xoa 1 cai
+						System.out.println("Xoa 1 cai label time cua ben kia");
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+					} else {
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+						originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+					}
+				}
+
+
+				originVBox.getChildren().add(messbox);
+
+
+				imageViewPlay.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent evt) {
+//						MediaView mdav = (MediaView) evt.getSource();
+
+						if (mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+							mediaPlayer.pause();
+						} else {
+							mediaPlayer.play();
+						}
+
+						if (evt.getButton() == MouseButton.PRIMARY) {
+							long clickTime = System.currentTimeMillis();
+							if (clickTime - lastClickTime <= DOUBLE_CLICK_TIME_DELTA) {
+								// Xử lý double click
+//				                		Thread t = new Thread(new Runnable() {
+//											public void run() {
+								Platform.runLater(() -> ClientModel.getInstance().getViewFactory().showPlayVideoWindow(mdav, (Stage) mdav.getScene().getWindow()));
+//											}
+//										});
+//				                		t.start();
+
+							}
+							lastClickTime = clickTime;
+						}
+
+					}
+				});
+				
+				sendMessageStatus = new Label();
+				timeSendMessage = new Label();
+
+				sendMessageStatus.setMinWidth(55.5);
+				timeSendMessage.setMinWidth(50.0);
+
+				sendMessageStatus.setAlignment(Pos.BASELINE_RIGHT);
+				timeSendMessage.setAlignment(Pos.BASELINE_RIGHT);
+
+				sendMessageStatus.setStyle("-fx-background-color:grey;"
+						+ "-fx-text-fill:white;"
+						+ "-fx-background-radius: 10;"
+						+ "-fx-padding: 0 10 0 10;");
+
+				sendMessageStatus.setText("✓ sent");
+
+				timeSendMessage.setText("time");
+
+				originVBox.setAlignment(Pos.BASELINE_RIGHT);
+				originVBox.getChildren().add(timeSendMessage);
+				originVBox.getChildren().add(sendMessageStatus);
+				
+				
+				System.out.println("File sent successfully.");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void sendAudioFileWithFile(File selectedFile) {
+		if (selectedFile != null) {
+			try {
+				byte[] fileData = readBytesFromFile(selectedFile);
+				
 				Request sendAudio = new AudioRequest(RequestType.SEND_AUDIO, sendToUserID, selectedFile.getName(), fileData);
 				// write fileDataObject
 
@@ -1355,17 +1511,7 @@ public class ClientController implements Initializable {
 		alert.initOwner((Stage) addFriendBtn.getScene().getWindow());
 		alert.showAndWait();
 
-//		 Stage alertStage = new Stage();
-//	        alertStage.initModality(Modality.WINDOW_MODAL);
-//	        alertStage.initOwner(primaryStage);
-//	        alertStage.setTitle("Alert");
-//
-//	        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//	        alert.setHeaderText("This is a custom alert");
-//	        alert.setContentText("Alert message goes here");
-//
-//	        alertStage.setScene(alert.getDialogPane().getScene());
-//	        alertStage.showAndWait();
+
 
 		this.getListFriend = false;
 		sendgetfriendlistrequest();
