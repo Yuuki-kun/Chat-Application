@@ -74,7 +74,7 @@ public class AudioRecordController implements Initializable {
 		// open audio record
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save Audio File");
-		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("WAV files (*.wav)", "*.wav"));
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("WAV files (*.mp3)", "*.mp3"));
 		outputFile = fileChooser.showSaveDialog(null);
 
 		// Start recording

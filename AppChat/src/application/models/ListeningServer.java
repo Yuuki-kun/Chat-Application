@@ -48,7 +48,6 @@ public class ListeningServer implements Runnable {
 				e.printStackTrace();
 				break;
 			}
-
 			switch (rq.getRqType()) {
 			case LOGIN_SUCCESSFULLY:
 				System.out.println("Da nhan doi tuong login client " + ((LoginSuccessfully) rq).getUsernameFromDB());
