@@ -45,6 +45,7 @@ public class AudioRecordController implements Initializable {
 	private boolean isRecording = false;
 
 	private File outputFile;
+	FileChooser fileChooser;
 	private TargetDataLine audioLine;
 
 	@Override
@@ -59,29 +60,31 @@ public class AudioRecordController implements Initializable {
 				this.start_lbl.setText("Click to start record");
 				this.microphone_fasiv.setFill(Color.BLACK);
 				stopRecording();
+				System.out.println(outputFile.length());
 			}
 		});
 		this.sendAudioRecord_btn.setOnAction(event -> {
-			if(this.outputFile!=null) {
-				ClientModel.getInstance().getViewFactory().getClientController().sendAudioFileWithFile(outputFile);
 
-			}
+			String audioURL = outputFile.getPath();
+			File file = new File(outputFile.getPath());
+			System.out.println(file.length());
+				ClientModel.getInstance().getViewFactory().getClientController().sendAudioFileWithFile(file);
+
 		});
 	}
 
 	public void audioRecord() {
 
 		// open audio record
-		FileChooser fileChooser = new FileChooser();
+		fileChooser = new FileChooser();
 		fileChooser.setTitle("Save Audio File");
-		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("WAV files (*.mp3)", "*.mp3"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("WAV files (*.wav)", "*.wav"));
 		outputFile = fileChooser.showSaveDialog(null);
 
 		// Start recording
 		if(outputFile!=null) {
 			try {
-//	            AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
-				AudioFormat audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
+	            AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
 
 				DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
 
