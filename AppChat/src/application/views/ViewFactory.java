@@ -178,7 +178,6 @@ public class ViewFactory {
 		 * like showClientWindow
 		 * */
 	}
-
 	public void closeStage(Stage stage) {
 		stage.close();
 	}
