@@ -47,8 +47,14 @@ public class SignupController implements Initializable{
 	private JFXButton SignUp;
 
 	
-	
 	public void onSignUp() {
+		
+		/*
+		 * connect to server
+		 * */
+		
+		ClientModel.getInstance().initialClient();
+		
 		String uname = UserName.getText();
 		String psw = Password.getText();
 		String name = Name.getText();
@@ -66,7 +72,6 @@ public class SignupController implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		
 	}
 

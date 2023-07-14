@@ -216,8 +216,15 @@ public class ClientHandler implements Runnable {
 					break;
 				case SIGN_UP:
 					System.out.println("Nhan yeu cau dang ky");
-					signUp((SignUp)rq);
+					boolean success = signUp((SignUp)rq);
 					
+					if(success) {
+						checkLogin(((SignUp)rq).getUsername(), ((SignUp)rq).getPassword());
+					}else {
+						
+					}
+					
+					break;
 					
 				default:
 					break;
@@ -408,7 +415,7 @@ public class ClientHandler implements Runnable {
 		}
 	}
 
-	public void signUp(Request signUpRequest) {
+	public boolean signUp(Request signUpRequest) {
 
 		SignUp signupRequest = (SignUp) signUpRequest;
 		String username = signupRequest.getUsername(),
@@ -482,12 +489,15 @@ public class ClientHandler implements Runnable {
 
 				
 				System.out.println("Đang ky thanh cong");
+				return true;
 			} catch (SQLException e) {
 				e.printStackTrace();
+				return false;
+
 			}
 		} else {
 			System.out.println("dang ky that bai");
-
+			return false;
 		}
 
 	}

@@ -172,6 +172,12 @@ public class ViewFactory {
 //        timeline.getKeyFrames().add(kf);
 //        timeline.play();
 //	}
+	
+	public void showSignUpWindow() {
+		/*
+		 * like showClientWindow
+		 * */
+	}
 
 	public void closeStage(Stage stage) {
 		stage.close();
