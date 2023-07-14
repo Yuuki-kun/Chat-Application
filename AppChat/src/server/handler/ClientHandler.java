@@ -453,11 +453,12 @@ public class ClientHandler implements Runnable {
 				// Tính toán id và userId mới
 				int id = accountCount + 1;
 				String userId = "u" + id;
+				String accountId = "a" + id;
 				
 				// Thêm accountId và userId vào bảng account
 				String updateAccountQuery = "UPDATE account SET accountid = ?, userid = ?, username = ?, password = ?, registration_date = NULL, type = ? WHERE username = ?";
 				PreparedStatement updateAccountStatement = ServerModel.getInstance().getDatadriver().getConn().prepareStatement(updateAccountQuery);
-				updateAccountStatement.setString(1, userId);
+				updateAccountStatement.setString(1, accountId);
 				updateAccountStatement.setString(2, userId);
 				updateAccountStatement.setString(3, username);
 				updateAccountStatement.setString(4, password);
