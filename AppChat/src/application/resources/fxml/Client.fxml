@@ -224,9 +224,9 @@
 
 	</center>
 	<center>
-		<AnchorPane maxWidth="354.0" minHeight="495.0" minWidth="354.0" prefHeight="495.0" prefWidth="354.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER_LEFT">
+		<AnchorPane maxWidth="354.0" minHeight="495.0" minWidth="354.0" prefHeight="495.0" prefWidth="354.0" BorderPane.alignment="CENTER_LEFT">
 			<children>
-				<AnchorPane fx:id="friend_ib" layoutY="2.0" prefHeight="602.0" prefWidth="354.0" styleClass="friend_book_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+				<AnchorPane fx:id="friend_ib" layoutY="2.0" prefHeight="602.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<children>
 						<ScrollPane fx:id="messScrollPane" fitToHeight="true" fitToWidth="true" layoutX="5.0" layoutY="4.0" minHeight="529.0" minWidth="346.0" prefHeight="602.0" prefWidth="354.0" stylesheets="@../styles/MessageBar.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
 							<content>
@@ -272,11 +272,11 @@
 						</VBox>
 					</children>
 				</AnchorPane>
-            <AnchorPane fx:id="addFriendAnchor" layoutY="722.0" prefHeight="602.0" prefWidth="354.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="addFriendAnchor" layoutY="722.0" prefHeight="602.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <ScrollPane fx:id="addFriendSP" fitToHeight="true" fitToWidth="true" layoutX="5.0" layoutY="-106.0" prefHeight="589.0" prefWidth="346.0">
+                  <ScrollPane fx:id="addFriendSP" fitToHeight="true" fitToWidth="true" layoutX="5.0" layoutY="2.0" prefHeight="630.0" prefWidth="346.0">
                      <content>
-                        <VBox fx:id="addFriendViewVBox" prefHeight="586.0" prefWidth="333.0" />
+                        <VBox fx:id="addFriendViewVBox" prefHeight="603.0" prefWidth="344.0" />
                      </content>
                   </ScrollPane>
                </children>

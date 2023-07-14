@@ -83,7 +83,7 @@ public class ClientHandler implements Runnable {
 			try {
 
 				rq = (Request) in.readObject();
-
+				
 				switch (rq.getRqType()) {
 				case LOGIN:
 
