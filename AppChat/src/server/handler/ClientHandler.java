@@ -17,7 +17,6 @@ import java.util.Map;
 import accounttype.AccountType;
 import application.models.ClientModel;
 import javafx.application.Platform;
-import request.AudioRequest;
 import request.FriendRequest;
 import request.GetFriendList;
 import request.GetSearchList;
@@ -83,7 +82,7 @@ public class ClientHandler implements Runnable {
 			try {
 
 				rq = (Request) in.readObject();
-				
+
 				switch (rq.getRqType()) {
 				case LOGIN:
 
@@ -206,44 +205,20 @@ public class ClientHandler implements Runnable {
 					System.out.println("Da nhan yeu cau send video");
 
 					// send buffer to id
-					boolean sendVideoSuccessfully = false;
 					for (ClientHandler client : clientHandlerFriendOnline) {
 						if (client.getClientID().equals(((VideoRequest) rq).getSendToID())) {
 							((VideoRequest) rq).setSenderId(clientID);
 							client.getOut().writeObject(rq);
-							sendVideoSuccessfully = true;
 						}
-					}
-					if(sendVideoSuccessfully) {
-						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, true);
-						this.out.writeObject(sendMessageSuccessfully);
-					}else {
-						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, false);
-						this.out.writeObject(sendMessageSuccessfully);
 					}
 					System.out.println("Send video thanh cong");
 
 					break;
-				case SEND_AUDIO:
-					System.out.println("DA NHAN YEU CAU GUI MP3");
-					boolean sendAudioSuccessfully = false;
-					for (ClientHandler client : clientHandlerFriendOnline) {
-						if (client.getClientID().equals(((AudioRequest) rq).getSendToId())) {
-							((AudioRequest) rq).setSenderId(clientID);
-							System.out.println("DA GUI MP3 SANG "+((AudioRequest) rq).getSendToId());
-							client.getOut().writeObject(rq);
-							sendAudioSuccessfully = true;
-						}
-					}
-					if(sendAudioSuccessfully) {
-						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, true);
-						this.out.writeObject(sendMessageSuccessfully);
-					}else {
-						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, false);
-						this.out.writeObject(sendMessageSuccessfully);
-					}
-					System.out.println("Send video thanh cong");
-					break;
+				case SIGN_UP:
+					System.out.println("Nhan yeu cau dang ky");
+					signUp((SignUp)rq);
+					
+					
 				default:
 					break;
 				}
@@ -442,7 +417,9 @@ public class ClientHandler implements Runnable {
 				city = signupRequest.getCity(),
 				district = signupRequest.getDistrict(),
 				district2 = signupRequest.getDistrict2(),
-				street = signupRequest.getStreet();
+				street = signupRequest.getStreet(),
+				client = signupRequest.getType();
+				
 
 		boolean checkSiggup = checkSignUp(username, password, name, city, district, district2, street);
 
@@ -476,26 +453,40 @@ public class ClientHandler implements Runnable {
 				// Tính toán id và userId mới
 				int id = accountCount + 1;
 				String userId = "u" + id;
-
-				// Thêm userId vào cột userid của bảng account
-				PreparedStatement updateAccountStatement = ServerModel.getInstance().getDatadriver().getConn().prepareStatement("UPDATE account SET userid = ? WHERE username = ?");
+				
+				// Thêm accountId và userId vào bảng account
+				String updateAccountQuery = "UPDATE account SET accountid = ?, userid = ?, username = ?, password = ?, registration_date = NULL, type = ? WHERE username = ?";
+				PreparedStatement updateAccountStatement = ServerModel.getInstance().getDatadriver().getConn().prepareStatement(updateAccountQuery);
 				updateAccountStatement.setString(1, userId);
-				updateAccountStatement.setString(2, username);
+				updateAccountStatement.setString(2, userId);
+				updateAccountStatement.setString(3, username);
+				updateAccountStatement.setString(4, password);
+				updateAccountStatement.setString(5, client);
+				updateAccountStatement.setString(6, username);
 				updateAccountStatement.executeUpdate();
 				updateAccountStatement.close();
 
-				// Thêm userId vào cột userid của bảng "user"
-				PreparedStatement updateUserStatement = ServerModel.getInstance().getDatadriver().getConn().prepareStatement("UPDATE \"user\" SET userid = ?");
+
+				// Thêm userId vào cột userid của bảng "users"
+				String updateUserQuery = "UPDATE users SET userid = ?, tenduong = ?, tentinh = ?, tenhuyen = ?, tenxa = ?, name = ? WHERE username = ?";
+				PreparedStatement updateUserStatement = ServerModel.getInstance().getDatadriver().getConn().prepareStatement(updateUserQuery);
 				updateUserStatement.setString(1, userId);
+				updateUserStatement.setString(2, street);
+				updateUserStatement.setString(3, city);
+				updateUserStatement.setString(4, district);
+				updateUserStatement.setString(5, district2);
+				updateUserStatement.setString(6, name);
+				updateUserStatement.setString(7, username);
 				updateUserStatement.executeUpdate();
 				updateUserStatement.close();
 
-				System.out.println("Đã thêm thành công userId: " + userId + " vào bảng account và user.");
+				
+				System.out.println("Đang ky thanh cong");
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		} else {
-			System.out.println("thêm không thành công");
+			System.out.println("dang ky that bai");
 
 		}
 

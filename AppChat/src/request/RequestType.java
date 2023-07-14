@@ -17,5 +17,5 @@ public enum RequestType {
 	UPDATE_F_STATUS,
 	TYPING,
 	SEND_VIDEO,
-	SEND_AUDIO
+	SIGN_UP
 }

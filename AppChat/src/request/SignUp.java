@@ -2,7 +2,8 @@ package request;
 
 public class SignUp extends Request{
 
-	String username, password, name, city, district, district2, street;
+	String username, password, name, city, district, district2, street,type,time;
+	
 	
 	public SignUp(RequestType rqType,
 			String username, 
@@ -11,7 +12,9 @@ public class SignUp extends Request{
 			String city, 
 			String district, 
 			String district2, 
-			String street
+			String street,
+			String type
+			
 			) {
 		super(rqType);
 		this.username = username;
@@ -21,6 +24,7 @@ public class SignUp extends Request{
 		this.district = district;
 		this.district2 = district2;
 		this.street = street;
+		this.type = type;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -86,6 +90,22 @@ public class SignUp extends Request{
 
 	public void setStreet(String street) {
 		this.street = street;
+	}
+//	
+//	public String getTime() {
+//		return time;
+//	}
+//
+//	public void setTime(String time) {
+//		this.time = time;
+//	}
+//	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

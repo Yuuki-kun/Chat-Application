@@ -2,6 +2,8 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.image.Image?>
@@ -35,22 +37,22 @@
                      <children>
                         <VBox layoutX="146.0" layoutY="105.0" prefHeight="500.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sign up:" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" />
-                              <TextField />
-                              <Text layoutX="10.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" />
-                              <TextField layoutX="10.0" layoutY="44.0" />
-                              <Text layoutX="10.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
-                              <TextField layoutX="10.0" layoutY="84.0" />
-                              <Text layoutX="10.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="City:" />
-                              <TextField layoutX="10.0" layoutY="130.0" />
-                              <Text layoutX="10.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="District:" />
-                              <TextField layoutX="10.0" layoutY="173.0" />
-                              <Text layoutX="10.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="District: 2 (Xã):" />
-                              <TextField layoutX="10.0" layoutY="212.0" />
-                              <Text layoutX="10.0" layoutY="255.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Street:" />
-                              <TextField layoutX="10.0" layoutY="259.0" />
-                              <JFXButton text="Sign up" />
+                              <Label text="Label" translateX="160.0" translateY="10.0" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" translateY="50.0" />
+                              <TextField fx:id="UserName" prefHeight="30.0" prefWidth="320.0" translateY="50.0" />
+                              <Text layoutX="10.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" translateY="50.0" />
+                              <PasswordField fx:id="Password" prefHeight="30.0" prefWidth="350.0" translateY="50.0" />
+                              <Text layoutX="10.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" translateY="50.0" />
+                              <TextField fx:id="Name" layoutX="10.0" layoutY="84.0" prefHeight="30.0" prefWidth="200.0" translateY="50.0" />
+                              <Text layoutX="10.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="City:" translateY="50.0" />
+                              <TextField fx:id="City" layoutX="10.0" layoutY="130.0" prefHeight="30.0" prefWidth="200.0" translateY="50.0" />
+                              <Text layoutX="10.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="District:" translateY="50.0" />
+                              <TextField fx:id="District" layoutX="10.0" layoutY="173.0" prefHeight="30.0" prefWidth="200.0" translateY="50.0" />
+                              <Text layoutX="10.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="District: 2 (Xã):" translateY="50.0" />
+                              <TextField fx:id="District2" layoutX="10.0" layoutY="212.0" prefHeight="30.0" prefWidth="200.0" translateY="50.0" />
+                              <Text layoutX="10.0" layoutY="255.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Street:" translateY="50.0" />
+                              <TextField fx:id="Street" layoutX="10.0" layoutY="259.0" prefHeight="30.0" prefWidth="200.0" translateY="50.0" />
+                              <JFXButton fx:id="SignUp" prefHeight="35.0" prefWidth="311.0" ripplerFill="WHITE" text="Sign up" textFill="#0e8825" translateX="20.0" translateY="80.0" />
                            </children>
                         </VBox>
                      </children>
