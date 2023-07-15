@@ -205,13 +205,25 @@ public class ClientHandler implements Runnable {
 //					getVideoAndSendTo(clientID, ((VideoRequest)rq).getSendToID());
 					System.out.println("Da nhan yeu cau send video");
 
+					boolean sendVideoSuccessfully = false;
+
 					// send buffer to id
 					for (ClientHandler client : clientHandlerFriendOnline) {
 						if (client.getClientID().equals(((VideoRequest) rq).getSendToID())) {
 							((VideoRequest) rq).setSenderId(clientID);
+							sendVideoSuccessfully = true;
 							client.getOut().writeObject(rq);
 						}
 					}
+
+					if(sendVideoSuccessfully) {
+						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, true);
+						this.out.writeObject(sendMessageSuccessfully);
+					}else {
+						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, false);
+						this.out.writeObject(sendMessageSuccessfully);
+					}
+					
 					System.out.println("Send video thanh cong");
 
 					break;
