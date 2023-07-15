@@ -102,7 +102,8 @@ public class ClientHandler implements Runnable {
 					break;
 				case SEND_MESSAGE:
 					if (((SendMessage) rq).getSendID() != null) {
-						sendMessageTo(((SendMessage) rq).getSendID(), ((SendMessage) rq).getMessage(), ((SendMessage) rq).getTimeSend());
+						sendMessageTo(((SendMessage) rq).getSendID(), ((SendMessage) rq).getMessage(),
+								((SendMessage) rq).getTimeSend());
 					}
 
 					break;
@@ -122,36 +123,38 @@ public class ClientHandler implements Runnable {
 					}
 
 					// tim kiem client trong client name list -> tra ve list tim thay
-					ArrayList<String> result = Search.searchIboxByName(inputToSearch, clientNameList);
+					if (inputToSearch != null) {
+						ArrayList<String> result = Search.searchIboxByName(inputToSearch, clientNameList);
 
-					Map<String, String> resultMap = new HashMap<>();
+						Map<String, String> resultMap = new HashMap<>();
 
-					// neu ket qua tra ve k rong
+						// neu ket qua tra ve k rong
 
-					if (!result.isEmpty()) {
-						for (String name : result) {
-							for (Map.Entry<String, String> entry : clientIDAndName.entrySet()) {
-								if (entry.getValue().equals(name) && !name.equals(clientName)) {
-									resultMap.put(entry.getKey(), entry.getValue());
+						if (!result.isEmpty()) {
+							for (String name : result) {
+								for (Map.Entry<String, String> entry : clientIDAndName.entrySet()) {
+									if (entry.getValue().equals(name) && !name.equals(clientName)) {
+										resultMap.put(entry.getKey(), entry.getValue());
+									}
 								}
 							}
 						}
-					}
 
-					// loai tru ket qua tra ve voi list ban be
+						// loai tru ket qua tra ve voi list ban be
 
-					for (Map.Entry<String, String> entri : resultMap.entrySet()) {
-						for (Map.Entry<String, String> entry : friendList.entrySet()) {
-							if (entri.getKey().equals(entry.getKey())) {
-								resultMap.remove(entri.getKey());
+						for (Map.Entry<String, String> entri : resultMap.entrySet()) {
+							for (Map.Entry<String, String> entry : friendList.entrySet()) {
+								if (entri.getKey().equals(entry.getKey())) {
+									resultMap.remove(entri.getKey());
+								}
 							}
 						}
+
+						// send to client
+						((GetSearchList) rq).setSearchList(resultMap);
+
+						this.out.writeObject(rq);
 					}
-
-					// send to client
-					((GetSearchList) rq).setSearchList(resultMap);
-
-					this.out.writeObject(rq);
 
 					break;
 				case SEND_FRIEND_REQUEST:
@@ -178,7 +181,8 @@ public class ClientHandler implements Runnable {
 								client.getOut().writeObject(accepted);
 								System.out.println("da gui tin nhan qua +" + ((ResponeFriendRq) rq).getId());
 							} catch (IOException e) {
-								System.out.println("from " + clientID + " send accepted friend message to user " + ((ResponeFriendRq) rq).getId() + " error.");
+								System.out.println("from " + clientID + " send accepted friend message to user "
+										+ ((ResponeFriendRq) rq).getId() + " error.");
 								closeEverything();
 								e.printStackTrace();
 							}
@@ -216,51 +220,51 @@ public class ClientHandler implements Runnable {
 						}
 					}
 
-					if(sendVideoSuccessfully) {
+					if (sendVideoSuccessfully) {
 						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, true);
 						this.out.writeObject(sendMessageSuccessfully);
-					}else {
+					} else {
 						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, false);
 						this.out.writeObject(sendMessageSuccessfully);
 					}
-					
+
 					System.out.println("Send video thanh cong");
 
 					break;
-					
+
 				case SEND_AUDIO:
 					System.out.println("DA NHAN YEU CAU GUI MP3");
 					boolean sendAudioSuccessfully = false;
 					for (ClientHandler client : clientHandlerFriendOnline) {
 						if (client.getClientID().equals(((AudioRequest) rq).getSendToId())) {
 							((AudioRequest) rq).setSenderId(clientID);
-							System.out.println("DA GUI MP3 SANG "+((AudioRequest) rq).getSendToId());
+							System.out.println("DA GUI MP3 SANG " + ((AudioRequest) rq).getSendToId());
 							client.getOut().writeObject(rq);
 							sendAudioSuccessfully = true;
 						}
 					}
-					if(sendAudioSuccessfully) {
+					if (sendAudioSuccessfully) {
 						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, true);
 						this.out.writeObject(sendMessageSuccessfully);
-					}else {
+					} else {
 						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, false);
 						this.out.writeObject(sendMessageSuccessfully);
 					}
 					System.out.println("Send video thanh cong");
 					break;
-					
+
 				case SIGN_UP:
 					System.out.println("Nhan yeu cau dang ky");
-					boolean success = signUp((SignUp)rq);
-					
-					if(success) {
-						checkLogin(((SignUp)rq).getUsername(), ((SignUp)rq).getPassword());
-					}else {
-						
+					boolean success = signUp((SignUp) rq);
+
+					if (success) {
+						checkLogin(((SignUp) rq).getUsername(), ((SignUp) rq).getPassword());
+					} else {
+
 					}
-					
+
 					break;
-					
+
 				default:
 					break;
 				}
@@ -371,7 +375,8 @@ public class ClientHandler implements Runnable {
 			}
 		}
 
-		Request sendFriendListForClient = new GetFriendList(RequestType.GET_FRIEND_LIST, friendList, friendOnlineStatus);
+		Request sendFriendListForClient = new GetFriendList(RequestType.GET_FRIEND_LIST, friendList,
+				friendOnlineStatus);
 //		System.out.println("FRIEND LIST = "+ServerModel.getInstance().getFriendList(clientID));
 		try {
 			this.out.writeObject(sendFriendListForClient);
@@ -392,7 +397,8 @@ public class ClientHandler implements Runnable {
 
 		if (ServerModel.getInstance().getLoginSuccessfully()) {
 			if (ServerModel.getInstance().getLoginAccoutType() == AccountType.CLIENT) {
-				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.CLIENT, clientName, clientID);
+				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.CLIENT,
+						clientName, clientID);
 
 				try {
 					this.out.writeObject(loginSuccessfully);
@@ -406,7 +412,8 @@ public class ClientHandler implements Runnable {
 				}
 			} else {
 				System.out.println("ADMIN LOGIN.");
-				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.ADMIN, clientName, clientID);
+				Request loginSuccessfully = new LoginSuccessfully(RequestType.LOGIN_SUCCESSFULLY, AccountType.ADMIN,
+						clientName, clientID);
 				try {
 					this.out.writeObject(loginSuccessfully);
 					System.out.println("Da gui doi tuong login admin.");
@@ -453,15 +460,10 @@ public class ClientHandler implements Runnable {
 	public boolean signUp(Request signUpRequest) {
 
 		SignUp signupRequest = (SignUp) signUpRequest;
-		String username = signupRequest.getUsername(),
-				password = signupRequest.getPassword(),
-				name = signupRequest.getName(),
-				city = signupRequest.getCity(),
-				district = signupRequest.getDistrict(),
-				district2 = signupRequest.getDistrict2(),
-				street = signupRequest.getStreet(),
+		String username = signupRequest.getUsername(), password = signupRequest.getPassword(),
+				name = signupRequest.getName(), city = signupRequest.getCity(), district = signupRequest.getDistrict(),
+				district2 = signupRequest.getDistrict2(), street = signupRequest.getStreet(),
 				client = signupRequest.getType();
-				
 
 		boolean checkSiggup = checkSignUp(username, password, name, city, district, district2, street);
 
@@ -479,35 +481,40 @@ public class ClientHandler implements Runnable {
 //			 * */
 //		}
 		if (checkSiggup) {
-			
+
 			try {
-			  
-			    Statement countStatement = ServerModel.getInstance().getDatadriver().getConn().createStatement();
-			    String countQuery = "SELECT COUNT(*) FROM account";
-			    ResultSet countResult = countStatement.executeQuery(countQuery);
-			    int accountCount = 0;
-			    if (countResult.next()) {
-			        accountCount = countResult.getInt(1);
-			    }
-			    countResult.close();
-			    countStatement.close();
 
-			    int id = accountCount + 1;
-			    String userId = "u" + id;
-			    String accountId = "a" + id;
+				Statement countStatement = ServerModel.getInstance().getDatadriver().getConn().createStatement();
+				String countQuery = "SELECT COUNT(*) FROM account";
+				ResultSet countResult = countStatement.executeQuery(countQuery);
+				int accountCount = 0;
+				if (countResult.next()) {
+					accountCount = countResult.getInt(1);
+				}
+				countResult.close();
+				countStatement.close();
 
-			    Statement insertUserStatement = ServerModel.getInstance().getDatadriver().getConn().createStatement();
-			    String insertUserQuery = "INSERT INTO users (userid, tenduong, tentinh, tenhuyen, tenxa, name) VALUES ('" + userId + "', '" + street + "', '" + city + "', '" + district + "', '" + district2 + "', '" + name + "')";
-			    insertUserStatement.executeUpdate(insertUserQuery);
-			    insertUserStatement.close();
+				int id = accountCount + 1;
+				String userId = "u" + id;
+				String accountId = "a" + id;
 
-			    Statement insertAccountStatement = ServerModel.getInstance().getDatadriver().getConn().createStatement();
-			    String insertAccountQuery = "INSERT INTO account (accountid, userid, username, password, registration_date, type) VALUES ('" + accountId + "', '" + userId + "', '" + username + "', '" + password + "', NULL, '" + client + "')";
-			    insertAccountStatement.executeUpdate(insertAccountQuery);
-			    insertAccountStatement.close();
+				Statement insertUserStatement = ServerModel.getInstance().getDatadriver().getConn().createStatement();
+				String insertUserQuery = "INSERT INTO users (userid, tenduong, tentinh, tenhuyen, tenxa, name) VALUES ('"
+						+ userId + "', '" + street + "', '" + city + "', '" + district + "', '" + district2 + "', '"
+						+ name + "')";
+				insertUserStatement.executeUpdate(insertUserQuery);
+				insertUserStatement.close();
 
-			    System.out.println("dang ky thanh cong");
-			    return true;
+				Statement insertAccountStatement = ServerModel.getInstance().getDatadriver().getConn()
+						.createStatement();
+				String insertAccountQuery = "INSERT INTO account (accountid, userid, username, password, registration_date, type) VALUES ('"
+						+ accountId + "', '" + userId + "', '" + username + "', '" + password + "', NULL, '" + client
+						+ "')";
+				insertAccountStatement.executeUpdate(insertAccountQuery);
+				insertAccountStatement.close();
+
+				System.out.println("dang ky thanh cong");
+				return true;
 			} catch (SQLException e) {
 				e.printStackTrace();
 				return false;
@@ -523,7 +530,8 @@ public class ClientHandler implements Runnable {
 	/*
 	 * Kiem tra false
 	 */
-	public boolean checkSignUp(String username, String password, String name, String city, String district, String district2, String street) {
+	public boolean checkSignUp(String username, String password, String name, String city, String district,
+			String district2, String street) {
 
 		/*
 		 * kiem tra username cua chua " " (space) hay khong -> neu co return false tiep
@@ -541,13 +549,10 @@ public class ClientHandler implements Runnable {
 
 		// Tiếp tục kiểm tra các trường còn lại nếu có bất kỳ trường nào có độ dài lớn
 		// hơn 30 hoặc bằng rỗng thì return false
-		if (username.isEmpty() || username.length() > 30 ||
-				password.isEmpty() || password.length() > 30 ||
-				name.isEmpty() || name.length() > 30 ||
-				city.isEmpty() || city.length() > 30 ||
-				district.isEmpty() || district.length() > 30 ||
-				district2.isEmpty() || district2.length() > 30 ||
-				street.isEmpty() || street.length() > 30) {
+		if (username.isEmpty() || username.length() > 30 || password.isEmpty() || password.length() > 30
+				|| name.isEmpty() || name.length() > 30 || city.isEmpty() || city.length() > 30 || district.isEmpty()
+				|| district.length() > 30 || district2.isEmpty() || district2.length() > 30 || street.isEmpty()
+				|| street.length() > 30) {
 			return false;
 		}
 
