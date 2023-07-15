@@ -1,10 +1,7 @@
 package application.controller;
-
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import com.jfoenix.controls.JFXButton;
-
 import accounttype.AccountType;
 import application.models.ClientModel;
 import application.models.ListeningServer;
@@ -18,7 +15,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+import application.views.ViewFactory;
 public class LoginController implements Initializable{
 
     @FXML
@@ -40,7 +37,9 @@ public class LoginController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		login_btn.setOnAction(event -> onLogin());
-
+		signup.setOnMouseClicked(event -> {
+			ClientModel.getInstance().getViewFactory().showSignUpWindow();
+		});
 	}
 	
 	public void onLogin() {

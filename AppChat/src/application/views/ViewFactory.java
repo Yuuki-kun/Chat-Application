@@ -7,6 +7,7 @@ import application.VideoMediaViewController;
 import application.controller.AudioRecordController;
 import application.controller.ClientController;
 import application.controller.LoginController;
+import application.controller.SignupController;
 import application.controller.PlayVideoController;
 //import javafx.animation.KeyFrame;
 //import javafx.animation.KeyValue;
@@ -20,6 +21,8 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.Parent;
+
 //import javafx.util.Duration;
 
 public class ViewFactory {
@@ -29,6 +32,8 @@ public class ViewFactory {
 	private LoginController loginController;
 
 	private ClientController clientControllers;
+	
+	private SignupController signUpController;
 
 	public ViewFactory(AccountType loginAccountType) {
 		this.loginAccountType = loginAccountType;
@@ -174,9 +179,30 @@ public class ViewFactory {
 //	}
 	
 	public void showSignUpWindow() {
+		
 		/*
 		 * like showClientWindow
 		 * */
+		  try {
+		        
+		        FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/Signup.fxml"));
+		        
+		        signUpController = new SignupController();
+				loader.setController(signUpController);
+				Scene scene = null;
+				try {
+					scene = new Scene(loader.load());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				Stage stage = new Stage();
+				stage.setScene(scene);
+				stage.show();
+		        
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		
 	}
 	public void closeStage(Stage stage) {
 		stage.close();
@@ -185,6 +211,8 @@ public class ViewFactory {
 	public void closeLoginWindow() {
 		this.loginController.closeLoginWindow();
 	}
+	
+	
 
 	public ClientController getClientController() {
 		return clientControllers;

@@ -444,53 +444,35 @@ public class ClientHandler implements Runnable {
 //			 * */
 //		}
 		if (checkSiggup) {
+			
 			try {
-				// Lấy số lượng tài khoản bằng cách đếm tất cả các tài khoản có trong bảng
-				// account
-				Statement countStatement = ServerModel.getInstance().getDatadriver().getConn().createStatement();
-				String countQuery = "SELECT COUNT(*) FROM account";
-				ResultSet countResult = countStatement.executeQuery(countQuery);
-				int accountCount = 0;
-				if (countResult.next()) {
-					accountCount = countResult.getInt(1);
-				}
-				countResult.close();
-				countStatement.close();
+			  
+			    Statement countStatement = ServerModel.getInstance().getDatadriver().getConn().createStatement();
+			    String countQuery = "SELECT COUNT(*) FROM account";
+			    ResultSet countResult = countStatement.executeQuery(countQuery);
+			    int accountCount = 0;
+			    if (countResult.next()) {
+			        accountCount = countResult.getInt(1);
+			    }
+			    countResult.close();
+			    countStatement.close();
 
-				// Tính toán id và userId mới
-				int id = accountCount + 1;
-				String userId = "u" + id;
-				String accountId = "a" + id;
-				
-				// Thêm accountId và userId vào bảng account
-				String updateAccountQuery = "UPDATE account SET accountid = ?, userid = ?, username = ?, password = ?, registration_date = NULL, type = ? WHERE username = ?";
-				PreparedStatement updateAccountStatement = ServerModel.getInstance().getDatadriver().getConn().prepareStatement(updateAccountQuery);
-				updateAccountStatement.setString(1, accountId);
-				updateAccountStatement.setString(2, userId);
-				updateAccountStatement.setString(3, username);
-				updateAccountStatement.setString(4, password);
-				updateAccountStatement.setString(5, client);
-				updateAccountStatement.setString(6, username);
-				updateAccountStatement.executeUpdate();
-				updateAccountStatement.close();
+			    int id = accountCount + 1;
+			    String userId = "u" + id;
+			    String accountId = "a" + id;
 
+			    Statement insertUserStatement = ServerModel.getInstance().getDatadriver().getConn().createStatement();
+			    String insertUserQuery = "INSERT INTO users (userid, tenduong, tentinh, tenhuyen, tenxa, name) VALUES ('" + userId + "', '" + street + "', '" + city + "', '" + district + "', '" + district2 + "', '" + name + "')";
+			    insertUserStatement.executeUpdate(insertUserQuery);
+			    insertUserStatement.close();
 
-				// Thêm userId vào cột userid của bảng "users"
-				String updateUserQuery = "UPDATE users SET userid = ?, tenduong = ?, tentinh = ?, tenhuyen = ?, tenxa = ?, name = ? WHERE username = ?";
-				PreparedStatement updateUserStatement = ServerModel.getInstance().getDatadriver().getConn().prepareStatement(updateUserQuery);
-				updateUserStatement.setString(1, userId);
-				updateUserStatement.setString(2, street);
-				updateUserStatement.setString(3, city);
-				updateUserStatement.setString(4, district);
-				updateUserStatement.setString(5, district2);
-				updateUserStatement.setString(6, name);
-				updateUserStatement.setString(7, username);
-				updateUserStatement.executeUpdate();
-				updateUserStatement.close();
+			    Statement insertAccountStatement = ServerModel.getInstance().getDatadriver().getConn().createStatement();
+			    String insertAccountQuery = "INSERT INTO account (accountid, userid, username, password, registration_date, type) VALUES ('" + accountId + "', '" + userId + "', '" + username + "', '" + password + "', NULL, '" + client + "')";
+			    insertAccountStatement.executeUpdate(insertAccountQuery);
+			    insertAccountStatement.close();
 
-				
-				System.out.println("Đang ky thanh cong");
-				return true;
+			    System.out.println("dang ky thanh cong");
+			    return true;
 			} catch (SQLException e) {
 				e.printStackTrace();
 				return false;
