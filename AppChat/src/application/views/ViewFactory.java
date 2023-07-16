@@ -9,6 +9,7 @@ import application.controller.ClientController;
 import application.controller.LoginController;
 import application.controller.SignupController;
 import application.controller.PlayVideoController;
+import application.controller.ProfileController;
 //import javafx.animation.KeyFrame;
 //import javafx.animation.KeyValue;
 //import javafx.animation.Timeline;
@@ -34,6 +35,8 @@ public class ViewFactory {
 	private ClientController clientControllers;
 	
 	private SignupController signUpController;
+	
+	private ProfileController profileController;
 
 	public ViewFactory(AccountType loginAccountType) {
 		this.loginAccountType = loginAccountType;
@@ -204,6 +207,32 @@ public class ViewFactory {
 		    }
 		
 	}
+	
+	// show Profile
+public void showProfileWindow() {
+		  try {
+		        
+		        FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/resources/fxml/Profile.fxml"));
+		        
+		        profileController = new ProfileController("userID");//add userID
+				loader.setController(profileController);
+				Scene scene = null;
+				try {
+					scene = new Scene(loader.load());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				Stage stage = new Stage();
+				stage.setScene(scene);
+				stage.show();
+		        
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		
+	}
+	
+	
 	public void closeStage(Stage stage) {
 		stage.close();
 	}
