@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -32,12 +33,15 @@
 										<Image url="@../images/appchatIcon.png" />
 									</image>
 								</ImageView>
-								<Label fx:id="clientNameLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="182.0" text="Hello There" />
+								<Label fx:id="clientNameLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="182.0" text="Hello There">
+                           <effect>
+                              <DropShadow />
+                           </effect></Label>
 							</children>
 						</VBox>
 					</top>
 					<center>
-						<VBox alignment="TOP_CENTER" styleClass="center_menu_container" BorderPane.alignment="CENTER">
+						<VBox alignment="TOP_CENTER" prefHeight="443.0" prefWidth="186.0" styleClass="center_menu_container" BorderPane.alignment="CENTER">
 							<children>
 								<JFXButton fx:id="message_btn" alignment="BASELINE_LEFT" prefHeight="26.0" prefWidth="135.0" text="Message">
 									<font>
@@ -90,7 +94,7 @@
 	</left>
 	<right>
 
-		<AnchorPane maxHeight="641.0" maxWidth="566.0" minHeight="600.0" minWidth="566.0" prefHeight="641.0" prefWidth="566.0" style="-fx-background-color: #eeeeee;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+		<AnchorPane maxHeight="641.0" maxWidth="900.0" minHeight="600.0" minWidth="566.0" prefHeight="641.0" prefWidth="566.0" style="-fx-background-color: #eeeeee;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
 			<children>
 				<AnchorPane fx:id="friend_list_view" layoutX="160.0" layoutY="49.0" maxWidth="900.0" prefHeight="636.0" prefWidth="566.0" styleClass="friend_list_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
 					<children>
@@ -105,7 +109,7 @@
 						</Pane>
 						<AnchorPane layoutX="209.0" layoutY="122.0" prefHeight="504.0" prefWidth="546.0" styleClass="friend_list_show_container" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="122.0">
 							<children>
-								<ScrollPane fx:id="friend_list_view_scroll" layoutX="8.0" layoutY="58.0" prefHeight="440.0" prefWidth="530.0" styleClass="no-focus-visual">
+								<ScrollPane fx:id="friend_list_view_scroll" fitToHeight="true" fitToWidth="true" layoutX="8.0" layoutY="58.0" prefHeight="440.0" prefWidth="530.0" styleClass="no-focus-visual">
 									<content>
 										<VBox fx:id="friend_list_view_vbox" prefHeight="429.0" prefWidth="523.0" styleClass="no-focus-visual" />
 									</content>
@@ -117,65 +121,74 @@
 						<Label layoutX="24.0" layoutY="74.0" text="Total Friend:" AnchorPane.leftAnchor="24.0" />
 					</children>
 				</AnchorPane>
-				<AnchorPane fx:id="chat_view" layoutX="221.0" layoutY="13.0" maxWidth="900.0" minHeight="445.0" prefHeight="514.0" prefWidth="556.0" style="-fx-background-color: #dddddd;" styleClass="chat_view_container" stylesheets="@../styles/ChatView.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
+				<AnchorPane fx:id="chat_view" layoutX="221.0" layoutY="13.0" maxWidth="900.0" minHeight="445.0" prefHeight="636.0" prefWidth="561.0" styleClass="chat_view_container" stylesheets="@../styles/ChatView.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
 					<children>
-						<ScrollPane fx:id="message_view_sp" layoutX="2.0" layoutY="40.0" prefHeight="524.0" prefWidth="552.0" />
-						<TextField fx:id="message_tf" layoutX="36.0" layoutY="585.0" prefHeight="26.0" prefWidth="422.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="100.0" />
-						<Button fx:id="sendMessageBtn" layoutX="467.0" layoutY="596.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="40.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="595.0">
+						<ScrollPane fx:id="message_view_sp" hbarPolicy="NEVER" layoutX="41.0" layoutY="40.0" prefHeight="524.0" prefWidth="508.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+						<TextField fx:id="message_tf" layoutX="36.0" layoutY="585.0" prefHeight="26.0" prefWidth="422.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="600.0" />
+						<Button fx:id="sendMessageBtn" layoutX="467.0" layoutY="596.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="40.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="595.0">
                      <graphic>
                         <FontAwesomeIconView glyphName="SEND" size="18" />
-                     </graphic></Button>
-                  <Label fx:id="typing_lbl" layoutX="24.0" layoutY="566.0" prefHeight="23.0" prefWidth="92.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="4.0" />
+                     </graphic>
+                  </Button>
+                  <Label fx:id="typing_lbl" layoutX="24.0" layoutY="566.0" prefHeight="23.0" prefWidth="92.0" styleClass="typing_lbl" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="15.0" />
                   <AnchorPane layoutX="143.0" layoutY="569.0" maxHeight="40.0" minHeight="25.0" prefHeight="25.0" prefWidth="401.0" style="-fx-border-color: #ffffff; -fx-border-radius: 5;" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="35.0">
                      <children>
-                        <Button fx:id="sendVideoBtn" layoutX="4.0" layoutY="8.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Video" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="3.0">
+                        <Button fx:id="sendVideoBtn" layoutX="4.0" layoutY="8.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" text="Video" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="3.0">
                            <font>
                               <Font name="Tahoma" size="10.0" />
                            </font>
                         </Button>
-                        <Button fx:id="picture_btn" layoutX="42.0" layoutY="12.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Picture" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="60.0">
+                        <Button fx:id="picture_btn" layoutX="42.0" layoutY="12.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" text="Picture" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="60.0">
                            <font>
                               <Font name="Tahoma" size="10.0" />
                            </font>
                         </Button>
-                        <Button fx:id="imoji_btn" layoutX="71.0" layoutY="11.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Imoji" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="120.0">
+                        <Button fx:id="imoji_btn" layoutX="71.0" layoutY="11.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" text="Imoji" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="120.0">
                            <font>
                               <Font name="Tahoma" size="10.0" />
                            </font>
                         </Button>
-                        <Button fx:id="sticker_btn" layoutX="131.0" layoutY="12.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Sticker" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="180.0">
+                        <Button fx:id="sticker_btn" layoutX="131.0" layoutY="12.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" text="Sticker" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="180.0">
                            <font>
                               <Font name="Tahoma" size="10.0" />
                            </font>
                         </Button>
-                        <Button fx:id="sendAudio_btn" layoutX="191.0" layoutY="13.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="Record" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="241.0">
+                        <Button fx:id="sendAudio_btn" layoutX="191.0" layoutY="13.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" text="Record" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="241.0">
                            <font>
                               <Font name="Tahoma" size="10.0" />
                            </font>
                         </Button>
-                        <Button fx:id="audioRecord_btn" layoutX="299.0" layoutY="4.0" minHeight="19.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="35.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="362.0" AnchorPane.topAnchor="3.0">
+                        <Button fx:id="audioRecord_btn" layoutX="299.0" layoutY="4.0" minHeight="19.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="35.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="362.0" AnchorPane.topAnchor="2.0">
                            <graphic>
                               <FontAwesomeIconView glyphName="MICROPHONE" size="16" />
                            </graphic>
                         </Button>
-                        <Button fx:id="record_btn1" layoutX="252.0" layoutY="13.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" style="-fx-background-color: transparent;" text="File" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="302.0">
+                        <Button fx:id="record_btn1" layoutX="252.0" layoutY="13.0" maxHeight="20.0" minHeight="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" text="File" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="302.0">
                            <font>
                               <Font name="Tahoma" size="10.0" />
                            </font>
                         </Button>
                      </children>
                   </AnchorPane>
-                  <Button layoutX="452.0" layoutY="601.0" mnemonicParsing="false" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="460.0" AnchorPane.topAnchor="595.0">
+                  <Button layoutX="452.0" layoutY="601.0" mnemonicParsing="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="460.0" AnchorPane.topAnchor="595.0">
                      <graphic>
                         <FontAwesomeIconView glyphName="THUMBS_UP" size="18" />
                      </graphic>
                   </Button>
+                  <Label fx:id="chatWithName_lbl" layoutX="9.0" layoutY="12.0" prefHeight="17.0" prefWidth="550.0">
+                     <font>
+                        <Font name="Ayuthaya" size="13.0" />
+                     </font>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </Label>
 					</children>
 				</AnchorPane>
             <AnchorPane fx:id="friendRequestView" layoutX="215.0" layoutY="122.0" maxWidth="900.0" prefHeight="631.0" prefWidth="566.0" visible="false" AnchorPane.bottomAnchor="-1.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <Label text="Friend Request" />
-                  <ScrollPane fx:id="friendRequestSP" layoutX="62.0" layoutY="41.0" prefHeight="557.0" prefWidth="566.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.0">
+                  <ScrollPane fx:id="friendRequestSP" fitToHeight="true" fitToWidth="true" layoutX="62.0" layoutY="41.0" prefHeight="557.0" prefWidth="566.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.0">
                      <content>
                         <VBox fx:id="friendRequestVB" prefHeight="584.0" prefWidth="558.0" />
                      </content>
@@ -190,9 +203,9 @@
 	<top>
 		<AnchorPane prefHeight="32.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
 			<children>
-				<VBox fillWidth="false" layoutX="56.0" layoutY="-74.0" prefHeight="126.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+				<VBox layoutX="56.0" layoutY="-74.0" prefHeight="126.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<children>
-						<HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="1101.0" styleClass="search-bar">
+						<HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="1101.0" styleClass="search-bar" VBox.vgrow="ALWAYS">
 							<children>
 								<TextField fx:id="searchFriendTf" alignment="BOTTOM_LEFT" prefHeight="26.0" prefWidth="243.0" promptText="Search ..." translateX="190.0">
 									<padding>
@@ -226,11 +239,11 @@
 	<center>
 		<AnchorPane maxWidth="354.0" minHeight="495.0" minWidth="354.0" prefHeight="495.0" prefWidth="354.0" BorderPane.alignment="CENTER_LEFT">
 			<children>
-				<AnchorPane fx:id="friend_ib" layoutY="2.0" prefHeight="602.0" prefWidth="354.0" styleClass="friend_book_container" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+				<AnchorPane fx:id="friend_ib" layoutX="-3.0" layoutY="2.0" prefHeight="636.0" prefWidth="357.0" styleClass="friend_book_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<children>
-						<ScrollPane fx:id="messScrollPane" fitToHeight="true" fitToWidth="true" layoutX="5.0" layoutY="4.0" minHeight="529.0" minWidth="346.0" prefHeight="602.0" prefWidth="354.0" stylesheets="@../styles/MessageBar.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
+						<ScrollPane fx:id="messScrollPane" fitToHeight="true" fitToWidth="true" layoutX="5.0" layoutY="4.0" minHeight="529.0" minWidth="346.0" prefHeight="636.0" prefWidth="354.0" style="-fx-background-color: transparent;" stylesheets="@../styles/MessageBar.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
 							<content>
-								<VBox fx:id="messVBox" prefHeight="588.0" prefWidth="330.0" style="-fx-background-color: red;" stylesheets="@../styles/MessageBar.css">
+								<VBox fx:id="messVBox" prefHeight="634.0" prefWidth="359.0" stylesheets="@../styles/MessageBar.css">
 									<styleClass>
 										<String fx:value="vbox" />
 										<String fx:value="no-focus-visual" />

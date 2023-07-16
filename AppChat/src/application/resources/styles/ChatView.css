@@ -1,11 +1,80 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
 .chat_view_container{
-	-fx-background-color: #eeeeee;
+	-fx-background-color: linear-gradient(to right, #7981ba, #7b74a6);
+	-fx-background-radius: 10.0;
 }
 
 .chat_view_container VBox{
-	-fx-pref-width: 538;
-	-fx-pref-height: 473;
-	-fx-padding: 14 7 14 0;
+	-fx-min-width: 526.0;
+	-fx-min-height: 514.0;
+	-fx-padding: 14.0 7.0 14.0 0.0;
+	-fx-background-color: linear-gradient(to bottom, #979db8, #72778a);
+	
+}
+
+.button{
+	-fx-font-size: 10;
+		-fx-background-color: transparent;
+	-fx-background-radius: 5.0;
+	-fx-text-fill: #ffffff;
+}
+
+.text-field{
+	-fx-background-radius: 10;
+	-fx-border-radius: 10;
+	-fx-background-color: #bcc2d1;
+}
+
+.text-field:focused{
+	-fx-background-color: #ffffff;
+	-fx-border-color: #ffffff;
+	-fx-effect: dropshadow(three-pass-box, #ffffff, 6, 0,0,0) ;
+}
+
+.button:hover{
+	-fx-cursor: hand;
+	-fx-border-color: #ffffff;
+	-fx-border-width: 0.8;
+	-fx-effect: dropshadow(three-pass-box, #ffffff, 6.0,0.0,0.0,0.0); 
+	-fx-border-radius: 5.0;
+	-fx-translate-y: -2;
+	-fx-background-color: #979db8;
+}
+
+
+.chat_view_container FontAwesomeIconView{
+	-fx-fill: #ffffff;
+}
+
+.label{
+	-fx-text-fill: #ffffff;
+	-fx-background-color: red;
+}
+
+.typing_lbl{
+	-fx-background-radius: 15 0 15 0;
+	-fx-background-color: linear-gradient(to bottom, #8e93ad, #e9ebf7);
+	-fx-text-fill: #535a75;
+	-fx-alignment: center;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-pref-width: 10px;
+}
+
+.scroll-pane .scroll-bar:vertical .increment-button,
+.scroll-pane .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent; 
+    -fx-padding: 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0; 
+    -fx-pref-height: 0;
+}
+
+.scroll-pane .scroll-bar .thumb {
+    -fx-background-color: #cccae3; 
+}
+.scroll-pane .scroll-bar .track {
+    -fx-background-color: #8e93ad; 
 }

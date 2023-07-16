@@ -1,26 +1,31 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
 .scroll-pane{	
-	-fx-border-color: #ffffff;
+	-fx-background-color: linear-gradient(to top right,#5e69bd, #543eb5 );
 }
 
 .message_bar_container .vbox{
-		-fx-border-color: #ffffff;
-	
-	-fx-background-color: #ffffff;
-	-fx-spacing: 5;
-	-fx-padding: 0 10 0 10;
+	-fx-background-color: linear-gradient(to top right, #5e69ac, #7981ba);
+		-fx-background-radius: 5;
+		-fx-spacing: 5;
+		-fx-text-fill: #ffffff;
+		-fx-font-family: "Tahoma";
 }
 
 .message_bar_container HBox{
 	-fx-min-width: 290;
 	-fx-min-height: 75;
 	-fx-padding: 0 10 0 10;
+	-fx-background-radius: 10 10 10 10;
+	-fx-border-radius: 10 10 10 10;
 }
 .message_bar_container HBox:hover{
-	-fx-background-color: linear-gradient(to right, #cccccc, #dddddd,  #eeeeee);
 	-fx-cursor: hand;
-	-fx-background-radius: 10 0 0 10;
+	-fx-background-color:#a3a8b5;
+	-fx-background-radius: 10 10 10 10;
+	-fx-border-radius: 10 10 10 10;
+	-fx-effect: dropshadow(three-pass-box, #ffffff, 6.0,0.0,0.0,2.0); 
+	-fx-border-width: 1.3;
 }
 
 .message_bar_container .scroll-pane:focued{
@@ -37,7 +42,7 @@
 
 .label {
     -fx-font-family: "Arial";
-    -fx-text-fill: #240000; 
+    -fx-text-fill: #ffffff; 
     -fx-font-size: 18;
 }
 

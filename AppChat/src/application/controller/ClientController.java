@@ -208,6 +208,8 @@ public class ClientController implements Initializable {
 	@FXML
 	private Button audioRecord_btn;
 
+    @FXML
+    private Label chatWithName_lbl;
 	
 	private static final long DOUBLE_CLICK_TIME_DELTA = 300;
 	private long lastClickTime = 0;
@@ -234,6 +236,7 @@ public class ClientController implements Initializable {
 		this.chat_view.setVisible(true);
 		this.friend_book.setVisible(false);
 		this.friend_list_view.setVisible(false);
+		this.typing_lbl.setVisible(false);
 
 		messVBox.heightProperty().addListener(new ChangeListener<Number>() {
 
@@ -296,8 +299,49 @@ public class ClientController implements Initializable {
 		audioRecord_btn.setOnAction(event -> {System.out.println("REC");
 									ClientModel.getInstance().getViewFactory().showAudioRecording();	
 		});
-//		sendgetfriendlistrequest();
+
+//		startBackgroundGradient();
+//		messVBox.setStyle("-fx-background-color: linear-gradient(to top right, #4e5fbf, #5330d1);");
 	}	
+	
+//	 private static final Duration COLOR_CHANGE_DURATION = Duration.seconds(1);
+//	    private static final String[] COLORS = {
+//	    		"#a5baf0",
+//	    		"#a9a5f0",
+//	            "#b0a5f0",
+//	            "#baa5f0",
+//	            "#c3a5f0",
+//	            "#8dafeb",
+//	            "#8da1eb",
+//	            "#8f8deb",
+//	            "#9d8deb",
+//	            "#a58deb",
+//	            "#73abf0",
+//	            "#739bf0",
+//	            "#7386f0",
+//	            "#7d73f0",
+//	            "#9b73f0"
+//	    };
+	    
+	    
+//	    private int colorIndex = 0;
+	
+//	public void startBackgroundGradient() {
+//        messVBox.setStyle("-fx-background-color: linear-gradient(to top right," + (COLORS[colorIndex])+", #d8dff0);");
+//        Timeline timeline = new Timeline(
+//                new KeyFrame(Duration.ZERO, event -> {
+//                    // Thay đổi màu nền
+//                    colorIndex = (colorIndex + 1) % COLORS.length;
+//                    messVBox.setStyle("-fx-background-color: linear-gradient(to top right," + (COLORS[colorIndex])+", #d8dff0);");
+//
+////                    messVBox.setStyle("-fx-background-color: linear-gradient(to bottom," + (COLORS[colorIndex])+", "+(COLOR2[colorIndex])+", #282a2b);");
+//                }),
+//                new KeyFrame(COLOR_CHANGE_DURATION)
+//        );
+//        timeline.setCycleCount(Animation.INDEFINITE);
+//        timeline.play();
+//	}
+	
 	// send mp3 or wav to server
 	public void sendAudioFile() {
 		FileChooser fileChooser = new FileChooser();
@@ -744,7 +788,7 @@ public class ClientController implements Initializable {
 	}
 
 	public void playTypingMessage(int dur) {
-
+		this.typing_lbl.setVisible(true);
 		this.typing_lbl.setText("Typinggg ...");
 		TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(dur), typing_lbl);
 		translateTransition.setFromY(5);
@@ -758,7 +802,7 @@ public class ClientController implements Initializable {
 		pauseTransition.setOnFinished(event -> {
 			translateTransition.stop();
 			this.typing_lbl.setText("");
-
+			this.typing_lbl.setVisible(false);
 		});
 
 		pauseTransition.play();
@@ -795,24 +839,25 @@ public class ClientController implements Initializable {
 			}
 
 			//
-
+//			#292929
 			HBox messbox = new HBox();
 
 			messbox.setAlignment(Pos.TOP_RIGHT);
 			messbox.setPadding(new Insets(5, 5, 5, 10));
 
 			Text text = new Text(messToSend);
+			text.setStyle("-fx-fill: #292929;");
+
 			TextFlow textFlow = new TextFlow(text);
 			textFlow.setTextAlignment(TextAlignment.JUSTIFY);
 
-			textFlow.setStyle("-fx-color: rgb(239, 242, 255);" +
-					"-fx-background-color: rgb(15, 125, 242);" +
-					"-fx-background-radius: 20px;"
+			textFlow.setStyle(
+					"-fx-background-color:  #e9ebf7;" +
+					"-fx-background-radius: 10px;"
 					+ "-fx-max-width: 330;"
 
 			);
 			textFlow.setPadding(new Insets(10, 15, 10, 15));
-			text.setFill(Color.color(0.934, 0.945, 0.996));
 //			textFlow.setPrefSize(350, 50);
 			messbox.getChildren().addAll(textFlow);
 			message_tf.clear();
@@ -861,20 +906,20 @@ public class ClientController implements Initializable {
 		imageView.setImage(image);
 
 		Text text = new Text(message);
+		text.setStyle("-fx-fill: #e9ebf7;");
 		TextFlow textFlow = new TextFlow(text);
 		textFlow.setTextAlignment(TextAlignment.JUSTIFY);
 
-		textFlow.setStyle("-fx-color: rgb(239, 242, 255);" +
-				"-fx-background-color: rgb(15, 125, 242);" +
-				"-fx-background-radius: 20px;"
+		textFlow.setStyle(
+				"-fx-background-color:  #5e5e91;" +
+				"-fx-background-radius: 10px;"
 				+ "-fx-max-width: 330;");
-		textFlow.setPadding(new Insets(10, 15, 10, 15));
-		text.setFill(Color.color(0.934, 0.945, 0.996));
+		textFlow.setPadding(new Insets(10, 15, 10, 15));	
 
 		timeReceiveMessage = new Label();
 //		timeReceiveMessage.setStyle("-fx-background-color:red;");
 
-		timeReceiveMessage.setPadding(new Insets(0, 0, 0, 60));
+		timeReceiveMessage.setPadding(new Insets(0, 0, 0, 35));
 
 		timeReceiveMessage.setAlignment(Pos.BASELINE_LEFT);
 
@@ -902,8 +947,10 @@ public class ClientController implements Initializable {
 				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
 			}
 		}
-		timeReceiveMessage.setMaxWidth(message_view_sp.getWidth());
-
+		
+		timeReceiveMessage.setMinWidth(50.0);
+		
+		originVBox.setAlignment(Pos.TOP_LEFT);
 		originVBox.getChildren().add(receiveMess);
 		originVBox.getChildren().add(timeReceiveMessage);
 
@@ -930,8 +977,6 @@ public class ClientController implements Initializable {
 
 		timeReceiveMessage = new Label();
 
-		timeReceiveMessage.setMinWidth(110.0);
-
 		timeReceiveMessage.setPadding(new Insets(0, 0, 0, 60));
 
 		timeReceiveMessage.setAlignment(Pos.BASELINE_LEFT);
@@ -955,7 +1000,7 @@ public class ClientController implements Initializable {
 			}
 		}
 
-		timeReceiveMessage.setMaxWidth(message_view_sp.getWidth());
+		timeReceiveMessage.setMinWidth(message_view_sp.getWidth());
 
 		originVBox.getChildren().addAll(receiveVideo, timeReceiveMessage);
 
@@ -1164,11 +1209,12 @@ public class ClientController implements Initializable {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/test/guiobjectjson/testHBox.fxml"));
 			h = loader.load();
 			h.setOnMouseEntered(event -> {
-				h.setStyle("-fx-background-color: #cccccc;");
+				h.setStyle("-fx-border-color: #ffffff;");
 
 			});
 			h.setOnMouseExited(event -> {
-				h.setStyle("-fx-background-color: #ffffff;");
+				h.setStyle("-fx-background-color: transparent;");
+				h.setStyle("-fx-border-color: transparent;");
 
 			});
 			VBox viewb = new VBox();
@@ -1215,12 +1261,21 @@ public class ClientController implements Initializable {
 		stopTimeline.setCycleCount(1);
 		stopTimeline.play();
 	}
-
+	
+	private String color1 = "#bcc2d1";
+	private String color2 = "transparent";
+	String currentColor = color1;
 	private void toggleFlashColor(HBox hbox) {
-		Color currentColor = hbox.getBackground() != null ? (Color) hbox.getBackground().getFills().get(0).getFill() : Color.TRANSPARENT;
 
-		Color flashColor = currentColor.equals(Color.RED) ? Color.WHITE : Color.RED;
-		hbox.setStyle("-fx-background-color: " + toHex(flashColor) + ";");
+		if(currentColor.equals(color1)) {
+			currentColor = color2;
+		}else {
+			currentColor = color1;
+		}
+				
+		hbox.setStyle("-fx-background-color: " + currentColor + ";"
+				+ "	-fx-effect: dropshadow(three-pass-box, #ffffff, 6.0,0.0,0.0,0.0);"
+				+ "-fx-border-color: #ffffff;");
 	}
 
 	private void stopFlashing(HBox hbox) {
@@ -1228,7 +1283,7 @@ public class ClientController implements Initializable {
 			flashTimeline.stop();
 			flashTimeline = null;
 		}
-		hbox.setStyle("-fx-background-color: #ffffff;");
+		hbox.setStyle("-fx-background-color: #bcc2d1;");
 	}
 
 	private String toHex(Color color) {
@@ -1344,6 +1399,7 @@ public class ClientController implements Initializable {
 	// KHI BAM VAO USER TREN FRIEND IN BOX -> MO VBOX TUONG UNG GAN VAO MESSAGE
 	// SCROLL PANE
 	public void resetVBox(VBox messageVbox) {
+		
 		this.message_view_sp.setContent(messageVbox);
 	}
 
@@ -1353,6 +1409,7 @@ public class ClientController implements Initializable {
 
 	public void setSendToUserID(String sendToUserID) {
 		this.sendToUserID = sendToUserID;
+		this.chatWithName_lbl.setText(friendList.get(sendToUserID));
 		// set vbox cua id nay
 		if (!clientInBoxFriend.isEmpty()) {
 			for (ClientBoxController clientbox : clientInBoxFriend) {
