@@ -67,6 +67,7 @@ public class AudioRecordController implements Initializable {
 
 			String audioURL = outputFile.getPath();
 			File file = new File(outputFile.getPath());
+			System.out.println(outputFile.getPath());
 			System.out.println(file.length());
 				ClientModel.getInstance().getViewFactory().getClientController().sendAudioFileWithFile(file);
 

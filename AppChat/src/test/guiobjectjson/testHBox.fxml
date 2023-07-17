@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -8,10 +9,13 @@
 
 <HBox alignment="CENTER_LEFT" prefHeight="72.0" prefWidth="302.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="84.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../application/resources/images/appchatIcon.png" />
          </image>
+         <HBox.margin>
+            <Insets left="10.0" />
+         </HBox.margin>
       </ImageView>
       <VBox prefHeight="94.0" prefWidth="215.0">
          <children>
@@ -19,6 +23,9 @@
             <Label maxWidth="200.0" text="LabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabelLabel" />
             <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="17.0" prefWidth="195.0" text="Label" />
          </children>
+         <HBox.margin>
+            <Insets left="10.0" />
+         </HBox.margin>
       </VBox>
    </children>
 </HBox>

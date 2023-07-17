@@ -18,5 +18,6 @@ public enum RequestType {
 	TYPING,
 	SEND_VIDEO,
 	SEND_AUDIO,
-	SIGN_UP
+	SIGN_UP,
+	SEND_IMAGE
 }

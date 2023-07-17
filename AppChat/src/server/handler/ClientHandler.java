@@ -30,6 +30,7 @@ import request.Request;
 import request.RequestType;
 import request.ResponeFriendRq;
 import request.SeenStatus;
+import request.SendImageRequest;
 import request.SendMessage;
 import request.SendMessageStatus;
 import request.SignUp;
@@ -264,7 +265,31 @@ public class ClientHandler implements Runnable {
 					}
 
 					break;
+				case SEND_IMAGE:
+					System.out.println("Da nhan yeu cau send picture");
 
+					boolean sendPictureSuccessfully = false;
+
+					// send buffer to id
+					for (ClientHandler client : clientHandlerFriendOnline) {
+						if (client.getClientID().equals(((SendImageRequest) rq).getSendToID())) {
+							((SendImageRequest) rq).setSenderId(clientID);
+							sendPictureSuccessfully = true;
+							client.getOut().writeObject(rq);
+						}
+					}
+
+					if (sendPictureSuccessfully) {
+						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, true);
+						this.out.writeObject(sendMessageSuccessfully);
+					} else {
+						Request sendMessageSuccessfully = new SendMessageStatus(RequestType.SEND_MESSAGE_STATUS, false);
+						this.out.writeObject(sendMessageSuccessfully);
+					}
+
+					System.out.println("Send picture thanh cong");
+
+					break;
 				default:
 					break;
 				}

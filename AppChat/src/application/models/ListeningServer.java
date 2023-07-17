@@ -19,6 +19,7 @@ import request.VideoRequest;
 import request.Request;
 import request.ResponeFriendRq;
 import request.SeenStatus;
+import request.SendImageRequest;
 import request.SendMessageStatus;
 import request.ServerMessage;
 import request.TypingRequest;
@@ -56,7 +57,8 @@ public class ListeningServer implements Runnable {
 
 				if (((LoginSuccessfully) rq).getAccountType() == AccountType.CLIENT) {
 
-					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().showClientWindow(clientID, clientNameFromDB));
+					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().showClientWindow(clientID,
+							clientNameFromDB));
 					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().closeLoginWindow());
 				}
 
@@ -66,7 +68,8 @@ public class ListeningServer implements Runnable {
 				if (!((ServerMessage) rq).getMessage().equals(null)) {
 					Platform.runLater(() -> {
 						try {
-							ClientModel.getInstance().getViewFactory().getClientController().addNewMessage("server", ((ServerMessage) rq).getMessage().toString(), ((ServerMessage) rq).getTimeSend(),
+							ClientModel.getInstance().getViewFactory().getClientController().addNewMessage("server",
+									((ServerMessage) rq).getMessage().toString(), ((ServerMessage) rq).getTimeSend(),
 									true);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -79,7 +82,8 @@ public class ListeningServer implements Runnable {
 				System.out.print("Da nhan danh sach ban be!");
 				Platform.runLater(() -> {
 					try {
-						ClientModel.getInstance().getViewFactory().getClientController().addFriendToListView(((GetFriendList) rq).getFriendList(), ((GetFriendList) rq).getFriendListOnlineStatus());
+						ClientModel.getInstance().getViewFactory().getClientController().addFriendToListView(
+								((GetFriendList) rq).getFriendList(), ((GetFriendList) rq).getFriendListOnlineStatus());
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -88,11 +92,13 @@ public class ListeningServer implements Runnable {
 				break;
 			case MESSAGE:
 				System.out.print("Da nhan tin nhan");
-				System.out.print("From: " + ((Message) rq).getFromID() + "\nMessage: " + ((Message) rq).getMessage() + " to my id = " + ((Message) rq).getSendID());
+				System.out.print("From: " + ((Message) rq).getFromID() + "\nMessage: " + ((Message) rq).getMessage()
+						+ " to my id = " + ((Message) rq).getSendID());
 //				Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().addNewMessage(((Message)rq).getSendID(), ((Message)rq).getMessage(), ((Message)rq).getTimeSend()));
 				Platform.runLater(() -> {
 					try {
-						ClientModel.getInstance().getViewFactory().getClientController().displayReceiveMessage(((Message) rq).getFromID(), ((Message) rq).getMessage(), ((Message) rq).getTimeSend());
+						ClientModel.getInstance().getViewFactory().getClientController().displayReceiveMessage(
+								((Message) rq).getFromID(), ((Message) rq).getMessage(), ((Message) rq).getTimeSend());
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -101,7 +107,8 @@ public class ListeningServer implements Runnable {
 				break;
 			case GET_SEARCH_ADDFRIEND_LIST:
 				try {
-					ClientModel.getInstance().getViewFactory().getClientController().addFriendResultSearch(((GetSearchList) rq).getSearchList());
+					ClientModel.getInstance().getViewFactory().getClientController()
+							.addFriendResultSearch(((GetSearchList) rq).getSearchList());
 				} catch (IOException e) {
 					System.out.println("Error display list friend");
 					e.printStackTrace();
@@ -111,7 +118,8 @@ public class ListeningServer implements Runnable {
 				// hien thi vao friend request
 				System.out.println("DA NHAN YC KET BAN");
 				try {
-					ClientModel.getInstance().getViewFactory().getClientController().addFriendRequest(((FriendRequest) rq).getFriendId(), ((FriendRequest) rq).getName());
+					ClientModel.getInstance().getViewFactory().getClientController()
+							.addFriendRequest(((FriendRequest) rq).getFriendId(), ((FriendRequest) rq).getName());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -120,79 +128,111 @@ public class ListeningServer implements Runnable {
 			case ACCEPT_FR:
 				// received accepted message from server
 				// accepted by id and name
-				Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().displayAcceptedFR(((ResponeFriendRq) rq).getName()));
+				Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController()
+						.displayAcceptedFR(((ResponeFriendRq) rq).getName()));
 				break;
 			case SEND_MESSAGE_STATUS:
 				if (((SendMessageStatus) rq).getSent()) {
-					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().getSendMessageStatus().setText("✓✓ received"));
+					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController()
+							.getSendMessageStatus().setText("✓✓ received"));
 				}
 				break;
 			case SEEN_STATUS:
 				if (((SeenStatus) rq).getSeen()) {
-					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().getSendMessageStatus().setText("✓✓✓ seen"));
+					Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController()
+							.getSendMessageStatus().setText("✓✓✓ seen"));
 				}
 				break;
 			case UPDATE_F_STATUS:
-				Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().updateFriendOnline(((UpdateFStatus) rq).getId(), ((UpdateFStatus) rq).getStatus()));
+				Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController()
+						.updateFriendOnline(((UpdateFStatus) rq).getId(), ((UpdateFStatus) rq).getStatus()));
 				break;
 			case TYPING:
-				Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController().playTypingMessage(((TypingRequest) rq).getDur()));
+				Platform.runLater(() -> ClientModel.getInstance().getViewFactory().getClientController()
+						.playTypingMessage(((TypingRequest) rq).getDur()));
 				break;
 			case SEND_VIDEO:
 				// tai tao lai video va ghi vao file
-				System.out.println("Da nhan video tu "+((VideoRequest)rq).getSenderID()+", bat dau write");
-				System.out.println(((VideoRequest)rq).getBuffer().length);
+				System.out.println("Da nhan video tu " + ((VideoRequest) rq).getSenderID() + ", bat dau write");
+				System.out.println(((VideoRequest) rq).getBuffer().length);
 
+				String outputFilePath = ((VideoRequest) rq).getFileName() + "-from" + ((VideoRequest) rq).getSenderID()
+						+ ".mp4";
 
-			        String outputFilePath = ((VideoRequest)rq).getFileName()+"-from"+((VideoRequest)rq).getSenderID()+".mp4";
+				byte[] buffer = (byte[]) ((VideoRequest) rq).getBuffer();
+				/* your video data buffer */;
 
-			        byte[] buffer = (byte[])((VideoRequest)rq).getBuffer(); /* your video data buffer */;
+				try (FileOutputStream fos = new FileOutputStream(outputFilePath)) {
+					fos.write(buffer);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
-			        try (FileOutputStream fos = new FileOutputStream(outputFilePath)) {
-		                fos.write(buffer);
-		            }catch(Exception e) {
-		            		e.printStackTrace();
-		            }
-			    
-			        Platform.runLater(()->							{
-						try {
-							ClientModel.getInstance().getViewFactory().getClientController().displayReceiveVideo(((VideoRequest)rq).getSenderID(), outputFilePath, ((VideoRequest)rq).getTimeSend());
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					});
-						
-				
-				
+				Platform.runLater(() -> {
+					try {
+						ClientModel.getInstance().getViewFactory().getClientController().displayReceiveVideo(
+								((VideoRequest) rq).getSenderID(), outputFilePath, ((VideoRequest) rq).getTimeSend());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				});
+
 				System.out.println("da nhan video");
 
 				break;
 			case SEND_AUDIO:
-				System.out.println("DA NHAN MP3 TU "+((AudioRequest)rq).getSenderId() + " / filename = "+((AudioRequest)rq).getFileName()+"/ file = "+((AudioRequest)rq).getFileData());
-				//display mp3 here
+				System.out.println("DA NHAN MP3 TU " + ((AudioRequest) rq).getSenderId() + " / filename = "
+						+ ((AudioRequest) rq).getFileName() + "/ file = " + ((AudioRequest) rq).getFileData());
+				// display mp3 here
 
-                try {
-					saveFile(((AudioRequest)rq).getFileName(), ((AudioRequest)rq).getFileData());
+				try {
+					saveFile(((AudioRequest) rq).getFileName(), ((AudioRequest) rq).getFileData());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-                
-                Platform.runLater(()->ClientModel.getInstance().getViewFactory().getClientController().displayReceiveAudio(((AudioRequest)rq).getSenderId(), ((AudioRequest)rq).getFileName(), "time"));
-                
+
+				Platform.runLater(
+						() -> ClientModel.getInstance().getViewFactory().getClientController().displayReceiveAudio(
+								((AudioRequest) rq).getSenderId(), ((AudioRequest) rq).getFileName(), "time"));
+
 				break;
+
+			case SEND_IMAGE:
+				// tai tao lai video va ghi vao file
+				System.out.println("Da nhan picture tu " + ((SendImageRequest) rq).getSenderId() + ", bat dau write");
+				System.out.println(((SendImageRequest) rq).getBuffer().length);
+
+				String outputFileP = ((SendImageRequest) rq).getFileName();
+
+				byte[] bufferImage = (byte[]) ((SendImageRequest) rq).getBuffer();
+				/* your video data buffer */;
+
+				try (FileOutputStream fos = new FileOutputStream(outputFileP)) {
+					fos.write(bufferImage);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				Platform.runLater(() -> {
+					ClientModel.getInstance().getViewFactory().getClientController()
+							.displayPicture(((SendImageRequest) rq).getSenderId(), outputFileP, "time");
+				});
+
+
+				break;
+
 			default:
 				break;
 			}
 		}
 	}
-	
-    private void saveFile(String fileName, byte[] fileData) throws IOException {
-        try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
-            outputStream.write(fileData);
-        }
-    }
 
+	private void saveFile(String fileName, byte[] fileData) throws IOException {
+		try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
+			outputStream.write(fileData);
+		}
+	}
 
 }

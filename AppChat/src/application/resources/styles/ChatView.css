@@ -6,8 +6,8 @@
 }
 
 .chat_view_container VBox{
-	-fx-min-width: 526.0;
-	-fx-min-height: 514.0;
+	-fx-pref-width: 526.0;
+	-fx-pref-height: 514.0;
 	-fx-padding: 14.0 7.0 14.0 0.0;
 	-fx-background-color: linear-gradient(to bottom, #979db8, #72778a);
 	
@@ -49,7 +49,6 @@
 
 .label{
 	-fx-text-fill: #ffffff;
-	-fx-background-color: red;
 }
 
 .typing_lbl{

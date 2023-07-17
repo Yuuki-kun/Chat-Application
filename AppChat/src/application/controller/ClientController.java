@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -49,6 +50,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
@@ -59,6 +61,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -71,7 +74,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import request.AudioRequest;
 import request.GetFriendList;
@@ -79,6 +84,7 @@ import request.GetSearchList;
 import request.Message;
 import request.Request;
 import request.RequestType;
+import request.SendImageRequest;
 import request.SendMessage;
 import request.SendMessageStatus;
 import request.TypingRequest;
@@ -229,6 +235,11 @@ public class ClientController implements Initializable {
 	private boolean getListFriend = false;
 	boolean typing = false;
 
+	private Popup emojiMenu;
+	private GridPane menuGrid;
+	
+	private ArrayList<Image> emoji = new ArrayList<>();
+	private ArrayList<File> emojiFile = new ArrayList<>();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.originVBox = new VBox();
@@ -299,49 +310,291 @@ public class ClientController implements Initializable {
 		audioRecord_btn.setOnAction(event -> {System.out.println("REC");
 									ClientModel.getInstance().getViewFactory().showAudioRecording();	
 		});
+		
+		picture_btn.setOnAction(event -> sendPicture());
+		
+		 Image image;
+		 File file;
+	        for(int i=0 ;i<16; i++) {
+	    		image = new Image(getClass().getResourceAsStream("/application/resources/images/emoji_"+(i+1)+".png"));
+	    		emoji.add(image);
+//	    		file = new File("emoji_"+(i+1)+".png");
+	    		 file = new File("src/application/resources/images/emoji_"+(i+1)+".png");
+	    		emojiFile.add(file);
+	    		System.out.println(file);
+	        }
+		
+		imoji_btn.setOnMouseClicked(event -> {
+			initialEmojiView();
+			emojiMenu.show(imoji_btn.getScene().getWindow(),
+					event.getScreenX() -100.0,
+					event.getScreenY() -100.0
+					);
+			emojiMenu.setAutoHide(true);
 
-//		startBackgroundGradient();
-//		messVBox.setStyle("-fx-background-color: linear-gradient(to top right, #4e5fbf, #5330d1);");
-	}	
+		});
+		
+	}
+	public void initialEmojiView() {
+		emojiMenu = new Popup();
+		menuGrid = new GridPane();
+		menuGrid.setStyle("-fx-background-color: lightblue;");
+
+        menuGrid.setPadding(new Insets(10));
+        menuGrid.setHgap(5);
+        menuGrid.setVgap(5);
+        for (int row = 0; row < 4; row++) {
+            for (int col = 0; col < 4; col++) {
+                Button button = new Button();
+                button.setPrefHeight(45);
+                button.setPrefWidth(45);
+                button.setStyle("-fx-background-color: transparent;");
+                int r = row;
+                int c = col;
+//                GridPane.setMargin(button, new Insets(marginTop, 0, 0, 0));
+//                
+//                ImageView buttoniv = new ImageView();
+//                buttonImg = new Image(getClass().
+//                		getResourceAsStream("/application/resources/images/emoji_"+emojistt+".png")); 
+//                buttoniv.setImage(buttonImg);
+//                button.setGraphic(buttoniv);
+        		ImageView iv = new ImageView(emoji.get((r * 4 + c)));
+        		iv.setFitHeight(25);
+        		iv.setFitWidth(25);
+        		button.setGraphic(iv);
+                menuGrid.add(button, col, row);
+              
+                button.setOnAction(event -> {
+                	System.out.println("gui emoji "+(r * 4 + c));
+                	sendPictureWithFile(emojiFile.get((r * 4 + c)));
+                });
+            }
+        }
+        emojiMenu.getContent().add(menuGrid);
+        
+	}
 	
-//	 private static final Duration COLOR_CHANGE_DURATION = Duration.seconds(1);
-//	    private static final String[] COLORS = {
-//	    		"#a5baf0",
-//	    		"#a9a5f0",
-//	            "#b0a5f0",
-//	            "#baa5f0",
-//	            "#c3a5f0",
-//	            "#8dafeb",
-//	            "#8da1eb",
-//	            "#8f8deb",
-//	            "#9d8deb",
-//	            "#a58deb",
-//	            "#73abf0",
-//	            "#739bf0",
-//	            "#7386f0",
-//	            "#7d73f0",
-//	            "#9b73f0"
-//	    };
-	    
-	    
-//	    private int colorIndex = 0;
+	public void sendPicture() {
+		//choose file
+		FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Image");
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            writePicture(selectedFile);
+        }
+        
+        if (originVBox.getChildren().size() >= 2) {
+			if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+				// xoa 1 cai
+				System.out.println("Xoa 1 cai label time cua ben kia");
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			} else {
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			}
+		}
+
+		//
+
+		HBox messbox = new HBox();
+
+		messbox.setAlignment(Pos.TOP_RIGHT);
+		messbox.setPadding(new Insets(5, 5, 5, 10));
+
+		// add image view
+		Image img = new Image("file:"+selectedFile.getPath());
+		ImageView imgv = new ImageView(img);
+		imgv.setFitWidth(350);
+		imgv.setFitHeight(350);
+		imgv.setPreserveRatio(true);
+		//
+
+//		textFlow.setPrefSize(350, 50);
+		messbox.getChildren().add(imgv);
+		
+		String timeSend = "time";
+		///
+		try {
+			addNewMessage(sendToUserID, "video", "time", false);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		originVBox.getChildren().add(messbox);
+
+		sendMessageStatus = new Label();
+		timeSendMessage = new Label();
+
+		sendMessageStatus.setMinWidth(55.5);
+		timeSendMessage.setMinWidth(50.0);
+
+		sendMessageStatus.setAlignment(Pos.BASELINE_RIGHT);
+		timeSendMessage.setAlignment(Pos.BASELINE_RIGHT);
+
+		sendMessageStatus.setStyle("-fx-background-color:grey;"
+				+ "-fx-text-fill:white;"
+				+ "-fx-background-radius: 10;"
+				+ "-fx-padding: 0 10 0 10;");
+
+		sendMessageStatus.setText("✓ sent");
+
+		timeSendMessage.setText(timeSend);
+
+		originVBox.setAlignment(Pos.BASELINE_RIGHT);
+		originVBox.getChildren().add(timeSendMessage);
+		originVBox.getChildren().add(sendMessageStatus);
+    
+	}
 	
-//	public void startBackgroundGradient() {
-//        messVBox.setStyle("-fx-background-color: linear-gradient(to top right," + (COLORS[colorIndex])+", #d8dff0);");
-//        Timeline timeline = new Timeline(
-//                new KeyFrame(Duration.ZERO, event -> {
-//                    // Thay đổi màu nền
-//                    colorIndex = (colorIndex + 1) % COLORS.length;
-//                    messVBox.setStyle("-fx-background-color: linear-gradient(to top right," + (COLORS[colorIndex])+", #d8dff0);");
-//
-////                    messVBox.setStyle("-fx-background-color: linear-gradient(to bottom," + (COLORS[colorIndex])+", "+(COLOR2[colorIndex])+", #282a2b);");
-//                }),
-//                new KeyFrame(COLOR_CHANGE_DURATION)
-//        );
-//        timeline.setCycleCount(Animation.INDEFINITE);
-//        timeline.play();
-//	}
+	public void sendPictureWithFile(File selectedFile) {
+		//choose file
+		
+        if (selectedFile != null) {
+            writePicture(selectedFile);
+        }
+        
+        if (originVBox.getChildren().size() >= 2) {
+			if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+				// xoa 1 cai
+				System.out.println("Xoa 1 cai label time cua ben kia");
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			} else {
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			}
+		}
+
+		//
+
+		HBox messbox = new HBox();
+
+		messbox.setAlignment(Pos.TOP_RIGHT);
+		messbox.setPadding(new Insets(5, 5, 5, 10));
+
+		// add image view
+		Image img = new Image("file:"+selectedFile.getPath());
+		ImageView imgv = new ImageView(img);
+		imgv.setFitWidth(100);
+		imgv.setFitHeight(100);
+		imgv.setPreserveRatio(true);
+		//
+
+//		textFlow.setPrefSize(350, 50);
+		messbox.getChildren().add(imgv);
+		
+		String timeSend = "time";
+		///
+		try {
+			addNewMessage(sendToUserID, "video", "time", false);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		originVBox.getChildren().add(messbox);
+
+		sendMessageStatus = new Label();
+		timeSendMessage = new Label();
+
+		sendMessageStatus.setMinWidth(55.5);
+		timeSendMessage.setMinWidth(50.0);
+
+		sendMessageStatus.setAlignment(Pos.BASELINE_RIGHT);
+		timeSendMessage.setAlignment(Pos.BASELINE_RIGHT);
+
+		sendMessageStatus.setStyle("-fx-background-color:grey;"
+				+ "-fx-text-fill:white;"
+				+ "-fx-background-radius: 10;"
+				+ "-fx-padding: 0 10 0 10;");
+
+		sendMessageStatus.setText("✓ sent");
+
+		timeSendMessage.setText(timeSend);
+
+		originVBox.setAlignment(Pos.BASELINE_RIGHT);
+		originVBox.getChildren().add(timeSendMessage);
+		originVBox.getChildren().add(sendMessageStatus);
+    
+	}
 	
+	public void writePicture(File file) {
+        try {
+			FileInputStream fileInputStream = new FileInputStream(file);
+			byte[] imageBytes = fileInputStream.readAllBytes();
+			
+			Request sendImageRequest = new SendImageRequest(RequestType.SEND_IMAGE, sendToUserID, file.getName(),imageBytes);
+			
+			ClientModel.getInstance().getClient().getOut().writeObject(sendImageRequest);
+			System.out.println("Da gui anh "+file.getName());
+			fileInputStream.close();
+        } catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        
+        
+	}
+	
+	public void displayPicture(String receiveFromID, String fileName, String timeReceive) {
+		HBox receivePicture = new HBox();
+		receivePicture.setAlignment(Pos.TOP_LEFT);
+		receivePicture.setPadding(new Insets(5, 5, 5, 10));
+		
+		Image imageReceive = new Image(("file:"+fileName));
+		ImageView imagePicture = new ImageView(imageReceive);
+		imagePicture.setFitWidth(350);
+		imagePicture.setFitHeight(350);
+		imagePicture.setPreserveRatio(true);
+		
+		ImageView imageView = new ImageView();
+		imageView.setFitWidth(25);
+		imageView.setFitHeight(25);
+		Image image = new Image(getClass().getResourceAsStream("/application/resources/images/appchatIcon.png"));
+		imageView.setImage(image);
+		
+		timeReceiveMessage = new Label();
+
+		timeReceiveMessage.setPadding(new Insets(0, 0, 0, 60));
+
+		timeReceiveMessage.setAlignment(Pos.BASELINE_LEFT);
+
+		timeReceiveMessage.setText(timeReceive);
+
+		receivePicture.getChildren().addAll(imageView, imagePicture);
+
+		try {
+			addNewMessage(receiveFromID, "picture", timeReceive, true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// remove last child
+
+		if (originVBox.getChildren().size() >= 2) {
+			if (originVBox.getChildren().get(originVBox.getChildren().size() - 2) instanceof HBox) {
+				// xoa 1 cai
+				System.out.println("Xoa 1 cai label time cua ben kia");
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			} else {
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+				originVBox.getChildren().remove(originVBox.getChildren().size() - 1);
+			}
+		}
+
+		timeReceiveMessage.setMinWidth(message_view_sp.getWidth());
+
+		originVBox.getChildren().addAll(receivePicture, timeReceiveMessage);
+		
+	}
+		
 	// send mp3 or wav to server
 	public void sendAudioFile() {
 		FileChooser fileChooser = new FileChooser();
@@ -368,7 +621,8 @@ public class ClientController implements Initializable {
 				}
 				
 				HBox messbox = new HBox();
-
+				messbox.setMaxWidth(260);
+				messbox.setMaxHeight(100);
 				messbox.setAlignment(Pos.TOP_RIGHT);
 				messbox.setPadding(new Insets(5, 5, 5, 10));
 				
@@ -384,11 +638,10 @@ public class ClientController implements Initializable {
 				MediaPlayer mediaPlayer = new MediaPlayer(media);
 				MediaView mdav = new MediaView();
 				mdav.setMediaPlayer(mediaPlayer);
+			
 
 				VBox audioVbox = new VBox();
 				audioVbox.setAlignment(Pos.CENTER);
-				audioVbox.setMaxWidth(250);
-				audioVbox.setMaxHeight(100);
 				
 				Slider audioSlier = new Slider();
 				audioSlier.setPadding(new Insets(35, 5, 5, 5));
@@ -400,8 +653,6 @@ public class ClientController implements Initializable {
 				
 				audioVbox.getChildren().addAll(imageViewPlay, audioSlier);
 				
-				
-
 				messbox.getChildren().addAll(mdav, audioVbox);
 
 				try {
@@ -967,7 +1218,7 @@ public class ClientController implements Initializable {
 		imageView.setFitHeight(25);
 		Image image = new Image(getClass().getResourceAsStream("/application/resources/images/appchatIcon.png"));
 		imageView.setImage(image);
-
+		
 		File file = new File(videoURL);
 		Media media = new Media(file.toURI().toString());
 		MediaPlayer mediaPlayer = new MediaPlayer(media);
